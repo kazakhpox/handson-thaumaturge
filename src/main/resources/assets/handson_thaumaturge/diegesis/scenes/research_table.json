@@ -1,0 +1,785 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Thaumaturge's research table (its main half, 16 high) worked through its own menu. In front on the table: the scribing tools standing on the left as the camera sees it, the note lying on the right (the menu's two slots). In the middle lies the note's puzzle on parchment (sheet), the screen's hex grid drawn on it by code. Over the far edge hangs the palette, five by five icons of the aspects the player knows (aspect_N in columns, the screen's order and pages; page_prev and page_next under it), and right of it the mixing tray (select_1, select_2, combine) and the copy button. The book of mixtures lies on the left end of the table; open, it hangs in the air beyond (book). The camera stands in front and above, looking down at the sheet with the palette behind it.",
+  "work_plane": 16,
+  "idle_visible": false,
+  "camera": {
+    "position": [
+      7,
+      35,
+      -12
+    ],
+    "target": [
+      7,
+      19,
+      11
+    ],
+    "fov": 55,
+    "interactive_at": 0.6
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "carry_lift": 1.5,
+    "highlight_color": "#26FFFFFF",
+    "hover_outline": false
+  },
+  "inventory_drawer": {
+    "layout": "hotbar",
+    "always_open": true,
+    "carry_size": 2.4
+  },
+  "nodes": [
+    {
+      "id": "tools",
+      "pos": [
+        13.2,
+        16.02,
+        3.0
+      ],
+      "slot": {
+        "slot": "tools[0]",
+        "display": "upright",
+        "size": 2.8,
+        "item_size": 2.8,
+        "idle_highlight": 0.3,
+        "ghost": [
+          "thaumaturge:scribing_tools"
+        ],
+        "ghost_alpha": 0.3
+      }
+    },
+    {
+      "id": "note",
+      "pos": [
+        2.8,
+        16.02,
+        3.0
+      ],
+      "slot": {
+        "slot": "note[0]",
+        "size": 2.8,
+        "item_size": 2.6,
+        "idle_highlight": 0.3
+      }
+    },
+    {
+      "$comment": "The note's puzzle, painted by code on parchment lying on the table; a click writes or rubs out on the hex under the cursor.",
+      "id": "sheet",
+      "pos": [
+        8,
+        16.0,
+        10.2
+      ],
+      "collider": {
+        "from": [
+          -5.5,
+          0,
+          -5.5
+        ],
+        "to": [
+          5.5,
+          0.2,
+          5.5
+        ]
+      }
+    },
+    {
+      "$comment": "The book of mixtures lying on the table; a click opens it in the air (book).",
+      "id": "helper",
+      "pos": [
+        14.6,
+        16.02,
+        9.5
+      ],
+      "visual": {
+        "item": "thaumaturge:thaumonomicon"
+      },
+      "rotation": [
+        90,
+        20,
+        0
+      ],
+      "scale": 0.4
+    },
+    {
+      "id": "book",
+      "pos": [
+        23.5,
+        22.5,
+        9
+      ],
+      "pickable": false,
+      "hidden": true
+    },
+    {
+      "id": "help_prev",
+      "pos": [
+        25.5,
+        16.8,
+        9
+      ],
+      "collider": {
+        "from": [
+          -0.8,
+          -0.8,
+          -0.3
+        ],
+        "to": [
+          0.8,
+          0.8,
+          0.3
+        ]
+      }
+    },
+    {
+      "id": "help_next",
+      "pos": [
+        21.5,
+        16.8,
+        9
+      ],
+      "collider": {
+        "from": [
+          -0.8,
+          -0.8,
+          -0.3
+        ],
+        "to": [
+          0.8,
+          0.8,
+          0.3
+        ]
+      }
+    },
+    {
+      "id": "held",
+      "pos": [
+        0,
+        0,
+        0
+      ],
+      "pickable": false
+    },
+    {
+      "id": "aspect_0",
+      "pos": [
+        11.6,
+        26.6,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_1",
+      "pos": [
+        11.6,
+        24.8,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_2",
+      "pos": [
+        11.6,
+        23.0,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_3",
+      "pos": [
+        11.6,
+        21.200000000000003,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_4",
+      "pos": [
+        11.6,
+        19.400000000000002,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_5",
+      "pos": [
+        9.799999999999999,
+        26.6,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_6",
+      "pos": [
+        9.799999999999999,
+        24.8,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_7",
+      "pos": [
+        9.799999999999999,
+        23.0,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_8",
+      "pos": [
+        9.799999999999999,
+        21.200000000000003,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_9",
+      "pos": [
+        9.799999999999999,
+        19.400000000000002,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_10",
+      "pos": [
+        8.0,
+        26.6,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_11",
+      "pos": [
+        8.0,
+        24.8,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_12",
+      "pos": [
+        8.0,
+        23.0,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_13",
+      "pos": [
+        8.0,
+        21.200000000000003,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_14",
+      "pos": [
+        8.0,
+        19.400000000000002,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_15",
+      "pos": [
+        6.199999999999999,
+        26.6,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_16",
+      "pos": [
+        6.199999999999999,
+        24.8,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_17",
+      "pos": [
+        6.199999999999999,
+        23.0,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_18",
+      "pos": [
+        6.199999999999999,
+        21.200000000000003,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_19",
+      "pos": [
+        6.199999999999999,
+        19.400000000000002,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_20",
+      "pos": [
+        4.3999999999999995,
+        26.6,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_21",
+      "pos": [
+        4.3999999999999995,
+        24.8,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_22",
+      "pos": [
+        4.3999999999999995,
+        23.0,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_23",
+      "pos": [
+        4.3999999999999995,
+        21.200000000000003,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "aspect_24",
+      "pos": [
+        4.3999999999999995,
+        19.400000000000002,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          -0.85,
+          -0.2
+        ],
+        "to": [
+          0.85,
+          0.85,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "page_prev",
+      "pos": [
+        10.4,
+        17.6,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.8,
+          -0.8,
+          -0.3
+        ],
+        "to": [
+          0.8,
+          0.8,
+          0.3
+        ]
+      }
+    },
+    {
+      "id": "page_next",
+      "pos": [
+        5.6,
+        17.6,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -0.8,
+          -0.8,
+          -0.3
+        ],
+        "to": [
+          0.8,
+          0.8,
+          0.3
+        ]
+      }
+    },
+    {
+      "id": "select_1",
+      "pos": [
+        1.6,
+        23.0,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -1,
+          -1,
+          -0.3
+        ],
+        "to": [
+          1,
+          1,
+          0.3
+        ]
+      }
+    },
+    {
+      "id": "select_2",
+      "pos": [
+        -1.6,
+        23.0,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -1,
+          -1,
+          -0.3
+        ],
+        "to": [
+          1,
+          1,
+          0.3
+        ]
+      }
+    },
+    {
+      "id": "combine",
+      "pos": [
+        0,
+        20.8,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -1.8,
+          -0.6,
+          -0.3
+        ],
+        "to": [
+          1.8,
+          0.6,
+          0.3
+        ]
+      }
+    },
+    {
+      "id": "duplicate",
+      "pos": [
+        0,
+        26.2,
+        16.6
+      ],
+      "collider": {
+        "from": [
+          -2.6,
+          -0.6,
+          -0.3
+        ],
+        "to": [
+          2.6,
+          0.6,
+          0.3
+        ]
+      }
+    }
+  ]
+}

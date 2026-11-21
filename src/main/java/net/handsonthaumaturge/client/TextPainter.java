@@ -40,4 +40,24 @@ final class TextPainter {
                 Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
         pose.popPose();
     }
+
+    /** Draws {@code text} lying face up, centred on the node's origin, reading towards the screen's right, its top away. */
+    static void drawFlat(PoseStack pose, MultiBufferSource buffers, Component text, float height, int argb) {
+        if ((argb >>> 24) < 8) {
+            return;
+        }
+        Font font = Minecraft.getInstance().font;
+        float scale = height / font.lineHeight;
+        pose.pushPose();
+        Matrix4f face = new Matrix4f(
+                -scale, 0.0F, 0.0F, 0.0F,
+                0.0F, 0.0F, -scale, 0.0F,
+                0.0F, scale, 0.0F, 0.0F,
+                0.0F, 0.0F, 0.0F, 1.0F);
+        pose.last().pose().mul(face);
+        float width = font.width(text);
+        font.drawInBatch(text, -width / 2.0F, -font.lineHeight / 2.0F, argb, false, pose.last().pose(), buffers,
+                Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
+        pose.popPose();
+    }
 }

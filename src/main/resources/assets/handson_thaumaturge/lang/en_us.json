@@ -1,4 +1,6 @@
 {
   "handson_thaumaturge.workbench.vis": "Vis in the aura: %s",
-  "handson_thaumaturge.workbench.cost": "The recipe draws: %s"
+  "handson_thaumaturge.workbench.cost": "The recipe draws: %s",
+  "handson_thaumaturge.research.combine": "Combine",
+  "handson_thaumaturge.research.copy": "Copy the note"
 }
