@@ -96,3 +96,29 @@ tasks.named('jar', Jar) {
         rename { "LICENSE_${mod_id}" }
     }
 }
+
+// Dev only, never in the jar: a client run ("shots") that builds a test world, works the stations with the mouse and saves
+// screenshots to shots/. Thaumaturge is not on a maven: put its jar at libs/thaumaturge.jar (not committed) to run it.
+sourceSets {
+    devtools {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations {
+    devtoolsImplementation.extendsFrom implementation
+}
+dependencies {
+    devtoolsImplementation files('libs/thaumaturge.jar')
+    devtoolsRuntimeOnly "maven.modrinth:lithostitched:1.8.0-neoforge-21.1"
+    devtoolsRuntimeOnly "maven.modrinth:curios:yohfFbgD"
+}
+neoForge.addModdingDependenciesTo(sourceSets.devtools)
+neoForge.mods.register('handson_thaumaturge_devtools') { sourceSet(sourceSets.devtools) }
+neoForge.runs.register('shots') {
+    client()
+    sourceSet = sourceSets.devtools
+    gameDirectory = project.file('run-shots')
+    systemProperty 'handson.shots', project.file('shots').absolutePath
+    programArguments.addAll('--width', '1280', '--height', '720')
+}

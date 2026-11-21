@@ -20,7 +20,12 @@ the [Diegesis](https://modrinth.com/mod/diegesis-api) library in the spirit of
   it. The book on the table opens the guide to mixtures in the air beside it, as Hands-On Vanilla's crafting table shows
   its recipe book.
 - **Nothing replaced.** Sneaking + use keeps Thaumaturge's own screens. The items stay in the blocks' own inventories;
-  the research table works through Thaumaturge's own menu and packets, so its checks and costs are all Thaumaturge's.
+  the research table's actions call the table's own methods, so ink, costs, aids and copying are all Thaumaturge's.
+  While you work at them, Thaumaturge's own renderers of the two blocks rest (the station draws what lies on them).
+
+| The arcane workbench | The research table | Its guide to mixtures |
+|---|---|---|
+| ![The arcane workbench](docs/workbench.png) | ![The research table](docs/research.png) | ![The guide](docs/research_book.png) |
 
 ## Requirements
 
@@ -41,7 +46,10 @@ Install on the client and on the server.
 
 Thaumaturge is published on no maven this build can reach, so the addon compiles without it and calls it by name at run time
 (`station/Thaum`, `client/ThaumClient`). If a Thaumaturge version renames what it needs, the stations log an error and the
-blocks keep their own screens.
+blocks keep their own screens. Tested with Thaumaturge 1.1.0 for 1.21.1.
+
+`./gradlew runShots` (dev only) builds a flat test world, works both stations with the mouse and saves screenshots to
+`shots/`; it needs Thaumaturge's jar at `libs/thaumaturge.jar` (not committed) and runs headless under `xvfb-run` too.
 
 ## License
 

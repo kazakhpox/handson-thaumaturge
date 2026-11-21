@@ -40,8 +40,8 @@
       "slot": {
         "slot": "tools[0]",
         "display": "upright",
-        "size": 2.8,
-        "item_size": 2.8,
+        "size": 2.6,
+        "item_size": 1.7,
         "idle_highlight": 0.3,
         "ghost": [
           "thaumaturge:scribing_tools"
@@ -59,7 +59,7 @@
       "slot": {
         "slot": "note[0]",
         "size": 2.8,
-        "item_size": 2.6,
+        "item_size": 2.4,
         "idle_highlight": 0.3
       }
     },
@@ -69,18 +69,18 @@
       "pos": [
         8,
         16.0,
-        10.2
+        9.8
       ],
       "collider": {
         "from": [
-          -5.5,
+          -6,
           0,
-          -5.5
+          -6
         ],
         "to": [
-          5.5,
+          6,
           0.2,
-          5.5
+          6
         ]
       }
     },
@@ -88,9 +88,9 @@
       "$comment": "The book of mixtures lying on the table; a click opens it in the air (book).",
       "id": "helper",
       "pos": [
-        14.6,
+        15.6,
         16.02,
-        9.5
+        12.5
       ],
       "visual": {
         "item": "thaumaturge:thaumonomicon"
@@ -100,14 +100,26 @@
         20,
         0
       ],
-      "scale": 0.4
+      "scale": 0.4,
+      "collider": {
+        "from": [
+          -4,
+          0,
+          -4
+        ],
+        "to": [
+          4,
+          3,
+          4
+        ]
+      }
     },
     {
       "id": "book",
       "pos": [
-        23.5,
+        20.5,
         22.5,
-        9
+        11
       ],
       "pickable": false,
       "hidden": true
@@ -115,9 +127,9 @@
     {
       "id": "help_prev",
       "pos": [
-        25.5,
+        22.5,
         16.8,
-        9
+        11
       ],
       "collider": {
         "from": [
@@ -135,9 +147,9 @@
     {
       "id": "help_next",
       "pos": [
-        21.5,
+        18.5,
         16.8,
-        9
+        11
       ],
       "collider": {
         "from": [

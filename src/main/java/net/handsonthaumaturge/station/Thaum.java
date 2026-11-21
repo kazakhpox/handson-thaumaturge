@@ -212,6 +212,112 @@ public final class Thaum {
         }
     }
 
+    // ---- The research table.
+
+    public static final ResourceLocation RESEARCH_TABLE = ResourceLocation.fromNamespaceAndPath("thaumaturge", "research_table");
+    private static boolean tableFailed;
+    private static Class<?> tableEntity;
+    private static Method items;
+    private static Method ensurePuzzle;
+    private static Method placeAspect;
+    private static Method combineAspects;
+    private static Method duplicateNote;
+    private static Constructor<?> newHex;
+    private static ResourceKey<? extends net.minecraft.core.Registry<?>> aspectRegistry;
+
+    private static boolean tableReady() {
+        if (tableEntity != null) {
+            return true;
+        }
+        if (tableFailed) {
+            return false;
+        }
+        try {
+            Class<?> entity = Class.forName(PACKAGE + "content.research.table.BlockEntityResearchTable");
+            Class<?> hex = Class.forName(PACKAGE + "content.research.note.HexGrid$Hex");
+            items = entity.getMethod("items");
+            ensurePuzzle = entity.getMethod("ensureNotePuzzle");
+            placeAspect = entity.getMethod("placeAspect", ServerPlayer.class, hex, Holder.class);
+            combineAspects = entity.getMethod("combineAspects", ServerPlayer.class, Holder.class, Holder.class, boolean.class, boolean.class);
+            duplicateNote = entity.getMethod("duplicateNote", ServerPlayer.class);
+            newHex = hex.getConstructor(int.class, int.class);
+            aspectRegistry = (ResourceKey<? extends net.minecraft.core.Registry<?>>) Class.forName(PACKAGE + "api.aspect.IAspect")
+                    .getField("REGISTRY_KEY").get(null);
+            tableEntity = entity;
+            return true;
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            tableFailed = true;
+            LOGGER.error("Hands-On Thaumaturge: this Thaumaturge does not have what the research table station needs", e);
+            return false;
+        }
+    }
+
+    public static Block researchTable() {
+        Block block = BuiltInRegistries.BLOCK.get(RESEARCH_TABLE);
+        return block == null ? Blocks.AIR : block;
+    }
+
+    public static boolean isResearchTable(BlockEntity entity) {
+        return tableReady() && tableEntity.isInstance(entity);
+    }
+
+    /** The table's two slots: the scribing tools, the note. */
+    public static net.neoforged.neoforge.items.IItemHandlerModifiable tableItems(BlockEntity table) {
+        return (net.neoforged.neoforge.items.IItemHandlerModifiable) invoke(items, table);
+    }
+
+    /** Draws the note's puzzle when it has none yet, and shows the table as it is now to everyone (its menu does both). */
+    public static void notesChanged(BlockEntity table) {
+        invoke(ensurePuzzle, table);
+        table.setChanged();
+        if (table.getLevel() != null) {
+            table.getLevel().sendBlockUpdated(table.getBlockPos(), table.getBlockState(), table.getBlockState(), 3);
+        }
+    }
+
+    private static Holder<?> aspect(ServerPlayer player, ResourceLocation id) {
+        if (id == null) {
+            return null;
+        }
+        Optional<?> found = player.registryAccess().lookupOrThrow((ResourceKey) aspectRegistry)
+                .get(ResourceKey.create((ResourceKey) aspectRegistry, id));
+        return (Holder<?>) found.orElse(null);
+    }
+
+    /** Writes an aspect into a hex of the note (or rubs it out, {@code aspect} null), as the table's screen asks. */
+    public static void place(BlockEntity table, ServerPlayer player, int q, int r, ResourceLocation aspect) {
+        Holder<?> holder = aspect(player, aspect);
+        if (aspect != null && holder == null) {
+            return;
+        }
+        try {
+            invoke(placeAspect, table, player, newHex.newInstance(q, r), holder);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void combine(BlockEntity table, ServerPlayer player, ResourceLocation first, ResourceLocation second,
+            boolean bonusFirst, boolean bonusSecond) {
+        Holder<?> a = aspect(player, first);
+        Holder<?> b = aspect(player, second);
+        if (a != null && b != null) {
+            invoke(combineAspects, table, player, a, b, bonusFirst, bonusSecond);
+        }
+    }
+
+    public static void duplicate(BlockEntity table, ServerPlayer player) {
+        invoke(duplicateNote, table, player);
+    }
+
+    private static Object invoke(Method method, Object target, Object... args) {
+        try {
+            return method.invoke(target, args);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     public static boolean isWorkbenchAt(net.minecraft.world.level.Level level, BlockPos pos) {
         return level.getBlockState(pos).is(workbench());
     }

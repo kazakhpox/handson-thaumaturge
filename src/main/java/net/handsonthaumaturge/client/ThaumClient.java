@@ -6,29 +6,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.slf4j.Logger;
 
 /**
  * What the research table's 3D sheet needs from Thaumaturge on the client, reached by name (the addon compiles without it): the
- * note's puzzle, the hex grid's geometry, the player's aspect pool, the aspects' looks and names, and the table's own packets,
- * sent exactly as its screen sends them. Everything the server checks stays Thaumaturge's.
+ * note's puzzle, the hex grid's geometry, and the player's aspect pool, the aspects' looks and names. Everything the server checks stays Thaumaturge's.
  */
 final class ThaumClient {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -69,12 +63,8 @@ final class ThaumClient {
     private static Method aspectName;
     private static Method researchOf;
     private static Method hasCompleted;
-    private static Method menuTable;
     private static Method bonusAspects;
     private static Method amountOf;
-    private static Constructor<?> placePayload;
-    private static Constructor<?> combinePayload;
-    private static Constructor<?> duplicatePayload;
 
     private ThaumClient() {
     }
@@ -122,15 +112,9 @@ final class ThaumClient {
             poolMap = Class.forName(P + "content.research.pool.AspectPoolData").getMethod("pool");
             researchOf = Class.forName(P + "api.capability.PlayerResearchAccess").getMethod("of", Player.class);
             hasCompleted = researchOf.getReturnType().getMethod("hasCompleted", ResourceLocation.class);
-            menuTable = Class.forName(P + "content.research.table.MenuResearchTable").getMethod("blockEntity");
             Class<?> table = Class.forName(P + "content.research.table.BlockEntityResearchTable");
             bonusAspects = table.getMethod("bonusAspects");
             amountOf = Class.forName(P + "api.aspect.AspectList").getMethod("amountOf", Holder.class);
-            placePayload = Class.forName(P + "network.ServerboundTablePlaceAspectPayload")
-                    .getConstructor(BlockPos.class, int.class, int.class, Optional.class);
-            combinePayload = Class.forName(P + "network.ServerboundTableCombinePayload")
-                    .getConstructor(BlockPos.class, ResourceLocation.class, ResourceLocation.class, boolean.class, boolean.class);
-            duplicatePayload = Class.forName(P + "network.ServerboundTableDuplicatePayload").getConstructor(BlockPos.class);
             ready = true;
             return true;
         } catch (ReflectiveOperationException | RuntimeException e) {
@@ -271,30 +255,10 @@ final class ThaumClient {
     }
 
     /** What the table gives on top of the player's pool (the aids round it): the screen counts it as available too. */
-    static int bonus(AbstractContainerMenu menu, Holder<?> aspect) {
-        Object table = menu == null ? null : call(menuTable, menu);
-        return table == null ? 0 : (int) call(amountOf, call(bonusAspects, table), aspect);
-    }
-
-    // ---- The table's packets, as its screen sends them.
-
-    static void place(BlockPos table, Object hex, Holder<?> aspect) {
-        send(placePayload, table, q(hex), r(hex), aspect == null ? Optional.empty() : Optional.of(id(aspect)));
-    }
-
-    static void combine(BlockPos table, Holder<?> first, Holder<?> second, boolean bonusFirst, boolean bonusSecond) {
-        send(combinePayload, table, id(first), id(second), bonusFirst, bonusSecond);
-    }
-
-    static void duplicate(BlockPos table) {
-        send(duplicatePayload, table);
-    }
-
-    private static void send(Constructor<?> payload, Object... args) {
-        try {
-            PacketDistributor.sendToServer((CustomPacketPayload) payload.newInstance(args));
-        } catch (ReflectiveOperationException e) {
-            LOGGER.error("Hands-On Thaumaturge: could not send the research table's packet", e);
+    static int bonus(net.minecraft.world.level.block.entity.BlockEntity table, Holder<?> aspect) {
+        if (table == null || !bonusAspects.getDeclaringClass().isInstance(table)) {
+            return 0;
         }
+        return (int) call(amountOf, call(bonusAspects, table), aspect);
     }
 }

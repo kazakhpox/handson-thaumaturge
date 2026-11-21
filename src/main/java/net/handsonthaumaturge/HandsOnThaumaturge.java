@@ -15,6 +15,7 @@ public final class HandsOnThaumaturge {
 
     public HandsOnThaumaturge() {
         WorkbenchStation.register();
+        net.handsonthaumaturge.station.ResearchStation.register();
     }
 
     public static ResourceLocation id(String path) {

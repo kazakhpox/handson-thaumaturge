@@ -1,0 +1,16 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="MIT"
+
+[[mods]]
+modId="handson_thaumaturge_devtools"
+version="0.0.0"
+displayName="Hands-On Thaumaturge dev tools"
+description='''Screenshots of the stations for development.'''
+
+[[dependencies.handson_thaumaturge_devtools]]
+    modId="handson_thaumaturge"
+    type="required"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="CLIENT"

@@ -30,6 +30,12 @@ final class Quads {
     /** A rectangle lying face up from ({@code x0}, {@code z0}) to ({@code x1}, {@code z1}), the whole texture on it. */
     static void flatRect(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float z0, float x1, float z1,
             float y, int argb) {
+        flatRect(pose, buffers, texture, x0, z0, x1, z1, y, 1.0F, argb);
+    }
+
+    /** As {@link #flatRect}, the texture's top left {@code uv} by {@code uv} of it only (a sheet drawn in a corner of its image). */
+    static void flatRect(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float z0, float x1, float z1,
+            float y, float uv, int argb) {
         VertexConsumer out = buffers.getBuffer(RenderType.entityTranslucent(texture));
         PoseStack.Pose last = pose.last();
         Matrix4f m = last.pose();
@@ -38,9 +44,9 @@ final class Quads {
         float far = Math.max(z0, z1);
         float near = Math.min(z0, z1);
         put(out, m, last, left, y, far, 0, 0, argb, 0, 1, 0);
-        put(out, m, last, left, y, near, 0, 1, argb, 0, 1, 0);
-        put(out, m, last, right, y, near, 1, 1, argb, 0, 1, 0);
-        put(out, m, last, right, y, far, 1, 0, argb, 0, 1, 0);
+        put(out, m, last, left, y, near, 0, uv, argb, 0, 1, 0);
+        put(out, m, last, right, y, near, uv, uv, argb, 0, 1, 0);
+        put(out, m, last, right, y, far, uv, 0, argb, 0, 1, 0);
     }
 
     /** A line of ink lying face up from one point to another, {@code width} wide. */
@@ -75,6 +81,11 @@ final class Quads {
     /** An upright rectangle facing the front, from ({@code x0}, {@code y0}) to ({@code x1}, {@code y1}). */
     static void uprightRect(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float y0, float x1, float y1,
             float z, int argb) {
+        uprightRect(pose, buffers, texture, x0, y0, x1, y1, z, 1.0F, argb);
+    }
+
+    static void uprightRect(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float y0, float x1, float y1,
+            float z, float uv, int argb) {
         VertexConsumer out = buffers.getBuffer(RenderType.entityTranslucent(texture));
         PoseStack.Pose last = pose.last();
         Matrix4f m = last.pose();
@@ -83,9 +94,9 @@ final class Quads {
         float top = Math.max(y0, y1);
         float bottom = Math.min(y0, y1);
         put(out, m, last, left, top, z, 0, 0, argb, 0, 0, -1);
-        put(out, m, last, left, bottom, z, 0, 1, argb, 0, 0, -1);
-        put(out, m, last, right, bottom, z, 1, 1, argb, 0, 0, -1);
-        put(out, m, last, right, top, z, 1, 0, argb, 0, 0, -1);
+        put(out, m, last, left, bottom, z, 0, uv, argb, 0, 0, -1);
+        put(out, m, last, right, bottom, z, uv, uv, argb, 0, 0, -1);
+        put(out, m, last, right, top, z, uv, 0, argb, 0, 0, -1);
     }
 
     private static void put(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float x, float y, float z, float u, float v, int argb,

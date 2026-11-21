@@ -15,14 +15,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Vector3f;
 
-import com.pockyl.diegesis.api.client.MenuAccess;
 import com.pockyl.diegesis.api.client.StationBehavior;
 import com.pockyl.diegesis.api.client.StationView;
 import com.pockyl.diegesis.api.event.SceneEvent;
+
+import net.handsonthaumaturge.station.ResearchStation;
 
 /**
  * Thaumaturge's research table worked in the world. The scribing tools and the note lie on the table in their slots; while a
@@ -32,7 +32,7 @@ import com.pockyl.diegesis.api.event.SceneEvent;
  * blank hex writes it in, a click on a written one rubs it out. A right click puts an aspect in the mixing tray beside the panel,
  * whose button combines the two; shift on a compound fills the tray with its parts (with the research for it). The book on
  * the table opens the guide to mixtures in the air beside it, as Hands-On Vanilla's crafting table shows its recipe book.
- * Everything sent goes as the screen's own packets.
+ * What is done goes to the server as the station's actions, which call the table's own methods.
  */
 public final class ResearchBehavior implements StationBehavior {
     private static final ResourceLocation PARCHMENT = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/misc/parchment3.png");
@@ -45,7 +45,9 @@ public final class ResearchBehavior implements StationBehavior {
     private static final float GUI_SHEET = 150.0F;
     private static final float GUI_HEX = 9.0F;
     /** The sheet on the table, scene pixels: its side, and the height it lies at over the node. */
-    private static final float SHEET = 11.0F;
+    private static final float SHEET = 12.0F;
+    /** The parchment fills the top left 150 of its image's 256 pixels. */
+    private static final float PARCHMENT_UV = 150.0F / 256.0F;
     private static final float K = SHEET / GUI_SHEET;
     private static final float LIFT = 0.04F;
     private static final int CELLS = 25;
@@ -73,9 +75,8 @@ public final class ResearchBehavior implements StationBehavior {
         return Minecraft.getInstance().player;
     }
 
-    private static AbstractContainerMenu menu(StationView view) {
-        MenuAccess access = view.menu();
-        return access == null ? null : access.handle();
+    private static net.minecraft.world.level.block.entity.BlockEntity table(StationView view) {
+        return view.level().getBlockEntity(view.pos());
     }
 
     private static ItemStack slot(StationView view, String group) {
@@ -92,7 +93,7 @@ public final class ResearchBehavior implements StationBehavior {
     }
 
     private int available(StationView view, Holder<?> aspect) {
-        return ThaumClient.amount(player(), aspect) + ThaumClient.bonus(menu(view), aspect);
+        return ThaumClient.amount(player(), aspect) + ThaumClient.bonus(table(view), aspect);
     }
 
     private Holder<?> shown(int cell) {
@@ -253,7 +254,7 @@ public final class ResearchBehavior implements StationBehavior {
             case "combine" -> combine(view);
             case "duplicate" -> {
                 if (canDuplicate(view)) {
-                    ThaumClient.duplicate(view.pos());
+                    view.sendAction(ResearchStation.ACTION_COPY, new net.minecraft.nbt.CompoundTag());
                     sound(view, SoundEvents.BOOK_PUT, 0.6F);
                 }
             }
@@ -310,13 +311,13 @@ public final class ResearchBehavior implements StationBehavior {
                 view.showCaption(Component.translatable("gui.thaumaturge.research_table.no_ink.0"), 2.0F);
                 return;
             }
-            ThaumClient.place(view.pos(), hex, held);
+            place(view, hex, held);
             sound(view, SoundEvents.VILLAGER_WORK_CARTOGRAPHER, 0.5F);
             if (available(view, held) <= 1) {
                 held = null;
             }
         } else if (type == ThaumClient.TYPE_PLACED) {
-            ThaumClient.place(view.pos(), hex, null);
+            place(view, hex, null);
             sound(view, SoundEvents.BRUSH_GENERIC, 0.5F);
         } else if (button == 1) {
             held = null;
@@ -329,13 +330,28 @@ public final class ResearchBehavior implements StationBehavior {
         }
         combineCooldownUntil = System.currentTimeMillis() + COMBINE_COOLDOWN_MS;
         Player player = player();
-        AbstractContainerMenu menu = menu(view);
+        var menu = table(view);
         // As the screen: what the pool lacks comes from the table's aids.
         boolean bonus1 = ThaumClient.amount(player, select1) <= 0 && ThaumClient.bonus(menu, select1) > 0;
         int second = ThaumClient.amount(player, select2) - (select1.equals(select2) && !bonus1 ? 1 : 0);
         boolean bonus2 = second <= 0 && ThaumClient.bonus(menu, select2) > 0;
-        ThaumClient.combine(view.pos(), select1, select2, bonus1, bonus2);
+        net.minecraft.nbt.CompoundTag data = new net.minecraft.nbt.CompoundTag();
+        data.putString(ResearchStation.FIRST, ThaumClient.id(select1).toString());
+        data.putString(ResearchStation.SECOND, ThaumClient.id(select2).toString());
+        data.putBoolean(ResearchStation.BONUS_FIRST, bonus1);
+        data.putBoolean(ResearchStation.BONUS_SECOND, bonus2);
+        view.sendAction(ResearchStation.ACTION_COMBINE, data);
         sound(view, SoundEvents.BREWING_STAND_BREW, 0.4F);
+    }
+
+    private static void place(StationView view, Object hex, Holder<?> aspect) {
+        net.minecraft.nbt.CompoundTag data = new net.minecraft.nbt.CompoundTag();
+        data.putInt(ResearchStation.Q, ThaumClient.q(hex));
+        data.putInt(ResearchStation.R, ThaumClient.r(hex));
+        if (aspect != null) {
+            data.putString(ResearchStation.ASPECT, ThaumClient.id(aspect).toString());
+        }
+        view.sendAction(ResearchStation.ACTION_PLACE, data);
     }
 
     private boolean canDuplicate(StationView view) {
@@ -388,7 +404,7 @@ public final class ResearchBehavior implements StationBehavior {
     // ---- The sheet's geometry: scene pixels on the table to the screen's sheet, and back.
 
     private static Vector3f sheetCentre(StationView view) {
-        return new Vector3f(8.0F, 16.0F, 10.2F);
+        return new Vector3f(8.0F, 16.0F, 9.8F);
     }
 
     private static Object hexUnderCursor(StationView view) {
@@ -429,7 +445,7 @@ public final class ResearchBehavior implements StationBehavior {
             return;
         }
         Player player = player();
-        Quads.flatRect(pose, buffers, PARCHMENT, -SHEET / 2.0F, -SHEET / 2.0F, SHEET / 2.0F, SHEET / 2.0F, LIFT, 0xFFFFFFFF);
+        Quads.flatRect(pose, buffers, PARCHMENT, -SHEET / 2.0F, -SHEET / 2.0F, SHEET / 2.0F, SHEET / 2.0F, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
         boolean complete = ThaumClient.complete(note);
         Object hovered = view.isInUse() ? hexUnderCursor(view) : null;
         List<?> cells = ThaumClient.cells(note);
@@ -488,7 +504,7 @@ public final class ResearchBehavior implements StationBehavior {
             return;
         }
         int pool = ThaumClient.amount(player(), aspect);
-        int bonus = ThaumClient.bonus(menu(view), aspect);
+        int bonus = ThaumClient.bonus(table(view), aspect);
         boolean ready = pool + bonus > 0;
         boolean isHeld = aspect.equals(held);
         if (isHeld) {
@@ -532,7 +548,7 @@ public final class ResearchBehavior implements StationBehavior {
         if (!helperOpen || player() == null) {
             return;
         }
-        Quads.uprightRect(pose, buffers, PARCHMENT, -5.0F, -6.0F, 5.0F, 6.0F, 0.05F, 0xFFFFFFFF);
+        Quads.uprightRect(pose, buffers, PARCHMENT, -5.0F, -6.0F, 5.0F, 6.0F, 0.05F, PARCHMENT_UV, 0xFFFFFFFF);
         List<Holder<?>> compounds = compounds();
         int start = helperPage * HELP_ROWS;
         float rowHeight = 1.5F;

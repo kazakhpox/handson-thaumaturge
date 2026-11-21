@@ -10,7 +10,7 @@ import com.pockyl.diegesis.api.client.DiegesisClient;
 import net.handsonthaumaturge.HandsOnThaumaturge;
 import net.handsonthaumaturge.station.WorkbenchStation;
 
-/** Client setup: the workbench's behaviour, the research table (a station on Thaumaturge's own menu, so registered here), and its effect (the behaviour plays it, see {@link WorkbenchBehavior#onEffect}). */
+/** Client setup: the workbench's behaviour, the research table's, and its effect (the behaviour plays it, see {@link WorkbenchBehavior#onEffect}). */
 @Mod(value = HandsOnThaumaturge.MOD_ID, dist = Dist.CLIENT)
 public final class HandsOnThaumaturgeClient {
     public HandsOnThaumaturgeClient(IEventBus modBus) {
@@ -19,8 +19,7 @@ public final class HandsOnThaumaturgeClient {
 
     private static void setup() {
         DiegesisClient.registerBehavior(WorkbenchStation.ID, WorkbenchBehavior::new);
-        ResearchStation.register();
-        DiegesisClient.registerBehavior(ResearchStation.ID, ResearchBehavior::new);
+        DiegesisClient.registerBehavior(net.handsonthaumaturge.station.ResearchStation.ID, ResearchBehavior::new);
         DiegesisClient.registerEffect(WorkbenchStation.EFFECT_CRAFTED, (view, node, data) -> {
         });
     }

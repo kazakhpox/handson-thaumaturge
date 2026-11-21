@@ -38,3 +38,6 @@ displayTest="IGNORE_ALL_VERSION"
     versionRange="${diegesis_version_range}"
     ordering="AFTER"
     side="BOTH"
+
+[[mixins]]
+config="${mod_id}.mixins.json"

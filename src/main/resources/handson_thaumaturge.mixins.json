@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.handsonthaumaturge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "StationRenderersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
