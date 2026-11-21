@@ -261,4 +261,31 @@ final class ThaumClient {
         }
         return (int) call(amountOf, call(bonusAspects, table), aspect);
     }
+
+    // ---- Where Thaumaturge's renderer draws the table's inkwell.
+
+    private static Method tablePose;
+    private static boolean tablePoseFailed;
+
+    /**
+     * The inkwell's place on the table's main half, in blocks from its corner: the pose Thaumaturge's renderer puts the table top
+     * in for that facing ({@code ResearchTableTop.pose}), then the inkwell's own offset in it.
+     */
+    static org.joml.Vector3f inkwell(net.minecraft.core.Direction facing) {
+        if (tablePose == null && !tablePoseFailed) {
+            try {
+                tablePose = Class.forName(P + "client.render.blockentity.ResearchTableTop")
+                        .getMethod("pose", com.mojang.blaze3d.vertex.PoseStack.class, net.minecraft.core.Direction.class);
+            } catch (ReflectiveOperationException e) {
+                tablePoseFailed = true;
+            }
+        }
+        if (tablePose == null) {
+            return new org.joml.Vector3f(0.5F, 1.0F, 0.5F);
+        }
+        com.mojang.blaze3d.vertex.PoseStack pose = new com.mojang.blaze3d.vertex.PoseStack();
+        call(tablePose, null, pose, facing);
+        pose.translate(-0.28125F, 0.0F, 0.28125F);
+        return pose.last().pose().transformPosition(new org.joml.Vector3f());
+    }
 }

@@ -89,11 +89,14 @@ public final class ResearchBehavior implements StationBehavior {
      * The table is two blocks long and the scene stands on the half that was used: the other half lies the way that half's
      * {@code facing} points. Seen from the front, the scene's +X is the front's clockwise side.
      */
-    /** How far from the middle of its half, towards the table's end, Thaumaturge draws the inkwell, scene pixels. */
-    private static final float INKWELL_OUT = 5.0F;
-
-    private static boolean isResearchTableHere(StationView view) {
-        return net.handsonthaumaturge.station.Thaum.isResearchTable(view.level().getBlockEntity(view.pos()));
+    /** A world position in the scene's pixels: the inverse of {@code view.toWorld}, which only turns and moves. */
+    private static Vector3f toScene(StationView view, net.minecraft.world.phys.Vec3 world) {
+        net.minecraft.world.phys.Vec3 origin = view.toWorld(0.0F, 0.0F, 0.0F);
+        net.minecraft.world.phys.Vec3 ax = view.toWorld(1.0F, 0.0F, 0.0F).subtract(origin);
+        net.minecraft.world.phys.Vec3 az = view.toWorld(0.0F, 0.0F, 1.0F).subtract(origin);
+        net.minecraft.world.phys.Vec3 d = world.subtract(origin);
+        // ax and az are square to each other and of one length (a pixel): project on each.
+        return new Vector3f((float) (d.dot(ax) / ax.lengthSqr()), 0.0F, (float) (d.dot(az) / az.lengthSqr()));
     }
 
     private static void centreOnTable(StationView view) {
@@ -120,11 +123,22 @@ public final class ResearchBehavior implements StationBehavior {
             view.node("aspect_" + i).ifPresent(node -> node.moveTo(SHIFT.x, SHIFT.y, SHIFT.z, 0.0F));
         }
         view.moveCamera(SHIFT.x, SHIFT.y, SHIFT.z);
-        // The scribing tools go where Thaumaturge draws its inkwell: on the table's main half, towards its outer end.
-        boolean onMain = isResearchTableHere(view);
-        float ex = onMain ? -SHIFT.x * INKWELL_OUT / 8.0F : SHIFT.x * 2.0F + SHIFT.x * INKWELL_OUT / 8.0F;
-        float ez = onMain ? -SHIFT.z * INKWELL_OUT / 8.0F : SHIFT.z * 2.0F + SHIFT.z * INKWELL_OUT / 8.0F;
-        view.node("tools").ifPresent(node -> node.moveTo(ex, 0.0F, ez, 0.0F));
+        // The scribing tools go where Thaumaturge's renderer draws its inkwell, worked out with its own pose of the table top.
+        net.minecraft.world.level.block.entity.BlockEntity table = table(view);
+        if (table != null) {
+            net.minecraft.world.level.block.state.BlockState state = table.getBlockState();
+            net.minecraft.core.Direction facing = net.minecraft.core.Direction.NORTH;
+            for (net.minecraft.world.level.block.state.properties.Property<?> property : state.getProperties()) {
+                if ("facing".equals(property.getName()) && state.getValue(property) instanceof net.minecraft.core.Direction d) {
+                    facing = d;
+                }
+            }
+            Vector3f local = ThaumClient.inkwell(facing);
+            net.minecraft.world.phys.Vec3 world = new net.minecraft.world.phys.Vec3(table.getBlockPos().getX() + local.x,
+                    table.getBlockPos().getY() + 1.0, table.getBlockPos().getZ() + local.z);
+            Vector3f scene = toScene(view, world);
+            view.node("tools").ifPresent(node -> node.moveTo(scene.x - 8.0F, 0.0F, scene.z - 8.0F, 0.0F));
+        }
     }
 
     private static ItemStack slot(StationView view, String group) {

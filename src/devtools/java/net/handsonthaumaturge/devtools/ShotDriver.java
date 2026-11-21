@@ -126,6 +126,38 @@ public final class ShotDriver {
         then("open other half", 90, ShotDriver::use);
         then("other half shot", 5, () -> shot("08_research_other_half"));
         then("leave other half", 40, ShotDriver::leave);
+        // Taken out of its slot, the scribing tools leave the table.
+        then("stand again", 20, () -> standBefore(TABLE));
+        then("aim again", 5, () -> lookAt(TABLE));
+        then("open again", 90, ShotDriver::use);
+        then("empty tools", 30, () -> server(player -> {
+            if (player.level().getBlockEntity(TABLE) instanceof com.leclowndu93150.thaumaturge.content.research.table.BlockEntityResearchTable table) {
+                table.items().setStackInSlot(0, ItemStack.EMPTY);
+                table.setChanged();
+                player.level().sendBlockUpdated(TABLE, table.getBlockState(), table.getBlockState(), 3);
+            }
+        }));
+        then("no tools shot", 5, () -> shot("09_research_no_tools"));
+        then("refill tools", 30, () -> server(player -> {
+            if (player.level().getBlockEntity(TABLE) instanceof com.leclowndu93150.thaumaturge.content.research.table.BlockEntityResearchTable table) {
+                table.items().setStackInSlot(0, new ItemStack(com.leclowndu93150.thaumaturge.registry.TTItems.SCRIBING_TOOLS.get()));
+                table.setChanged();
+                player.level().sendBlockUpdated(TABLE, table.getBlockState(), table.getBlockState(), 3);
+            }
+        }));
+        then("hover east tools", 10, ShotDriver::hoverTools);
+        then("east shot", 5, () -> shot("10_table_east"));
+        then("leave again", 40, ShotDriver::leave);
+        // The table turned every way, the player always north of it looking south.
+        for (Direction facing : new Direction[]{Direction.WEST, Direction.SOUTH}) {
+            then("turn " + facing, 30, () -> placeTable(facing));
+            then("stand " + facing, 20, () -> standBefore(TABLE));
+            then("aim " + facing, 5, () -> lookAt(TABLE));
+            then("open " + facing, 90, ShotDriver::use);
+            then("hover tools " + facing, 10, ShotDriver::hoverTools);
+            then("shot " + facing, 5, () -> shot("10_table_" + facing.getName()));
+            then("leave " + facing, 40, ShotDriver::leave);
+        }
         then("quit", 5, () -> Minecraft.getInstance().stop());
     }
 
@@ -174,6 +206,45 @@ public final class ShotDriver {
                 inventory.setChanged();
             }
         });
+    }
+
+    /** The research table with its main half at TABLE facing {@code facing}, its other half that way. */
+    private void placeTable(Direction facing) {
+        server(player -> {
+            ServerLevel level = player.serverLevel();
+            for (Direction d : Direction.Plane.HORIZONTAL) {
+                level.setBlockAndUpdate(TABLE.relative(d), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+            }
+            level.setBlockAndUpdate(TABLE, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+            var table = com.leclowndu93150.thaumaturge.registry.TTBlocks.RESEARCH_TABLE.get().defaultBlockState();
+            var f = com.leclowndu93150.thaumaturge.content.research.table.BlockResearchTable.FACING;
+            var part = com.leclowndu93150.thaumaturge.content.research.table.BlockResearchTable.PART;
+            BlockPos other = TABLE.relative(facing);
+            if (other.equals(TABLE.north())) {
+                // The player stands north of the table: the other half there would stand where they do.
+                return;
+            }
+            level.setBlockAndUpdate(TABLE, table.setValue(f, facing)
+                    .setValue(part, com.leclowndu93150.thaumaturge.content.research.table.ResearchTablePart.MAIN));
+            level.setBlockAndUpdate(other, table.setValue(f, facing.getOpposite())
+                    .setValue(part, com.leclowndu93150.thaumaturge.content.research.table.ResearchTablePart.EXT));
+        });
+        fillTable();
+    }
+
+    /** The mouse over the tools slot, wherever the station put it. */
+    private static void hoverTools() {
+        station().ifPresent(view -> view.node("tools").ifPresent(node -> {
+            Vec3 world = node.worldPosition();
+            Optional<Vector2f> screen = DiegesisClient.toScreen(world.add(0, 0.06, 0));
+            screen.ifPresent(point -> {
+                Minecraft mc = Minecraft.getInstance();
+                double scale = mc.getWindow().getGuiScale();
+                long window = mc.getWindow().getWindow();
+                GLFW.glfwSetCursorPos(window, point.x * scale, point.y * scale);
+                invoke("onMove", new Class<?>[]{long.class, double.class, double.class}, window, point.x * scale, point.y * scale);
+            });
+        }));
     }
 
     private void fillTable() {
