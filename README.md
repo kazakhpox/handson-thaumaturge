@@ -11,7 +11,7 @@ the [Diegesis](https://modrinth.com/mod/diegesis-api) library in the spirit of
   enchanting table) in its primal's colour, flaring and turning while the recipe on the grid burns that crystal. Over the
   far edge stands the vis in the aura and what the recipe costs, red when the aura cannot pay it. Taking the result crafts
   through Thaumaturge's own workbench menu: arcane and vanilla recipes, research gates, wand and crystal payment.
-- **The research table** (either half opens it; the sheet lies in the middle of the whole table). The scribing tools go in where Thaumaturge draws its own inkwell and quill, the note lies in front. With
+- **The research table** (either half opens it; like a furnace it is always worked from its front, the side that puts the inkwell in the far left corner, the sheet in the middle of the whole table). The scribing tools go in where Thaumaturge draws its own inkwell and quill, the note lies in front. With
   a note in, its puzzle lies open on the table on parchment: Thaumaturge's hex grid, the aspects written in, the lines of the
   chains that connect. The aspects you know hang over the far edge as a panel of icons (five by five, paged as in the screen:
   the wheel or the arrows). Click one to take it up, click a blank hex to write it in, click a written one to rub it out.

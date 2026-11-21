@@ -43,7 +43,11 @@ public final class ResearchStation {
             .schema(SCHEMA)
             .logic(ResearchLogic::new)
             .openWhen(ResearchStation::opens)
-            .orientation(StationType.Orientation.PLAYER)
+            // One station for the whole table, on its main half, seen from the side that puts Thaumaturge's inkwell in the far
+            // left corner, whichever way the table stands and whichever side the player comes from (as a furnace is always worked
+            // from its front). BLOCK is turned a quarter for this table by OrientationMixin.
+            .anchor((level, pos, state) -> isMain(state) ? pos : Thaum.otherHalf(state, pos))
+            .orientation(StationType.Orientation.BLOCK)
             .build();
 
     private ResearchStation() {
@@ -51,6 +55,25 @@ public final class ResearchStation {
 
     public static void register() {
         Diegesis.register(TYPE);
+    }
+
+    /** Whether a research table block is its main half (the one with the block entity). */
+    public static boolean isMain(BlockState state) {
+        for (net.minecraft.world.level.block.state.properties.Property<?> property : state.getProperties()) {
+            if ("part".equals(property.getName())) {
+                return "main".equals(state.getValue(property).toString().toLowerCase(java.util.Locale.ROOT));
+            }
+        }
+        return true;
+    }
+
+    /**
+     * The side the table is worked from: its main half's facing points to the other half, and seen from its clockwise side
+     * the inkwell Thaumaturge draws at the main half's outer end, on its counter-clockwise side, lies in the far left corner.
+     */
+    public static net.minecraft.core.Direction front(BlockState state) {
+        net.minecraft.core.Direction facing = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING);
+        return isMain(state) ? facing.getClockWise() : facing.getCounterClockWise();
     }
 
     /** Sneaking keeps Thaumaturge's screen; either half of the table opens the station. */

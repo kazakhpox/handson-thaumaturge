@@ -149,9 +149,11 @@ public final class ShotDriver {
         then("east shot", 5, () -> shot("10_table_east"));
         then("leave again", 40, ShotDriver::leave);
         // The table turned every way, the player always north of it looking south.
-        for (Direction facing : new Direction[]{Direction.WEST, Direction.SOUTH}) {
+        for (Direction facing : new Direction[]{Direction.WEST, Direction.SOUTH, Direction.NORTH}) {
             then("turn " + facing, 30, () -> placeTable(facing));
-            then("stand " + facing, 20, () -> standBefore(TABLE));
+            // From the south this time: the station is worked from the same side whichever way the player comes.
+            then("stand " + facing, 20, () -> server(player -> player.teleportTo(player.serverLevel(), TABLE.getX() + 0.5 + (facing == Direction.SOUTH ? 1.6 : 0),
+                    TABLE.getY(), TABLE.getZ() + (facing == Direction.SOUTH ? 0.5 : 2.6), facing == Direction.SOUTH ? 90.0F : 180.0F, 45.0F)));
             then("aim " + facing, 5, () -> lookAt(TABLE));
             then("open " + facing, 90, ShotDriver::use);
             then("hover tools " + facing, 10, ShotDriver::hoverTools);
@@ -220,10 +222,6 @@ public final class ShotDriver {
             var f = com.leclowndu93150.thaumaturge.content.research.table.BlockResearchTable.FACING;
             var part = com.leclowndu93150.thaumaturge.content.research.table.BlockResearchTable.PART;
             BlockPos other = TABLE.relative(facing);
-            if (other.equals(TABLE.north())) {
-                // The player stands north of the table: the other half there would stand where they do.
-                return;
-            }
             level.setBlockAndUpdate(TABLE, table.setValue(f, facing)
                     .setValue(part, com.leclowndu93150.thaumaturge.content.research.table.ResearchTablePart.MAIN));
             level.setBlockAndUpdate(other, table.setValue(f, facing.getOpposite())
