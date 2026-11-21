@@ -1,0 +1,362 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
+  "$comment": "Thaumaturge's arcane workbench is the block itself. Its green top has eleven cells: the 3 x 3 grid in the middle (cells centred on 5, 8 and 11 pixels, in the vanilla screen's order from the far left as the camera sees it), the strip on the left for the wand and the one on the right for the result, which hovers there like a dropped item. The six primal crystals float in a ring round the table, clear of the grid, in the screen's places (aer far, perditio near, ignis and terra on the left, aqua and ordo on the right); under each glows a sigil in its colour, bright and turning when the recipe on the grid burns that crystal. Over the far edge stands the vis in the aura and what the recipe costs. The camera stands above the near edge looking down; the hotbar stays where the HUD has it, over it rows of the other stacks.",
+  "work_plane": 16,
+  "idle_visible": false,
+  "camera": {
+    "position": [
+      8,
+      50,
+      -21
+    ],
+    "target": [
+      8,
+      16,
+      7
+    ],
+    "fov": 44,
+    "interactive_at": 0.6
+  },
+  "interface": {
+    "hide_player": true,
+    "inventory_panel": false,
+    "carry_lift": 1.5,
+    "highlight_color": "#26FFFFFF",
+    "hover_outline": false
+  },
+  "inventory_drawer": {
+    "layout": "hotbar",
+    "always_open": true,
+    "carry_size": 2.4
+  },
+  "nodes": [
+    {
+      "id": "grid_0",
+      "pos": [
+        11,
+        16.02,
+        11
+      ],
+      "slot": {
+        "slot": "grid[0]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_1",
+      "pos": [
+        8,
+        16.02,
+        11
+      ],
+      "slot": {
+        "slot": "grid[1]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_2",
+      "pos": [
+        5,
+        16.02,
+        11
+      ],
+      "slot": {
+        "slot": "grid[2]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_3",
+      "pos": [
+        11,
+        16.02,
+        8
+      ],
+      "slot": {
+        "slot": "grid[3]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_4",
+      "pos": [
+        8,
+        16.02,
+        8
+      ],
+      "slot": {
+        "slot": "grid[4]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_5",
+      "pos": [
+        5,
+        16.02,
+        8
+      ],
+      "slot": {
+        "slot": "grid[5]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_6",
+      "pos": [
+        11,
+        16.02,
+        5
+      ],
+      "slot": {
+        "slot": "grid[6]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_7",
+      "pos": [
+        8,
+        16.02,
+        5
+      ],
+      "slot": {
+        "slot": "grid[7]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "grid_8",
+      "pos": [
+        5,
+        16.02,
+        5
+      ],
+      "slot": {
+        "slot": "grid[8]",
+        "size": 2.2,
+        "item_size": 2.2
+      }
+    },
+    {
+      "id": "wand",
+      "pos": [
+        14.5,
+        16.02,
+        8
+      ],
+      "slot": {
+        "slot": "wand[0]",
+        "size": 2.8,
+        "item_size": 3.0,
+        "idle_highlight": 0.3
+      }
+    },
+    {
+      "id": "result",
+      "pos": [
+        1.5,
+        16.4,
+        8
+      ],
+      "output": {
+        "output": "result",
+        "display": "floating",
+        "size": 3.0,
+        "count_facing": "camera"
+      }
+    },
+    {
+      "id": "crystal_0",
+      "pos": [
+        8,
+        19.0,
+        19.5
+      ],
+      "slot": {
+        "slot": "crystals[0]",
+        "display": "floating",
+        "size": 3.0,
+        "item_size": 2.6,
+        "counts": "always",
+        "count_facing": "camera",
+        "idle_highlight": 0.2
+      }
+    },
+    {
+      "id": "crystal_1",
+      "pos": [
+        17.5,
+        19.0,
+        14.0
+      ],
+      "slot": {
+        "slot": "crystals[1]",
+        "display": "floating",
+        "size": 3.0,
+        "item_size": 2.6,
+        "counts": "always",
+        "count_facing": "camera",
+        "idle_highlight": 0.2
+      }
+    },
+    {
+      "id": "crystal_2",
+      "pos": [
+        -1.5,
+        19.0,
+        14.0
+      ],
+      "slot": {
+        "slot": "crystals[2]",
+        "display": "floating",
+        "size": 3.0,
+        "item_size": 2.6,
+        "counts": "always",
+        "count_facing": "camera",
+        "idle_highlight": 0.2
+      }
+    },
+    {
+      "id": "crystal_3",
+      "pos": [
+        17.5,
+        19.0,
+        2.0
+      ],
+      "slot": {
+        "slot": "crystals[3]",
+        "display": "floating",
+        "size": 3.0,
+        "item_size": 2.6,
+        "counts": "always",
+        "count_facing": "camera",
+        "idle_highlight": 0.2
+      }
+    },
+    {
+      "id": "crystal_4",
+      "pos": [
+        -1.5,
+        19.0,
+        2.0
+      ],
+      "slot": {
+        "slot": "crystals[4]",
+        "display": "floating",
+        "size": 3.0,
+        "item_size": 2.6,
+        "counts": "always",
+        "count_facing": "camera",
+        "idle_highlight": 0.2
+      }
+    },
+    {
+      "id": "crystal_5",
+      "pos": [
+        8,
+        19.0,
+        -3.5
+      ],
+      "slot": {
+        "slot": "crystals[5]",
+        "display": "floating",
+        "size": 3.0,
+        "item_size": 2.6,
+        "counts": "always",
+        "count_facing": "camera",
+        "idle_highlight": 0.2
+      }
+    },
+    {
+      "id": "sigil_0",
+      "pos": [
+        8,
+        17.6,
+        19.5
+      ],
+      "pickable": false,
+      "extra": {
+        "primal": "aer"
+      }
+    },
+    {
+      "id": "sigil_1",
+      "pos": [
+        17.5,
+        17.6,
+        14.0
+      ],
+      "pickable": false,
+      "extra": {
+        "primal": "ignis"
+      }
+    },
+    {
+      "id": "sigil_2",
+      "pos": [
+        -1.5,
+        17.6,
+        14.0
+      ],
+      "pickable": false,
+      "extra": {
+        "primal": "aqua"
+      }
+    },
+    {
+      "id": "sigil_3",
+      "pos": [
+        17.5,
+        17.6,
+        2.0
+      ],
+      "pickable": false,
+      "extra": {
+        "primal": "terra"
+      }
+    },
+    {
+      "id": "sigil_4",
+      "pos": [
+        -1.5,
+        17.6,
+        2.0
+      ],
+      "pickable": false,
+      "extra": {
+        "primal": "ordo"
+      }
+    },
+    {
+      "id": "sigil_5",
+      "pos": [
+        8,
+        17.6,
+        -3.5
+      ],
+      "pickable": false,
+      "extra": {
+        "primal": "perditio"
+      }
+    },
+    {
+      "id": "vis",
+      "pos": [
+        8,
+        21.5,
+        19.5
+      ],
+      "pickable": false
+    }
+  ]
+}
