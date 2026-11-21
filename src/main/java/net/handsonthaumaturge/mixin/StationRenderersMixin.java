@@ -26,7 +26,7 @@ abstract class StationRenderersMixin {
     private void handson$restWhileWorked(BlockEntity table, float partialTick, PoseStack pose, MultiBufferSource buffers, int light,
             int overlay, CallbackInfo ci) {
         DiegesisClient.focusedStation().ifPresent(view -> {
-            if (view.isInUse() && view.pos().equals(table.getBlockPos())) {
+            if (view.isInUse() && view.pos().distManhattan(table.getBlockPos()) <= 1) {
                 ci.cancel();
             }
         });

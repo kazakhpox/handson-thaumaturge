@@ -252,6 +252,26 @@ public final class Thaum {
         }
     }
 
+    /** The research table's other half: it lies the way the half's {@code facing} points (both halves face each other). */
+    public static BlockPos otherHalf(net.minecraft.world.level.block.state.BlockState state, BlockPos pos) {
+        for (net.minecraft.world.level.block.state.properties.Property<?> property : state.getProperties()) {
+            if ("facing".equals(property.getName()) && state.getValue(property) instanceof net.minecraft.core.Direction direction) {
+                return pos.relative(direction);
+            }
+        }
+        return pos;
+    }
+
+    /** The table's block entity, which only its main half has, from either half. */
+    public static BlockEntity researchTableAt(net.minecraft.world.level.Level level, BlockPos pos) {
+        BlockEntity here = level.getBlockEntity(pos);
+        if (isResearchTable(here)) {
+            return here;
+        }
+        BlockEntity there = level.getBlockEntity(otherHalf(level.getBlockState(pos), pos));
+        return isResearchTable(there) ? there : null;
+    }
+
     public static Block researchTable() {
         Block block = BuiltInRegistries.BLOCK.get(RESEARCH_TABLE);
         return block == null ? Blocks.AIR : block;

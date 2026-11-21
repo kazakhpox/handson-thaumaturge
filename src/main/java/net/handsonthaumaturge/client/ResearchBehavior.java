@@ -76,7 +76,43 @@ public final class ResearchBehavior implements StationBehavior {
     }
 
     private static net.minecraft.world.level.block.entity.BlockEntity table(StationView view) {
-        return view.level().getBlockEntity(view.pos());
+        return net.handsonthaumaturge.station.Thaum.researchTableAt(view.level(), view.pos());
+    }
+
+    /** Everything laid out on the table moves with the sheet to the middle of the two-block table. */
+    private static final String[] ON_TABLE = {"tools", "note", "sheet", "helper", "book", "help_prev", "help_next", "page_prev",
+            "page_next", "select_1", "select_2", "combine", "duplicate"};
+    /** How far the middle of the whole table lies from the middle of the half the station stands on, scene pixels. */
+    private static final Vector3f SHIFT = new Vector3f();
+
+    /**
+     * The table is two blocks long and the scene stands on the half that was used: the other half lies the way that half's
+     * {@code facing} points. Seen from the front, the scene's +X is the front's clockwise side.
+     */
+    private static void centreOnTable(StationView view) {
+        net.minecraft.core.BlockPos other = net.handsonthaumaturge.station.Thaum.otherHalf(view.level().getBlockState(view.pos()), view.pos());
+        net.minecraft.core.Direction front = view.facing();
+        SHIFT.set(0.0F);
+        if (!other.equals(view.pos())) {
+            net.minecraft.core.Direction towards = net.minecraft.core.Direction.getNearest(other.getX() - view.pos().getX(), 0,
+                    other.getZ() - view.pos().getZ());
+            if (towards == front.getClockWise()) {
+                SHIFT.x = 8.0F;
+            } else if (towards == front.getCounterClockWise()) {
+                SHIFT.x = -8.0F;
+            } else if (towards == front) {
+                SHIFT.z = -8.0F;
+            } else {
+                SHIFT.z = 8.0F;
+            }
+        }
+        for (String id : ON_TABLE) {
+            view.node(id).ifPresent(node -> node.moveTo(SHIFT.x, SHIFT.y, SHIFT.z, 0.0F));
+        }
+        for (int i = 0; i < CELLS; i++) {
+            view.node("aspect_" + i).ifPresent(node -> node.moveTo(SHIFT.x, SHIFT.y, SHIFT.z, 0.0F));
+        }
+        view.moveCamera(SHIFT.x, SHIFT.y, SHIFT.z);
     }
 
     private static ItemStack slot(StationView view, String group) {
@@ -122,6 +158,7 @@ public final class ResearchBehavior implements StationBehavior {
         if (!ThaumClient.ready()) {
             return;
         }
+        centreOnTable(view);
         view.node("sheet").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintSheet(view, pose, buffers)));
         for (int i = 0; i < CELLS; i++) {
             int cell = i;
@@ -158,6 +195,7 @@ public final class ResearchBehavior implements StationBehavior {
 
     @Override
     public void onOpen(StationView view) {
+        centreOnTable(view);
         held = null;
         helperOpen = false;
     }
@@ -404,7 +442,7 @@ public final class ResearchBehavior implements StationBehavior {
     // ---- The sheet's geometry: scene pixels on the table to the screen's sheet, and back.
 
     private static Vector3f sheetCentre(StationView view) {
-        return new Vector3f(8.0F, 16.0F, 9.8F);
+        return new Vector3f(8.0F, 16.0F, 9.8F).add(SHIFT);
     }
 
     private static Object hexUnderCursor(StationView view) {

@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
 
 import com.pockyl.diegesis.api.Diegesis;
 import com.pockyl.diegesis.api.state.SlotRules;
@@ -54,16 +53,8 @@ public final class ResearchStation {
         Diegesis.register(TYPE);
     }
 
-    /** Sneaking keeps Thaumaturge's screen; the station stands on the table's main half, where its note and tools lie. */
+    /** Sneaking keeps Thaumaturge's screen; either half of the table opens the station. */
     private static boolean opens(Player player, BlockPos pos, BlockState state) {
-        if (player.isSecondaryUseActive()) {
-            return false;
-        }
-        for (Property<?> property : state.getProperties()) {
-            if ("part".equals(property.getName())) {
-                return "main".equals(state.getValue(property).toString().toLowerCase(java.util.Locale.ROOT));
-            }
-        }
-        return true;
+        return !player.isSecondaryUseActive();
     }
 }

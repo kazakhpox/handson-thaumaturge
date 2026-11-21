@@ -1,32 +1,36 @@
-Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32889 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=45989 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
 Picked up _JAVA_OPTIONS: -XX:+UnlockDiagnosticVMOptions -XX:DisableIntrinsic=_base64_encodeBlock,_base64_decodeBlock
 > Task :createMinecraftArtifacts UP-TO-DATE
-> Task :compileJava UP-TO-DATE
+
+> Task :compileJava
+Note: /home/user/handson-thaumaturge/src/main/java/net/handsonthaumaturge/station/Thaum.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
 > Task :generateModMetadata UP-TO-DATE
 > Task :processResources
 > Task :classes
-> Task :compileDevtoolsJava UP-TO-DATE
+> Task :compileDevtoolsJava
 > Task :processDevtoolsResources UP-TO-DATE
-> Task :devtoolsClasses UP-TO-DATE
+> Task :devtoolsClasses
 > Task :downloadAssets UP-TO-DATE
 > Task :writeShotsLegacyClasspath UP-TO-DATE
 > Task :prepareShotsRun UP-TO-DATE
 
 > Task :runShots
-Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=32889 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=45989 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
 Picked up _JAVA_OPTIONS: -XX:+UnlockDiagnosticVMOptions -XX:DisableIntrinsic=_base64_encodeBlock,_base64_decodeBlock
 WARN StatusConsoleListener Advanced terminal features are not available in this environment
-[05:54:04] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientdev, --version, 21.1.253, --assetIndex, 17, --assetsDir, /root/.gradle/caches/neoformruntime/assets, --gameDir, ., --fml.fmlVersion, 4.0.45, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.253, --fml.neoFormVersion, 20240808.144430, --width, 1280, --height, 720]
-[05:54:04] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Ubuntu OpenJDK 64-Bit Server VM 21.0.13.0.3+1-1-24.04.1-Ubuntu
-[05:54:04] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.13.0.3 by Ubuntu; OS Linux arch amd64 version 6.18.44-fc-v726
-[05:54:04] [main/INFO] [ne.ne.fm.lo.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
-[05:54:04] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
-[05:54:04] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.5
-[05:54:04] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.5 got version 4.5
-[05:54:04] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/root/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%23126!/ Service=ModLauncher Env=CLIENT
-[05:54:04] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: llvmpipe (LLVM 20.1.2, 256 bits) GL version 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.4, Mesa
-[05:54:05] [main/INFO] [ne.ne.fm.lo.mo.lo.JarInJarDependencyLocator/]: Found 4 dependencies adding them to mods collection
-[05:54:05] [main/INFO] [ne.ne.fm.lo.mo.ModDiscoverer/]: 
+[08:42:39] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeclientdev, --version, 21.1.253, --assetIndex, 17, --assetsDir, /root/.gradle/caches/neoformruntime/assets, --gameDir, ., --fml.fmlVersion, 4.0.45, --fml.mcVersion, 1.21.1, --fml.neoForgeVersion, 21.1.253, --fml.neoFormVersion, 20240808.144430, --width, 1280, --height, 720]
+[08:42:39] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: JVM identified as Ubuntu OpenJDK 64-Bit Server VM 21.0.13.0.3+1-1-24.04.1-Ubuntu
+[08:42:39] [main/INFO] [cp.mo.mo.Launcher/MODLAUNCHER]: ModLauncher 11.0.5+main.901c6ea8 starting: java version 21.0.13.0.3 by Ubuntu; OS Linux arch amd64 version 6.18.44-fc-v726
+[08:42:39] [main/INFO] [ne.ne.fm.lo.ImmediateWindowHandler/]: Loading ImmediateWindowProvider fmlearlywindow
+[08:42:39] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.6
+[08:42:40] [main/INFO] [EARLYDISPLAY/]: Trying GL version 4.5
+[08:42:40] [main/INFO] [EARLYDISPLAY/]: Requested GL version 4.5 got version 4.5
+[08:42:40] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/root/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%23126!/ Service=ModLauncher Env=CLIENT
+[08:42:40] [pool-2-thread-1/INFO] [EARLYDISPLAY/]: GL info: llvmpipe (LLVM 20.1.2, 256 bits) GL version 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.4, Mesa
+[08:42:40] [main/INFO] [ne.ne.fm.lo.mo.lo.JarInJarDependencyLocator/]: Found 4 dependencies adding them to mods collection
+[08:42:40] [main/INFO] [ne.ne.fm.lo.mo.ModDiscoverer/]: 
      Mod List:
 		Name Version (Mod Id)
 
@@ -39,58 +43,26 @@ WARN StatusConsoleListener Advanced terminal features are not available in this 
 		Minecraft 1.21.1 (minecraft)
 		NeoForge 21.1.253 (neoforge)
 		Thaumaturge 1.1.0 (thaumaturge)
-[05:54:05] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[05:54:05] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
-[05:54:05] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientdev' with arguments [--version, 21.1.253, --gameDir, ., --assetsDir, /root/.gradle/caches/neoformruntime/assets, --assetIndex, 17, --width, 1280, --height, 720]
-[05:54:06] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message
-[05:54:06] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.mixins.json could not be read. If this is a development environment you can ignore this message
-[05:54:06] [main/WARN] [mixin/]: Error loading class: net/caffeinemc/mods/sodium/client/render/chunk/compile/pipeline/BlockOcclusionCache (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache)
-[05:54:06] [main/WARN] [mixin/]: Error loading class: net/caffeinemc/mods/sodium/client/world/LevelSlice (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.world.LevelSlice)
-[05:54:06] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
-[05:54:08] [Datafixer Bootstrap/INFO] [mojang/DataFixerBuilder]: 229 Datafixer optimizations took 503 milliseconds
-[05:54:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
-[05:54:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
-[05:54:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
-[05:54:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
-[05:54:14] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
-[05:54:14] [Render thread/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/user/handson-thaumaturge/build/moddev/artifacts/neoforge-21.1.253.jar%23178!/assets/.mcassetsroot' uses unexpected schema
-[05:54:14] [Render thread/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/user/handson-thaumaturge/build/moddev/artifacts/neoforge-21.1.253.jar%23178!/data/.mcassetsroot' uses unexpected schema
-[05:54:14] [Render thread/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
-[05:54:14] [Render thread/INFO] [minecraft/Minecraft]: Setting user: Dev
-[05:54:14] [Render thread/INFO] [minecraft/Minecraft]: Backend library: LWJGL version 3.3.3+5
-[05:54:14] [Download-1/WARN] [mojang/YggdrasilMinecraftSessionService]: Couldn't look up profile properties for 380df991-f603-344c-a090-369bad2a924a
-com.mojang.authlib.exceptions.MinecraftClientException: Failed to read from https://sessionserver.mojang.com/session/minecraft/profile/380df991f603344ca090369bad2a924a?unsigned=false due to sessionserver.mojang.com
-	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:108) ~[authlib-6.0.54.jar%23104!/:?] {}
-	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:57) ~[authlib-6.0.54.jar%23104!/:?] {}
-	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fetchProfileUncached(YggdrasilMinecraftSessionService.java:201) ~[authlib-6.0.54.jar%23104!/:?] {}
-	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fetchProfile(YggdrasilMinecraftSessionService.java:171) ~[authlib-6.0.54.jar%23104!/:?] {}
-	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.lambda$new$1(Minecraft.java:432) ~[neoforge-21.1.253.jar%23178!/:?] {re:classloading,pl:runtimedistcleaner:A}
-	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?] {}
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
-	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?] {}
-Caused by: java.net.UnknownHostException: sessionserver.mojang.com
-	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:567) ~[?:?] {}
-	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:351) ~[?:?] {}
-	at java.base/java.net.Socket.connect(Socket.java:751) ~[?:?] {}
-	at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304) ~[?:?] {}
-	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178) ~[?:?] {}
-	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:539) ~[?:?] {}
-	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:644) ~[?:?] {}
-	at java.base/sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:265) ~[?:?] {}
-	at java.base/sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:378) ~[?:?] {}
-	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:196) ~[?:?] {}
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1305) ~[?:?] {}
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1146) ~[?:?] {}
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1075) ~[?:?] {}
-	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:181) ~[?:?] {}
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1707) ~[?:?] {}
-	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1632) ~[?:?] {}
-	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:531) ~[?:?] {}
-	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307) ~[?:?] {}
-	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%23104!/:?] {}
-	... 8 more
-[05:54:14] [Yggdrasil Key Fetcher/ERROR] [mojang/YggdrasilServicesKeyInfo]: Failed to request yggdrasil public key
+[08:42:41] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[08:42:41] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
+[08:42:41] [main/INFO] [cp.mo.mo.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeclientdev' with arguments [--version, 21.1.253, --gameDir, ., --assetsDir, /root/.gradle/caches/neoformruntime/assets, --assetIndex, 17, --width, 1280, --height, 720]
+[08:42:41] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.neoforge.mixins.json could not be read. If this is a development environment you can ignore this message
+[08:42:41] [main/WARN] [mixin/]: Reference map 'curios.refmap.json' for curios.mixins.json could not be read. If this is a development environment you can ignore this message
+[08:42:42] [main/WARN] [mixin/]: Error loading class: net/caffeinemc/mods/sodium/client/render/chunk/compile/pipeline/BlockOcclusionCache (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockOcclusionCache)
+[08:42:42] [main/WARN] [mixin/]: Error loading class: net/caffeinemc/mods/sodium/client/world/LevelSlice (java.lang.ClassNotFoundException: net.caffeinemc.mods.sodium.client.world.LevelSlice)
+[08:42:42] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.3).
+[08:42:44] [Datafixer Bootstrap/INFO] [mojang/DataFixerBuilder]: 229 Datafixer optimizations took 330 milliseconds
+[08:42:48] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[08:42:48] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[08:42:48] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[08:42:48] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[08:42:48] [main/WARN] [minecraft/Commands]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[08:42:48] [Render thread/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/user/handson-thaumaturge/build/moddev/artifacts/neoforge-21.1.253.jar%23178!/assets/.mcassetsroot' uses unexpected schema
+[08:42:48] [Render thread/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/user/handson-thaumaturge/build/moddev/artifacts/neoforge-21.1.253.jar%23178!/data/.mcassetsroot' uses unexpected schema
+[08:42:49] [Render thread/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[08:42:49] [Render thread/INFO] [minecraft/Minecraft]: Setting user: Dev
+[08:42:49] [Render thread/INFO] [minecraft/Minecraft]: Backend library: LWJGL version 3.3.3+5
+[08:42:49] [Yggdrasil Key Fetcher/ERROR] [mojang/YggdrasilServicesKeyInfo]: Failed to request yggdrasil public key
 com.mojang.authlib.exceptions.MinecraftClientException: Failed to read from https://api.minecraftservices.com/publickeys due to api.minecraftservices.com
 	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:108) ~[authlib-6.0.54.jar%23104!/:?] {}
 	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:57) ~[authlib-6.0.54.jar%23104!/:?] {}
@@ -123,15 +95,63 @@ Caused by: java.net.UnknownHostException: api.minecraftservices.com
 	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307) ~[?:?] {}
 	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%23104!/:?] {}
 	... 9 more
-[05:54:14] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.253, for MC 1.21.1
-[05:54:22] [Render thread/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: []
-[05:54:23] [Render thread/INFO] [minecraft/ReloadableResourceManager]: Reloading ResourceManager: vanilla, mod_resources, mod/lithostitched, mod/apollib, mod/diegesis, mod/curios, mod/thaumaturge, mod/handson_thaumaturge, mod/handson_thaumaturge_devtools, mod/neoforge
-[05:54:23] [Worker-Main-3/INFO] [minecraft/UnihexProvider]: Found unifont_all_no_pua-15.1.05.hex, loading
-[05:54:23] [Worker-Main-2/WARN] [minecraft/SpriteLoader]: Texture diegesis:block/bits/chunk with size 8x8 limits mip level from 4 to 3
-[05:54:23] [Worker-Main-3/INFO] [minecraft/UnihexProvider]: Found unifont_jp_patch-15.1.05.hex, loading
-[05:54:25] [Render thread/WARN] [minecraft/SoundEngine]: Missing sound for event: minecraft:item.goat_horn.play
-[05:54:25] [Render thread/WARN] [minecraft/SoundEngine]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
-[05:54:25] [Render thread/ERROR] [minecraft/SoundEngine]: Error starting SoundSystem. Turning off sounds & music
+[08:42:49] [Download-1/WARN] [mojang/YggdrasilMinecraftSessionService]: Couldn't look up profile properties for 380df991-f603-344c-a090-369bad2a924a
+com.mojang.authlib.exceptions.MinecraftClientException: Failed to read from https://sessionserver.mojang.com/session/minecraft/profile/380df991f603344ca090369bad2a924a?unsigned=false due to sessionserver.mojang.com
+	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:108) ~[authlib-6.0.54.jar%23104!/:?] {}
+	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.get(MinecraftClient.java:57) ~[authlib-6.0.54.jar%23104!/:?] {}
+	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fetchProfileUncached(YggdrasilMinecraftSessionService.java:201) ~[authlib-6.0.54.jar%23104!/:?] {}
+	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fetchProfile(YggdrasilMinecraftSessionService.java:171) ~[authlib-6.0.54.jar%23104!/:?] {}
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.lambda$new$1(Minecraft.java:432) ~[neoforge-21.1.253.jar%23178!/:?] {re:classloading,pl:runtimedistcleaner:A}
+	at java.base/java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1768) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?] {}
+Caused by: java.net.UnknownHostException: sessionserver.mojang.com
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:567) ~[?:?] {}
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:351) ~[?:?] {}
+	at java.base/java.net.Socket.connect(Socket.java:751) ~[?:?] {}
+	at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304) ~[?:?] {}
+	at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:178) ~[?:?] {}
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:539) ~[?:?] {}
+	at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:644) ~[?:?] {}
+	at java.base/sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:265) ~[?:?] {}
+	at java.base/sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:378) ~[?:?] {}
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:196) ~[?:?] {}
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1305) ~[?:?] {}
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1146) ~[?:?] {}
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:1075) ~[?:?] {}
+	at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:181) ~[?:?] {}
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1707) ~[?:?] {}
+	at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1632) ~[?:?] {}
+	at java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:531) ~[?:?] {}
+	at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:307) ~[?:?] {}
+	at MC-BOOTSTRAP/authlib@6.0.54/com.mojang.authlib.minecraft.client.MinecraftClient.readInputStream(MinecraftClient.java:84) ~[authlib-6.0.54.jar%23104!/:?] {}
+	... 8 more
+[08:42:49] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.253, for MC 1.21.1
+[08:42:57] [Render thread/INFO] [ne.ne.ne.ga.GameTestHooks/]: Enabled Gametest Namespaces: []
+[08:42:57] [Render thread/INFO] [minecraft/ReloadableResourceManager]: Reloading ResourceManager: vanilla, mod_resources, mod/lithostitched, mod/apollib, mod/diegesis, mod/curios, mod/thaumaturge, mod/handson_thaumaturge, mod/handson_thaumaturge_devtools, mod/neoforge
+[08:42:58] [Worker-Main-2/INFO] [minecraft/UnihexProvider]: Found unifont_all_no_pua-15.1.05.hex, loading
+[08:42:59] [Worker-Main-2/INFO] [minecraft/UnihexProvider]: Found unifont_jp_patch-15.1.05.hex, loading
+[08:42:59] [Worker-Main-3/WARN] [minecraft/SpriteLoader]: Texture diegesis:block/bits/chunk with size 8x8 limits mip level from 4 to 3
+[08:43:01] [Render thread/WARN] [minecraft/SoundEngine]: Missing sound for event: minecraft:item.goat_horn.play
+[08:43:01] [Render thread/WARN] [minecraft/SoundEngine]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
+[08:43:01] [Render thread/ERROR] [minecraft/SoundEngine]: Error starting SoundSystem. Turning off sounds & music
 java.lang.IllegalStateException: Failed to open OpenAL device
 	at TRANSFORMER/minecraft@1.21.1/com.mojang.blaze3d.audio.Library.openDeviceOrFallback(Library.java:229) ~[neoforge-21.1.253.jar%23178!/:?] {re:classloading,pl:runtimedistcleaner:A}
 	at TRANSFORMER/minecraft@1.21.1/com.mojang.blaze3d.audio.Library.init(Library.java:83) ~[neoforge-21.1.253.jar%23178!/:?] {re:classloading,pl:runtimedistcleaner:A}
@@ -168,74 +188,58 @@ java.lang.IllegalStateException: Failed to open OpenAL device
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?] {}
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?] {}
 	at net.neoforged.devlaunch.Main.main(Main.java:57) [DevLaunch-1.0.2.jar:?] {}
-ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
-ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
-ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
-ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
-ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
-ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
-ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
-ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
-ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
-ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
-ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
-ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
-ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
-ALSA lib conf.c:5208:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
-ALSA lib conf.c:5731:(snd_config_expand) Evaluate error: No such file or directory
-ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 1024x1024x4 minecraft:textures/atlas/blocks.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 4096x4096x4 minecraft:textures/atlas/armor_trims.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 2048x512x0 minecraft:textures/atlas/particles.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x128x0 minecraft:textures/atlas/mob_effects.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
-[05:54:26] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 1024x1024x0 minecraft:textures/atlas/gui.png-atlas
-[05:54:26] [Render thread/WARN] [minecraft/ShaderInstance]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
-[05:54:26] [Render thread/INFO] [co.po.di.DiegesisMod/]: Loaded 2 Diegesis scenes, 0 meshes
-[05:54:26] [Render thread/INFO] [ne.ne.ne.cl.en.an.js.AnimationLoader/]: Loaded 0 entity animations
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 1024x1024x4 minecraft:textures/atlas/blocks.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 4096x4096x4 minecraft:textures/atlas/armor_trims.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 2048x512x0 minecraft:textures/atlas/particles.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 256x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[08:43:01] [Render thread/INFO] [minecraft/TextureAtlas]: Created: 1024x1024x0 minecraft:textures/atlas/gui.png-atlas
+[08:43:01] [Render thread/WARN] [minecraft/ShaderInstance]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
+[08:43:03] [Render thread/INFO] [co.po.di.DiegesisMod/]: Loaded 2 Diegesis scenes, 0 meshes
+[08:43:03] [Render thread/INFO] [ne.ne.ne.cl.en.an.js.AnimationLoader/]: Loaded 0 entity animations
 [shots] title
-[05:54:26] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack thaumaturge_wand_assembly, loading it automatically
-[05:54:26] [Render thread/INFO] [thaumaturge/]: Serving 161 wand assembly recipes from 6 caps and 18 rods
-[05:54:27] [Render thread/INFO] [minecraft/RecipeManager]: Loaded 1950 recipes
-[05:54:27] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 1875 advancements
-[05:54:27] [Render thread/INFO] [Curios API/]: Loaded 10 curio slots
-[05:54:27] [Render thread/INFO] [Curios API/]: Loaded 1 curio entities
-[05:54:27] [Render thread/WARN] [minecraft/MappedRegistry]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:item] are present in data pack: c:nuggets/copper, c:nuggets/lead, c:nuggets/silver, c:nuggets/tin
-[05:54:33] [Server thread/INFO] [minecraft/IntegratedServer]: Starting integrated minecraft server version 1.21.1
-[05:54:33] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
-[05:54:34] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
-[05:54:34] [progressListener/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
-[05:54:34] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
-[05:54:34] [progressListener/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 149 ms
-[05:54:35] [Server thread/INFO] [thaumaturge/]: Loaded aspect index for 1646 items from /home/user/handson-thaumaturge/run-shots/config/thaumaturge/aspect_index.json
-[05:54:35] [Server thread/INFO] [minecraft/IntegratedServer]: Changing view distance to 4, from 10
-[05:54:35] [Server thread/INFO] [minecraft/IntegratedServer]: Changing simulation distance to 5, from 0
-[05:54:36] [Server thread/INFO] [minecraft/PlayerList]: Dev[local:E:1cbc024f] logged in with entity id 1 at (-0.5, -60.0, 3.5)
-[05:54:36] [Server thread/INFO] [minecraft/MinecraftServer]: Dev joined the game
-[05:54:36] [Render thread/WARN] [minecraft/ClientPacketListener]: Ignoring chat session from Dev due to missing Services public key
-[05:54:36] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] ✦ Thaumaturge ✦
-[05:54:36] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] Thanks for making Thaumaturge possible, Dev!
-[05:54:36] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] To thank you for your contribution, we have awarded you a special cape.
-[05:54:36] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] Every player on the server can see it while it is on. You can turn it off or back on at any time in Mods > Thaumaturge > Config > Client.
-[05:54:36] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] This message is only shown once.
-[05:54:36] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 2 advancements
+[08:43:04] [Render thread/INFO] [minecraft/MinecraftServer]: Found new data pack thaumaturge_wand_assembly, loading it automatically
+[08:43:04] [Render thread/INFO] [thaumaturge/]: Serving 161 wand assembly recipes from 6 caps and 18 rods
+[08:43:05] [Render thread/INFO] [minecraft/RecipeManager]: Loaded 1950 recipes
+[08:43:05] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 1875 advancements
+[08:43:05] [Render thread/INFO] [Curios API/]: Loaded 10 curio slots
+[08:43:05] [Render thread/INFO] [Curios API/]: Loaded 1 curio entities
+[08:43:05] [Render thread/WARN] [minecraft/MappedRegistry]: Not all defined tags for registry ResourceKey[minecraft:root / minecraft:item] are present in data pack: c:nuggets/copper, c:nuggets/lead, c:nuggets/silver, c:nuggets/tin
+[08:43:10] [Server thread/INFO] [minecraft/IntegratedServer]: Starting integrated minecraft server version 1.21.1
+[08:43:10] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
+[08:43:11] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[08:43:11] [progressListener/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[08:43:11] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[08:43:11] [progressListener/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 358 ms
+[08:43:11] [Server thread/INFO] [thaumaturge/]: Loaded aspect index for 1646 items from /home/user/handson-thaumaturge/run-shots/config/thaumaturge/aspect_index.json
+[08:43:11] [Server thread/INFO] [minecraft/IntegratedServer]: Changing view distance to 4, from 10
+[08:43:11] [Server thread/INFO] [minecraft/IntegratedServer]: Changing simulation distance to 5, from 0
+[08:43:12] [Server thread/INFO] [minecraft/PlayerList]: Dev[local:E:fd6a7686] logged in with entity id 1 at (1.5, -60.0, -4.5)
+[08:43:12] [Server thread/INFO] [minecraft/MinecraftServer]: Dev joined the game
+[08:43:13] [Render thread/WARN] [minecraft/ClientPacketListener]: Ignoring chat session from Dev due to missing Services public key
+[08:43:13] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] ✦ Thaumaturge ✦
+[08:43:13] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] Thanks for making Thaumaturge possible, Dev!
+[08:43:13] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] To thank you for your contribution, we have awarded you a special cape.
+[08:43:13] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] Every player on the server can see it while it is on. You can turn it off or back on at any time in Mods > Thaumaturge > Config > Client.
+[08:43:13] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] This message is only shown once.
+[08:43:13] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 2 advancements
 [shots] in world
 [shots] build
 [shots] research
-[05:54:42] [Server thread/INFO] [minecraft/MinecraftServer]: Completed all research for Dev (210 entries)
-[05:54:42] [Server thread/INFO] [minecraft/MinecraftServer]: Gave 20 points of every aspect to Dev
-[05:54:42] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] ÂAddendum added to Control Seal: Collect Â
-[05:54:42] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] ÂAddendum added to Control Seal: StoreÂ
-[05:54:42] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] [Server: Completed all research for Dev (210 entries)]
-[05:54:42] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] [Server: Gave 20 points of every aspect to Dev]
+[08:43:19] [Server thread/INFO] [minecraft/MinecraftServer]: Completed all research for Dev (210 entries)
+[08:43:19] [Server thread/INFO] [minecraft/MinecraftServer]: Gave 20 points of every aspect to Dev
+[08:43:19] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] ÂAddendum added to Control Seal: Collect Â
+[08:43:19] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] ÂAddendum added to Control Seal: StoreÂ
+[08:43:19] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] [Server: Completed all research for Dev (210 entries)]
+[08:43:19] [Render thread/INFO] [minecraft/ChatComponent]: [System] [CHAT] [Server: Gave 20 points of every aspect to Dev]
 [shots] look
 [shots] world shot
 [shots] Saved screenshot as 00_world.png
@@ -243,7 +247,7 @@ ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
 [shots] fill bench
 [shots] aim bench
 [shots] open bench
-[shots] looking at net.minecraft.world.phys.BlockHitResult@6dc78fa8
+[shots] looking at net.minecraft.world.phys.BlockHitResult@59e33cea
 [shots] bench shot
 [shots] Saved screenshot as 01_workbench.png
 [shots] aim result
@@ -253,12 +257,12 @@ ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
 [shots] crafted shot
 [shots] Saved screenshot as 03_workbench_crafted.png
 [shots] leave bench
-[05:54:55] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 6 advancements
+[08:43:32] [Render thread/INFO] [minecraft/AdvancementTree]: Loaded 6 advancements
 [shots] stand at table
 [shots] fill table
 [shots] aim table
 [shots] open table
-[shots] looking at net.minecraft.world.phys.BlockHitResult@2d11d5e7
+[shots] looking at net.minecraft.world.phys.BlockHitResult@4e0710c5
 [shots] table shot
 [shots] research station handson_thaumaturge:research_table
 [shots] Saved screenshot as 04_research.png
@@ -275,23 +279,32 @@ ALSA lib pcm.c:2721:(snd_pcm_open_noupdate) Unknown PCM default
 [shots] book shot
 [shots] Saved screenshot as 07_research_book.png
 [shots] leave table
+[shots] stand at other half
+[shots] aim other half
+[shots] open other half
+[shots] looking at net.minecraft.world.phys.BlockHitResult@69925e55
+[shots] other half shot
+[shots] Saved screenshot as 08_research_other_half.png
+[shots] leave other half
 [shots] quit
-[05:55:13] [Render thread/INFO] [minecraft/Minecraft]: Stopping!
-[05:55:13] [Server thread/INFO] [minecraft/ServerGamePacketListenerImpl]: Dev lost connection: Disconnected
-[05:55:13] [Server thread/INFO] [minecraft/MinecraftServer]: Dev left the game
-[05:55:14] [Server thread/INFO] [minecraft/ServerCommonPacketListenerImpl]: Stopping singleplayer server as player logged out
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/minecraft:overworld
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/minecraft:the_end
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/thaumaturge:outer_lands
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/minecraft:the_nether
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (handson_shots): All chunks are saved
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (outer_lands): All chunks are saved
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
-[05:55:14] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
+[08:43:59] [Render thread/INFO] [minecraft/Minecraft]: Stopping!
+[08:43:59] [Server thread/INFO] [minecraft/ServerGamePacketListenerImpl]: Dev lost connection: Disconnected
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Dev left the game
+[08:43:59] [Server thread/INFO] [minecraft/ServerCommonPacketListenerImpl]: Stopping singleplayer server as player logged out
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Stopping server
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving players
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving worlds
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/minecraft:overworld
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/minecraft:the_nether
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/minecraft:the_end
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: Saving chunks for level 'ServerLevel[handson_shots]'/thaumaturge:outer_lands
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (handson_shots): All chunks are saved
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage (outer_lands): All chunks are saved
+[08:43:59] [Server thread/INFO] [minecraft/MinecraftServer]: ThreadedAnvilChunkStorage: All dimensions are saved
 
-BUILD SUCCESSFUL in 1m 14s
-10 actionable tasks: 2 executed, 8 up-to-date
+[Incubating] Problems report is available at: file:///home/user/handson-thaumaturge/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 1m 28s
+10 actionable tasks: 4 executed, 6 up-to-date

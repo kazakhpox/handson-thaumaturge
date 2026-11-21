@@ -109,16 +109,22 @@ public final class ShotDriver {
             shot("04_research");
             station().ifPresent(view -> System.out.println("[shots] research station " + view.type().id()));
         });
-        then("aim aspect", 10, () -> aimAt(11.6F, 26.6F, 16.6F));
+        then("aim aspect", 10, () -> aimAt(19.6F, 26.6F, 16.6F));
         then("take aspect", 20, ShotDriver::click);
-        then("aim sheet", 10, () -> aimAt(8.0F + 0.6F, 16.05F, 10.2F));
+        then("aim sheet", 10, () -> aimAt(16.6F, 16.05F, 9.8F));
         then("held shot", 5, () -> shot("05_research_held"));
         then("write aspect", 30, ShotDriver::click);
         then("written shot", 5, () -> shot("06_research_written"));
-        then("aim book", 10, () -> aimAt(15.6F, 16.5F, 12.5F));
+        then("aim book", 10, () -> aimAt(23.0F, 16.4F, 13.0F));
         then("open book", 30, ShotDriver::click);
         then("book shot", 5, () -> shot("07_research_book"));
         then("leave table", 40, ShotDriver::leave);
+        // The other half of the table opens the same station, laid out on the same middle.
+        then("stand at other half", 20, () -> standBefore(TABLE.east()));
+        then("aim other half", 5, () -> lookAt(TABLE.east()));
+        then("open other half", 90, ShotDriver::use);
+        then("other half shot", 5, () -> shot("08_research_other_half"));
+        then("leave other half", 40, ShotDriver::leave);
         then("quit", 5, () -> Minecraft.getInstance().stop());
     }
 

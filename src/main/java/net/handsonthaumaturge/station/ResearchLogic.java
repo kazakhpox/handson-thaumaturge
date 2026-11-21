@@ -19,8 +19,8 @@ public final class ResearchLogic implements StationLogic {
     private final IItemHandlerModifiable items;
 
     public ResearchLogic(StationContext station) {
-        BlockEntity entity = station.blockEntity();
-        this.table = Thaum.isResearchTable(entity) ? entity : null;
+        // Either half opens the station; the note and the tools are the main half's.
+        this.table = Thaum.researchTableAt(station.level(), station.pos());
         this.items = table == null ? null : Thaum.tableItems(table);
         if (items == null) {
             return;
