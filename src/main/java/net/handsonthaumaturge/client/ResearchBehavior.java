@@ -80,7 +80,7 @@ public final class ResearchBehavior implements StationBehavior {
     }
 
     /** Everything laid out on the table moves with the sheet to the middle of the two-block table. */
-    private static final String[] ON_TABLE = {"tools", "note", "sheet", "helper", "book", "help_prev", "help_next", "page_prev",
+    private static final String[] ON_TABLE = {"note", "sheet", "helper", "book", "help_prev", "help_next", "page_prev",
             "page_next", "select_1", "select_2", "combine", "duplicate"};
     /** How far the middle of the whole table lies from the middle of the half the station stands on, scene pixels. */
     private static final Vector3f SHIFT = new Vector3f();
@@ -89,6 +89,13 @@ public final class ResearchBehavior implements StationBehavior {
      * The table is two blocks long and the scene stands on the half that was used: the other half lies the way that half's
      * {@code facing} points. Seen from the front, the scene's +X is the front's clockwise side.
      */
+    /** How far from the middle of its half, towards the table's end, Thaumaturge draws the inkwell, scene pixels. */
+    private static final float INKWELL_OUT = 5.0F;
+
+    private static boolean isResearchTableHere(StationView view) {
+        return net.handsonthaumaturge.station.Thaum.isResearchTable(view.level().getBlockEntity(view.pos()));
+    }
+
     private static void centreOnTable(StationView view) {
         net.minecraft.core.BlockPos other = net.handsonthaumaturge.station.Thaum.otherHalf(view.level().getBlockState(view.pos()), view.pos());
         net.minecraft.core.Direction front = view.facing();
@@ -113,6 +120,11 @@ public final class ResearchBehavior implements StationBehavior {
             view.node("aspect_" + i).ifPresent(node -> node.moveTo(SHIFT.x, SHIFT.y, SHIFT.z, 0.0F));
         }
         view.moveCamera(SHIFT.x, SHIFT.y, SHIFT.z);
+        // The scribing tools go where Thaumaturge draws its inkwell: on the table's main half, towards its outer end.
+        boolean onMain = isResearchTableHere(view);
+        float ex = onMain ? -SHIFT.x * INKWELL_OUT / 8.0F : SHIFT.x * 2.0F + SHIFT.x * INKWELL_OUT / 8.0F;
+        float ez = onMain ? -SHIFT.z * INKWELL_OUT / 8.0F : SHIFT.z * 2.0F + SHIFT.z * INKWELL_OUT / 8.0F;
+        view.node("tools").ifPresent(node -> node.moveTo(ex, 0.0F, ez, 0.0F));
     }
 
     private static ItemStack slot(StationView view, String group) {

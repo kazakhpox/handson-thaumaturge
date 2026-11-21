@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
-  "$comment": "Thaumaturge's research table (its main half, 16 high) worked through its own menu. In front on the table: the scribing tools standing on the left as the camera sees it, the note lying on the right (the menu's two slots). In the middle lies the note's puzzle on parchment (sheet), the screen's hex grid drawn on it by code. Over the far edge hangs the palette, five by five icons of the aspects the player knows (aspect_N in columns, the screen's order and pages; page_prev and page_next under it), and right of it the mixing tray (select_1, select_2, combine) and the copy button. The book of mixtures lies on the left end of the table; open, it hangs in the air beyond (book). The camera stands in front and above, looking down at the sheet with the palette behind it.",
+  "$comment": "Thaumaturge's research table (its main half, 16 high) worked through its own menu. The scribing tools go where Thaumaturge's own renderer draws its inkwell, towards the main half's outer end (code moves the slot there); the note lies in front. In the middle lies the note's puzzle on parchment (sheet), the screen's hex grid drawn on it by code. Over the far edge hangs the palette, five by five icons of the aspects the player knows (aspect_N in columns, the screen's order and pages; page_prev and page_next under it), and right of it the mixing tray (select_1, select_2, combine) and the copy button. The book of mixtures lies on the left end of the table; open, it hangs in the air beyond (book). The camera stands in front and above, looking down at the sheet with the palette behind it.",
   "work_plane": 16,
   "idle_visible": false,
   "camera": {
@@ -33,20 +33,15 @@
     {
       "id": "tools",
       "pos": [
-        13.2,
+        8,
         16.02,
-        3.0
+        8
       ],
       "slot": {
         "slot": "tools[0]",
-        "display": "upright",
-        "size": 2.6,
-        "item_size": 1.7,
-        "idle_highlight": 0.3,
-        "ghost": [
-          "thaumaturge:scribing_tools"
-        ],
-        "ghost_alpha": 0.3
+        "display": "hidden",
+        "size": 5.0,
+        "idle_highlight": 0.3
       }
     },
     {

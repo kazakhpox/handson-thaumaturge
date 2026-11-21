@@ -105,6 +105,7 @@ public final class ShotDriver {
         then("fill table", 10, this::fillTable);
         then("aim table", 5, () -> lookAt(TABLE));
         then("open table", 90, ShotDriver::use);
+        then("aim inkwell", 10, () -> aimAt(3.0F, 17.0F, 8.0F));
         then("table shot", 5, () -> {
             shot("04_research");
             station().ifPresent(view -> System.out.println("[shots] research station " + view.type().id()));

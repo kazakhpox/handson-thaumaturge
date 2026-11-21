@@ -12,9 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.pockyl.diegesis.api.client.DiegesisClient;
 
 /**
- * While a player works at the research table or the arcane workbench, the station draws what lies on it itself: Thaumaturge's
- * own renderers of them (the table's papers, inkwell and scroll; the wand shown over the workbench) would lie over that, so they
- * rest until the station is left.
+ * While a player works at the arcane workbench, the station draws its wand itself: Thaumaturge's wand display over it rests. At
+ * the research table its renderer goes on drawing the inkwell (see ResearchTableTopMixin for the papers and scroll it leaves out).
  */
 @Pseudo
 @Mixin(targets = {"com.leclowndu93150.thaumaturge.client.render.blockentity.ResearchTableRenderer",
@@ -25,10 +24,22 @@ abstract class StationRenderersMixin {
             + "Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At("HEAD"), cancellable = true, require = 0)
     private void handson$restWhileWorked(BlockEntity table, float partialTick, PoseStack pose, MultiBufferSource buffers, int light,
             int overlay, CallbackInfo ci) {
-        DiegesisClient.focusedStation().ifPresent(view -> {
-            if (view.isInUse() && view.pos().distManhattan(table.getBlockPos()) <= 1) {
-                ci.cancel();
-            }
-        });
+        boolean worked = DiegesisClient.focusedStation()
+                .filter(view -> view.isInUse() && view.pos().distManhattan(table.getBlockPos()) <= 1).isPresent();
+        if (!worked) {
+            net.handsonthaumaturge.client.TableRendering.WORKED.set(false);
+        } else if (table.getClass().getSimpleName().contains("ResearchTable")) {
+            // The table's own inkwell stays; ResearchTableTopMixin leaves out its papers and scroll.
+            net.handsonthaumaturge.client.TableRendering.WORKED.set(true);
+        } else {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "render(Lnet/minecraft/world/level/block/entity/BlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;"
+            + "Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At("RETURN"), require = 0)
+    private void handson$done(BlockEntity table, float partialTick, PoseStack pose, MultiBufferSource buffers, int light,
+            int overlay, CallbackInfo ci) {
+        net.handsonthaumaturge.client.TableRendering.WORKED.set(false);
     }
 }

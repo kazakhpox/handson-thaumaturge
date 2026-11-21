@@ -11,7 +11,7 @@ the [Diegesis](https://modrinth.com/mod/diegesis-api) library in the spirit of
   enchanting table) in its primal's colour, flaring and turning while the recipe on the grid burns that crystal. Over the
   far edge stands the vis in the aura and what the recipe costs, red when the aura cannot pay it. Taking the result crafts
   through Thaumaturge's own workbench menu: arcane and vanilla recipes, research gates, wand and crystal payment.
-- **The research table** (either half opens it; the sheet lies in the middle of the whole table). The scribing tools and the note go in their slots on the table and lie there as themselves. With
+- **The research table** (either half opens it; the sheet lies in the middle of the whole table). The scribing tools go in where Thaumaturge draws its own inkwell and quill, the note lies in front. With
   a note in, its puzzle lies open on the table on parchment: Thaumaturge's hex grid, the aspects written in, the lines of the
   chains that connect. The aspects you know hang over the far edge as a panel of icons (five by five, paged as in the screen:
   the wheel or the arrows). Click one to take it up, click a blank hex to write it in, click a written one to rub it out.
@@ -21,7 +21,7 @@ the [Diegesis](https://modrinth.com/mod/diegesis-api) library in the spirit of
   its recipe book.
 - **Nothing replaced.** Sneaking + use keeps Thaumaturge's own screens. The items stay in the blocks' own inventories;
   the research table's actions call the table's own methods, so ink, costs, aids and copying are all Thaumaturge's.
-  While you work at them, Thaumaturge's own renderers of the two blocks rest (the station draws what lies on them).
+  While you work at the research table, Thaumaturge's renderer of it draws only its inkwell and quill (its papers and scroll give way to the sheet); at the workbench its wand display rests.
 
 | The arcane workbench | The research table | Its guide to mixtures |
 |---|---|---|
