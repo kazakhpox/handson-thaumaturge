@@ -173,6 +173,7 @@ public final class ShotDriver {
         then("stand again", 20, () -> standBefore(TABLE));
         then("aim again", 5, () -> lookAt(TABLE));
         then("open again", 90, ShotDriver::use);
+        then("note back", 20, this::fillTable);
         then("empty tools", 30, () -> server(player -> {
             if (player.level().getBlockEntity(TABLE) instanceof com.leclowndu93150.thaumaturge.content.research.table.BlockEntityResearchTable table) {
                 table.items().setStackInSlot(0, ItemStack.EMPTY);

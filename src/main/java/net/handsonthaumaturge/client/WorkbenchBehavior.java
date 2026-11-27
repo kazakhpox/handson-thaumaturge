@@ -98,9 +98,9 @@ public final class WorkbenchBehavior implements StationBehavior {
         }
         float lit = glow[index];
         float breath = 0.5F + 0.5F * Mth.sin(clock * 2.0F + index);
-        int alpha = Math.round(55 + 40 * breath + 120 * lit);
+        int alpha = Math.round(110 + 50 * breath + 95 * lit);
         int argb = alpha << 24 | COLOURS[index];
-        float half = 1.3F + 0.4F * lit + 0.1F * breath;
+        float half = 1.7F + 0.5F * lit + 0.15F * breath;
         VertexConsumer out = buffers.getBuffer(RenderType.entityTranslucentEmissive(GLOW));
         for (int plane = 0; plane < 2; plane++) {
             pose.pushPose();
