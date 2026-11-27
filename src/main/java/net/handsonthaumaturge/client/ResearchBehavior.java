@@ -529,7 +529,7 @@ public final class ResearchBehavior implements StationBehavior {
         Player player = player();
         boolean complete = ThaumClient.complete(note);
         if (complete && sealTime >= 0) {
-            paintSealing(pose, buffers);
+            paintSealing(pose, buffers, ThaumClient.noteColour(note));
             return;
         }
         Quads.flatRect(pose, buffers, PARCHMENT, -SHEET / 2.0F, -SHEET / 2.0F, SHEET / 2.0F, SHEET / 2.0F, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
@@ -640,14 +640,20 @@ public final class ResearchBehavior implements StationBehavior {
         }
         pose.pushPose();
         pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(10.0F));
-        Quads.modelBox(pose, buffers, TABLE_MODEL, -4.0F, 0.0F, -1.0F, 4.0F, 2.0F, 1.0F, 0.0F, 0.0F, 128.0F, 64.0F, 0xFFFFFFFF);
-        // The ribbon as the model's: a box one by two by two, drawn at 1.2 times about its middle so it stands proud of the roll.
-        pose.pushPose();
-        pose.translate(1.9F, 1.0F, 0.0F);
-        pose.scale(1.2F, 1.2F, 1.2F);
-        Quads.modelBox(pose, buffers, TABLE_MODEL, -0.5F, -1.0F, -1.0F, 0.5F, 1.0F, 1.0F, 0.0F, 4.0F, 128.0F, 64.0F,
-                0xFF000000 | ThaumClient.noteColour(note));
+        paintScroll(pose, buffers, ThaumClient.noteColour(note));
         pose.popPose();
+    }
+
+    /**
+     * Thaumaturge's scroll from its table model, its texture and its box: eight long and two thick along X, lying on Y = 0 round
+     * Z = 0, the ribbon of the note's colour tied round its middle (the model's one by two by two, at 1.2 times).
+     */
+    private static void paintScroll(PoseStack pose, MultiBufferSource buffers, int colour) {
+        Quads.modelBox(pose, buffers, TABLE_MODEL, -4.0F, 0.0F, -1.0F, 4.0F, 2.0F, 1.0F, 0.0F, 0.0F, 128.0F, 64.0F, 0xFFFFFFFF);
+        pose.pushPose();
+        pose.translate(0.0F, 1.0F, 0.0F);
+        pose.scale(1.2F, 1.2F, 1.2F);
+        Quads.modelBox(pose, buffers, TABLE_MODEL, -0.5F, -1.0F, -1.0F, 0.5F, 1.0F, 1.0F, 0.0F, 4.0F, 128.0F, 64.0F, 0xFF000000 | colour);
         pose.popPose();
     }
 
@@ -655,23 +661,31 @@ public final class ResearchBehavior implements StationBehavior {
      * The completed note rolled up in the middle of the table: the parchment curls from the near edge into a roll, which ends
      * lying across the sheet's place; then a wax seal drops onto it.
      */
-    private void paintSealing(PoseStack pose, MultiBufferSource buffers) {
+    private void paintSealing(PoseStack pose, MultiBufferSource buffers, int colour) {
         float roll = Math.min(1.0F, sealTime / ROLL_TIME);
         roll = roll * roll * (3 - 2 * roll);
         float half = SHEET / 2.0F;
-        float radius = 0.2F + 0.75F * roll;
+        // The roll thickens and draws in to the size of Thaumaturge's scroll, and, rolled, is that scroll, tied with the note's ribbon.
+        float radius = 0.2F + 0.8F * roll;
+        float length = half * 0.85F + (4.0F - half * 0.85F) * roll;
         float edge = -half + roll * (half + 0.0F);
         if (roll < 1.0F) {
             Quads.flatRect(pose, buffers, PARCHMENT, -half, edge, half, half - roll * half, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
+            Quads.rollX(pose, buffers, SCROLL, -length, length, LIFT + radius, edge, radius, CLEAN_UV, 0xFFFFFFFF);
+        } else {
+            pose.pushPose();
+            pose.translate(0.0F, LIFT, edge);
+            paintScroll(pose, buffers, colour);
+            pose.popPose();
         }
-        Quads.rollX(pose, buffers, SCROLL, -half * 0.85F, half * 0.85F, LIFT + radius, edge, radius, CLEAN_UV, 0xFFFFFFFF);
         float seal = Math.max(0.0F, Math.min(1.0F, (sealTime - SEAL_AT) / SEAL_TIME));
         if (seal > 0) {
             // A flat blob of wax pressed down on the roll's top: it drops, squashes wide, and settles.
             float drop = (1 - seal) * (1 - seal) * 3.0F;
             float squash = 1.0F + 0.35F * (float) Math.sin(seal * Math.PI);
             float size = 0.85F * squash;
-            float top = LIFT + 2 * radius + drop;
+            // On the ribbon's knot, which stands a little proud of the roll.
+            float top = LIFT + 2.2F + drop;
             // Round-ish, as a seal is: a long and a wide bar crossed make an octagon of wax, a smaller one its raised rim.
             sealDisc(pose, buffers, edge, top - 0.05F, top + 0.06F, size, 0xFF8E1010);
             sealDisc(pose, buffers, edge, top + 0.06F, top + 0.12F, size * 0.8F, 0xFFB82420);
