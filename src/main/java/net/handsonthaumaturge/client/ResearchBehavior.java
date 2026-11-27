@@ -659,9 +659,9 @@ public final class ResearchBehavior implements StationBehavior {
                     1.0F, 1.0F, 0xFF8E1010);
             Quads.box(pose, buffers, WHITE, -size * 0.8F, top + 0.06F, edge - size * 0.62F, size * 0.8F, top + 0.12F, edge + size * 0.62F,
                     0.0F, 0.0F, 1.0F, 1.0F, 0xFFB82420);
-            if (seal >= 1) {
-                Quads.flat(pose, buffers, UNKNOWN, 0.0F, top + 0.13F, edge, 0.4F, 0xC0601010);
-            }
+            // The seal's pressed middle, a shade darker.
+            Quads.box(pose, buffers, WHITE, -size * 0.35F, top + 0.12F, edge - size * 0.3F, size * 0.35F, top + 0.14F, edge + size * 0.3F,
+                    0.0F, 0.0F, 1.0F, 1.0F, 0xFF7A0C0C);
         }
     }
 
@@ -749,7 +749,7 @@ public final class ResearchBehavior implements StationBehavior {
 
 
     private static void paintTray(Holder<?> aspect, PoseStack pose, MultiBufferSource buffers) {
-        Quads.upright(pose, buffers, HEX_IDLE, 0.0F, 0.0F, 0.02F, 1.0F, 0xFFF0C860);
+        Quads.upright(pose, buffers, HEX_HOVER, 0.0F, 0.0F, 0.02F, 1.0F, 0xFFF0C860);
         if (aspect != null) {
             Quads.upright(pose, buffers, ThaumClient.texture(aspect), 0.0F, 0.0F, -0.01F, 0.9F, 0xFF000000 | ThaumClient.colour(aspect));
         }
