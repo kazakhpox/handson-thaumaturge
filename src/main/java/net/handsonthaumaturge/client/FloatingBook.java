@@ -42,8 +42,11 @@ final class FloatingBook {
     static final float PAGE_WIDE = 5.6F;
     static final float PAGE_HIGH = 7.5F;
     private static final float COVER_RIM = 0.6F;
-    /** How far the open pages rise towards the spine, radians: an open book is not a plank. */
-    private static final float REST_FOLD = 0.07F;
+    /** How far the open pages rise from the spine to their outer edges, radians: an open book is not a plank. */
+    private static final float REST_FOLD = 0.12F;
+    /** How high the open book floats over the table, node pixels, and how far it is tipped towards the player, degrees. */
+    static final float HOVER = 5.0F;
+    static final float TILT = 40.0F;
     private static final float OPEN_TIME = 0.35F;
     private static final float FLIP_TIME = 0.4F;
 
@@ -96,8 +99,9 @@ final class FloatingBook {
         float eased = 1 - (1 - open) * (1 - open);
         pose.pushPose();
         // Lying on the table: what is drawn facing the front faces up, its top away from the player.
-        pose.translate(0.0F, 0.45F + bob, 0.0F);
-        pose.mulPose(Axis.XP.rotationDegrees(90.0F));
+        // Floating over the table, tipped towards the player: what is drawn facing the front faces up and forward, its top away.
+        pose.translate(0.0F, HOVER + bob, 0.0F);
+        pose.mulPose(Axis.XP.rotationDegrees(90.0F - TILT));
         pose.scale(0.6F + 0.4F * eased, 0.6F + 0.4F * eased, 0.6F + 0.4F * eased);
         // Closed, both halves fold away to the back; open, they lie a shallow V towards the viewer.
         float fold = REST_FOLD + (1 - eased) * (Mth.HALF_PI - REST_FOLD);
@@ -114,21 +118,22 @@ final class FloatingBook {
         } else if (turning) {
             rightPage = 2 * fromSpread + 1;
         }
-        page(pose, buffers, painter, 1, -fold, leftPage, 0.0F, alpha);
-        page(pose, buffers, painter, -1, fold, rightPage, 0.0F, alpha);
+        page(pose, buffers, painter, 1, fold, leftPage, 0.0F, alpha);
+        page(pose, buffers, painter, -1, -fold, rightPage, 0.0F, alpha);
 
         if (turning) {
             // The leaf: from the right side over the spine to the left (forward), or back again; the old page on its front.
             float t = flip * flip * (3 - 2 * flip);
+            // The leaf rises off the page towards the reader (-Z), over the spine and down on the other side.
             float angle = fold + t * (Mth.PI - 2 * fold);
             if (flipWay < 0) {
                 angle = Mth.PI - angle;
             }
             float lift = -0.25F * Mth.sin(t * Mth.PI);
             if (angle < Mth.HALF_PI) {
-                page(pose, buffers, painter, -1, angle, flipWay > 0 ? 2 * fromSpread + 1 : 2 * spread + 1, lift, alpha);
+                page(pose, buffers, painter, -1, -angle, flipWay > 0 ? 2 * fromSpread + 1 : 2 * spread + 1, lift, alpha);
             } else {
-                page(pose, buffers, painter, 1, angle - Mth.PI, flipWay > 0 ? 2 * spread : 2 * fromSpread, lift, alpha);
+                page(pose, buffers, painter, 1, Mth.PI - angle, flipWay > 0 ? 2 * spread : 2 * fromSpread, lift, alpha);
             }
         }
         pose.popPose();
@@ -189,7 +194,7 @@ final class FloatingBook {
     /** One half of the cover behind its page: {@code side} 1 the left (+X), -1 the right. */
     private static void cover(PoseStack pose, MultiBufferSource buffers, int side, float fold, int alpha) {
         pose.pushPose();
-        pose.mulPose(Axis.YP.rotation(side > 0 ? -fold : fold));
+        pose.mulPose(Axis.YP.rotation(side > 0 ? fold : -fold));
         float x0 = 0.0F;
         float x1 = side * (PAGE_WIDE + COVER_RIM);
         float h = PAGE_HIGH / 2 + COVER_RIM;

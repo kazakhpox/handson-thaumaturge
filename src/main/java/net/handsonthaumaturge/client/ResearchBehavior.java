@@ -623,7 +623,7 @@ public final class ResearchBehavior implements StationBehavior {
         if (player() == null) {
             return;
         }
-        guide.render(pose, buffers, this::paintGuidePage, 0.0F);
+        guide.render(pose, buffers, this::paintGuidePage, 0.25F * (float) Math.sin(clock * 1.6F));
     }
 
     private void paintGuidePage(PoseStack pose, MultiBufferSource buffers, int pageNumber) {
