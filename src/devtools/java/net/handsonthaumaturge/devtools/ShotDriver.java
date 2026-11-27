@@ -116,7 +116,7 @@ public final class ShotDriver {
         then("held shot", 5, () -> shot("05_research_held"));
         then("write aspect", 30, ShotDriver::click);
         then("written shot", 5, () -> shot("06_research_written"));
-        then("aim book", 10, () -> aimAt(23.0F, 16.4F, 13.0F));
+        then("aim book", 10, () -> aimAt(15.0F, 16.4F, 13.0F));
         then("open book", 30, ShotDriver::click);
         then("book shot", 5, () -> shot("07_research_book"));
         then("aim next page", 10, () -> aimAt(14.4F, 17.4F, 10.6F));
@@ -124,6 +124,9 @@ public final class ShotDriver {
         then("turning shot", 5, () -> shot("07b_research_book_turning"));
         then("turned wait", 20, () -> { });
         then("turned shot", 5, () -> shot("07c_research_book_turned"));
+        if (Boolean.getBoolean("handson.shots.bookOnly")) {
+            then("quit early", 5, () -> Minecraft.getInstance().stop());
+        }
         then("leave table", 40, ShotDriver::leave);
         // The other half of the table opens the same station, laid out on the same middle.
         then("stand at other half", 20, () -> standBefore(TABLE.east()));
