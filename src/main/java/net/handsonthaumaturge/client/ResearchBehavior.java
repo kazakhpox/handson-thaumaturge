@@ -206,17 +206,19 @@ public final class ResearchBehavior implements StationBehavior {
                 TextPainter.draw(pose, buffers, Component.translatable("handson_thaumaturge.research.copy"), 0.9F, 0.0F, 0xFFFFE8A0);
             }
         }));
-        view.node("book").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintGuide(pose, buffers)));
-        view.node("helper").ifPresent(node -> node.setPainter((pose, buffers, light) -> guide.renderClosed(pose, buffers)));
+        view.node("helper").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
+            guide.renderClosed(pose, buffers);
+            paintGuide(pose, buffers);
+        }));
         view.node("help_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
             if (helperOpen) {
-                TextPainter.draw(pose, buffers, Component.literal("<"), 1.2F, 0.0F, guide.spread() > 0 ? 0xFFE8D8A8 : 0x40E8D8A8);
+                TextPainter.drawFlat(pose, buffers, Component.literal("<"), 1.1F, guide.spread() > 0 ? 0xFF3A2A1A : 0x403A2A1A);
             }
         }));
         view.node("help_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
             if (helperOpen) {
-                TextPainter.draw(pose, buffers, Component.literal(">"), 1.2F, 0.0F,
-                        guide.spread() < lastHelperPage() ? 0xFFE8D8A8 : 0x40E8D8A8);
+                TextPainter.drawFlat(pose, buffers, Component.literal(">"), 1.1F,
+                        guide.spread() < lastHelperPage() ? 0xFF3A2A1A : 0x403A2A1A);
             }
         }));
         view.node("held").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintHeld(view, pose, buffers)));
@@ -625,50 +627,50 @@ public final class ResearchBehavior implements StationBehavior {
     }
 
     /**
-     * The guide to mixtures: a book open in the air beside the table ({@link FloatingBook}), as Hands-On Vanilla's crafting table
+     * The guide to mixtures: the recipe book lying open on the table ({@link FloatingBook}), as Hands-On Vanilla's crafting table
      * shows its recipe book. Each page lists {@link #HELP_ROWS} known compounds, "part + part = compound"; the leaves turn.
      */
     private void paintGuide(PoseStack pose, MultiBufferSource buffers) {
         if (player() == null) {
             return;
         }
-        guide.render(pose, buffers, this::paintGuidePage, 0.15F * (float) Math.sin(clock * 1.6F));
+        guide.render(pose, buffers, this::paintGuidePage, 0.0F);
     }
 
     private void paintGuidePage(PoseStack pose, MultiBufferSource buffers, int pageNumber) {
         List<Holder<?>> compounds = compounds();
         int start = pageNumber * HELP_ROWS;
-        float rowHeight = 1.55F;
+        float rowHeight = 1.3F;
         for (int row = 0; row < HELP_ROWS && start + row < compounds.size(); row++) {
             Holder<?> compound = compounds.get(start + row);
             List<Holder<?>> parts = ThaumClient.components(compound);
-            float y = 3.2F - row * rowHeight;
-            guideTag(pose, buffers, parts.get(0), 2.4F, y);
+            float y = 2.7F - row * rowHeight;
+            guideTag(pose, buffers, parts.get(0), 2.0F, y);
             pose.pushPose();
-            pose.translate(1.2F, y, 0.0F);
-            TextPainter.draw(pose, buffers, Component.literal("+"), 0.7F, 0.0F, 0xFF3A2A1A);
+            pose.translate(1.0F, y, 0.0F);
+            TextPainter.draw(pose, buffers, Component.literal("+"), 0.6F, 0.0F, 0xFF3A2A1A);
             pose.popPose();
             guideTag(pose, buffers, parts.get(1), 0.0F, y);
             pose.pushPose();
-            pose.translate(-1.2F, y, 0.0F);
-            TextPainter.draw(pose, buffers, Component.literal("="), 0.7F, 0.0F, 0xFF3A2A1A);
+            pose.translate(-1.0F, y, 0.0F);
+            TextPainter.draw(pose, buffers, Component.literal("="), 0.6F, 0.0F, 0xFF3A2A1A);
             pose.popPose();
-            guideTag(pose, buffers, compound, -2.4F, y);
+            guideTag(pose, buffers, compound, -2.0F, y);
         }
         int pages = Math.max(1, (compounds.size() + HELP_ROWS - 1) / HELP_ROWS);
         if (pageNumber < pages) {
             pose.pushPose();
-            pose.translate(0.0F, -4.0F, 0.0F);
-            TextPainter.draw(pose, buffers, Component.literal(String.valueOf(pageNumber + 1)), 0.55F, 0.0F, 0xFF6A5A3A);
+            pose.translate(0.0F, -3.3F, 0.0F);
+            TextPainter.draw(pose, buffers, Component.literal(String.valueOf(pageNumber + 1)), 0.5F, 0.0F, 0xFF6A5A3A);
             pose.popPose();
         }
     }
 
     private static void guideTag(PoseStack pose, MultiBufferSource buffers, Holder<?> aspect, float x, float y) {
         if (ThaumClient.discovered(player(), aspect)) {
-            Quads.upright(pose, buffers, ThaumClient.texture(aspect), x, y, 0.0F, 0.5F, 0xFF000000 | ThaumClient.colour(aspect));
+            Quads.upright(pose, buffers, ThaumClient.texture(aspect), x, y, 0.0F, 0.42F, 0xFF000000 | ThaumClient.colour(aspect));
         } else {
-            Quads.upright(pose, buffers, UNKNOWN, x, y, 0.0F, 0.5F, 0x80000000);
+            Quads.upright(pose, buffers, UNKNOWN, x, y, 0.0F, 0.42F, 0x80000000);
         }
     }
 }

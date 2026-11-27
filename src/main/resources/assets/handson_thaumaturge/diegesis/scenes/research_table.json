@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
-  "$comment": "Thaumaturge's research table (its main half, 16 high) worked through its own menu. The scribing tools go where Thaumaturge's own renderer draws its inkwell, towards the main half's outer end (code moves the slot there); the note lies in front. In the middle lies the note's puzzle on parchment (sheet), the screen's hex grid drawn on it by code. Over the far edge hangs the palette, five by five icons of the aspects the player knows (aspect_N in columns, the screen's order and pages; page_prev and page_next under it), and right of it the mixing tray (select_1, select_2, combine) and the copy button. The book of mixtures lies closed on the right of the table; open, it hangs in the air above it (book). The camera stands in front and above, looking down at the sheet with the palette behind it.",
+  "$comment": "Thaumaturge's research table (its main half, 16 high) worked through its own menu. The scribing tools go where Thaumaturge's own renderer draws its inkwell, towards the main half's outer end (code moves the slot there); the note lies in front. In the middle lies the note's puzzle on parchment (sheet), the screen's hex grid drawn on it by code. Over the far edge hangs the palette, five by five icons of the aspects the player knows (aspect_N in columns, the screen's order and pages; page_prev and page_next under it), and right of it the mixing tray (select_1, select_2, combine) and the copy button. The recipe book of mixtures lies on the right of the table, shut or open flat in place (helper). The camera stands in front and above, looking down at the sheet with the palette behind it.",
   "work_plane": 16,
   "idle_visible": false,
   "camera": {
@@ -80,16 +80,16 @@
       }
     },
     {
-      "$comment": "The book of mixtures lying closed on the right of the table, a 3D book drawn by code; a click opens it in the air (book).",
+      "$comment": "The recipe book of mixtures on the right of the table, drawn by code: shut, a green book; a click opens it flat in place, another shuts it.",
       "id": "helper",
       "pos": [
-        -2.5,
+        -5.5,
         16.02,
-        11.0
+        10.5
       ],
       "rotation": [
         0,
-        -18,
+        0,
         0
       ],
       "collider": {
@@ -108,9 +108,9 @@
     {
       "id": "book",
       "pos": [
-        -8.5,
-        22.5,
-        11
+        -5.5,
+        16.02,
+        10.5
       ],
       "pickable": false,
       "hidden": true
@@ -118,40 +118,40 @@
     {
       "id": "help_prev",
       "pos": [
-        -1.8,
-        17.4,
-        10.6
+        -0.4,
+        16.3,
+        6.1
       ],
       "collider": {
         "from": [
           -0.8,
-          -0.8,
-          -0.3
+          -0.2,
+          -0.8
         ],
         "to": [
           0.8,
-          0.8,
-          0.3
+          0.5,
+          0.8
         ]
       }
     },
     {
       "id": "help_next",
       "pos": [
-        -15.2,
-        17.4,
-        10.6
+        -10.6,
+        16.3,
+        6.1
       ],
       "collider": {
         "from": [
           -0.8,
-          -0.8,
-          -0.3
+          -0.2,
+          -0.8
         ],
         "to": [
           0.8,
-          0.8,
-          0.3
+          0.5,
+          0.8
         ]
       }
     },

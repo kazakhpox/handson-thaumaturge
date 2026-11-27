@@ -12,12 +12,14 @@ import net.minecraft.util.Mth;
 import org.joml.Matrix4f;
 
 /**
- * A book open in the air beside a station, its pages turned one leaf at a time, after the floating recipe books of Pocky's
- * Hands-On Vanilla, Delight and Let's Do (MIT): it opens out of nothing, lies open in a shallow V, and a turn lifts the leaf off one
- * side and lays it on the other, the old page on its front and the new one on its back.
+ * A recipe book lying on a station's table, as in Pocky's Hands-On Vanilla, Delight and Let's Do, whose book textures it wears (MIT,
+ * see THIRD_PARTY_NOTICES.txt): shut, a green book; opened, it lies open flat on the table, cream pages framed by the green cover,
+ * the page block's edge stepped at the outer sides and a red ribbon hanging from the head; a turn lifts a leaf off one side and lays
+ * it on the other, the old page on its front and the new one on its back.
  *
- * <p>Drawn in a node's pixels, facing the front (the viewer at -Z), the spine on X = 0: the left page on +X, the right page on -X.
- * What is written on a page is the caller's ({@link PagePainter}), drawn centred on the page.
+ * <p>Drawn in a node's pixels on the table (Y up), the spine along Z (the head away from the player), the left page on +X and the
+ * right page on -X. What is written on a page is the caller's ({@link PagePainter}), drawn upright as if the page faced the player,
+ * centred on the page; the book lays it down.
  */
 final class FloatingBook {
     /** Draws page {@code page} (0 is the first left page), centred on the origin, facing the front. */
@@ -25,15 +27,23 @@ final class FloatingBook {
         void paint(PoseStack pose, MultiBufferSource buffers, int page);
     }
 
-    private static final ResourceLocation COVER = ResourceLocation.withDefaultNamespace("textures/entity/enchanting_table_book.png");
-    private static final ResourceLocation PAPER = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/misc/parchment3.png");
-    private static final float PAPER_UV = 150.0F / 256.0F;
-    /** Page size, node pixels. */
-    static final float PAGE_WIDE = 6.4F;
-    static final float PAGE_HIGH = 9.0F;
-    private static final float COVER_RIM = 0.45F;
-    /** How far the open pages fold back from flat, radians: an open book is a shallow V, not a plank. */
-    private static final float REST_FOLD = 0.16F;
+    private static final ResourceLocation COVER = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "textures/entity/recipe_book.png");
+    private static final ResourceLocation PAPER = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "textures/entity/recipe_book_paper.png");
+    /** The page on the paper texture: 72 by 96 of 128 by 128; the ribbons beside it. */
+    private static final float PAPER_U = 72.0F / 128.0F;
+    private static final float PAPER_V = 96.0F / 128.0F;
+    private static final float RIBBON_U0 = 80.0F / 128.0F;
+    private static final float RIBBON_U1 = 86.0F / 128.0F;
+    private static final float RIBBON_V = 13.0F / 128.0F;
+    /** The green lid on the cover texture (the book model's lid face, 6 by 10 of 64 by 32). */
+    private static final float LID_U = 6.0F / 64.0F;
+    private static final float LID_V = 10.0F / 32.0F;
+    /** Page size, node pixels (the paper's 3 by 4). */
+    static final float PAGE_WIDE = 5.6F;
+    static final float PAGE_HIGH = 7.5F;
+    private static final float COVER_RIM = 0.35F;
+    /** How far the open pages rise towards the spine, radians: an open book is not a plank. */
+    private static final float REST_FOLD = 0.07F;
     private static final float OPEN_TIME = 0.35F;
     private static final float FLIP_TIME = 0.4F;
 
@@ -85,8 +95,10 @@ final class FloatingBook {
         }
         float eased = 1 - (1 - open) * (1 - open);
         pose.pushPose();
-        pose.translate(0.0F, bob, 0.0F);
-        pose.scale(0.35F + 0.65F * eased, 0.35F + 0.65F * eased, 0.35F + 0.65F * eased);
+        // Lying on the table: what is drawn facing the front faces up, its top away from the player.
+        pose.translate(0.0F, 0.45F + bob, 0.0F);
+        pose.mulPose(Axis.XP.rotationDegrees(90.0F));
+        pose.scale(0.6F + 0.4F * eased, 0.6F + 0.4F * eased, 0.6F + 0.4F * eased);
         // Closed, both halves fold away to the back; open, they lie a shallow V towards the viewer.
         float fold = REST_FOLD + (1 - eased) * (Mth.HALF_PI - REST_FOLD);
         int alpha = (int) (255 * Math.min(1.0F, open * 2.0F)) << 24;
@@ -135,16 +147,15 @@ final class FloatingBook {
         float board = 0.3F;
         float pages = 0.9F;
         int leather = 0xFFFFFFFF;
-        int edge = 0xFFE8DDB8;
-        // Boards: the leather of the enchanting book's lid.
-        box(pose, buffers, COVER, -w, 0.0F, -d, w, board, d, 0.0F, 0.0F, 6.0F / 64.0F, 10.0F / 32.0F, leather);
-        box(pose, buffers, COVER, -w, board + pages, -d, w, 2 * board + pages, d, 0.0F, 0.0F, 6.0F / 64.0F, 10.0F / 32.0F, leather);
-        // The pages, a little inside the boards, and the spine closing them on -X.
-        box(pose, buffers, PAPER, -w + 0.3F, board, -d + 0.25F, w - 0.25F, board + pages, d - 0.25F, 0.0F, 0.0F, 0.1F, 0.6F, edge);
-        box(pose, buffers, COVER, -w - 0.15F, 0.0F, -d, -w + 0.3F, 2 * board + pages, d, 0.0F, 0.0F, 1.0F / 64.0F, 10.0F / 32.0F, leather);
-        // A ribbon hanging out at the foot, as the Thaumonomicon's.
-        box(pose, buffers, PAPER, 1.0F, board + pages * 0.5F, -d - 0.9F, 1.6F, board + pages * 0.5F + 0.08F, -d + 0.3F,
-                0.0F, 0.0F, 0.1F, 0.1F, 0xFF9A1E1E);
+        int edge = 0xFFFFFFFF;
+        // Green boards, the paper's cream between them, the spine closing them on -X.
+        box(pose, buffers, COVER, -w, 0.0F, -d, w, board, d, 0.0F, 0.0F, LID_U, LID_V, leather);
+        box(pose, buffers, COVER, -w, board + pages, -d, w, 2 * board + pages, d, 0.0F, 0.0F, LID_U, LID_V, leather);
+        box(pose, buffers, PAPER, -w + 0.3F, board, -d + 0.25F, w - 0.25F, board + pages, d - 0.25F, 0.1F, 0.1F, 0.3F, 0.5F, edge);
+        box(pose, buffers, COVER, -w - 0.15F, 0.0F, -d, -w + 0.3F, 2 * board + pages, d, 0.0F, 0.0F, 1.0F / 64.0F, LID_V, leather);
+        // The ribbon hanging out of the head.
+        box(pose, buffers, PAPER, 1.0F, board + pages * 0.5F, d - 0.3F, 1.5F, board + pages * 0.5F + 0.06F, d + 1.0F,
+                RIBBON_U0, 0.0F, RIBBON_U1, RIBBON_V, leather);
     }
 
     /** A box, every face carrying the same piece of texture. */
@@ -182,8 +193,7 @@ final class FloatingBook {
         float x0 = 0.0F;
         float x1 = side * (PAGE_WIDE + COVER_RIM);
         float h = PAGE_HIGH / 2 + COVER_RIM;
-        // The enchanting book's leather: the lid's face on its texture (6 by 10 of 64 by 32).
-        quad(pose, buffers, COVER, x0, -h, x1, h, 0.12F, 0.0F, 0.0F, 6.0F / 64.0F, 10.0F / 32.0F, alpha | 0xFFFFFF);
+        quad(pose, buffers, COVER, x0, -h, x1, h, 0.3F, 0.0F, 0.0F, LID_U, LID_V, alpha | 0xFFFFFF);
         pose.popPose();
     }
 
@@ -193,8 +203,20 @@ final class FloatingBook {
         pose.pushPose();
         pose.translate(0.0F, 0.0F, lift);
         pose.mulPose(Axis.YP.rotation(angle));
-        quad(pose, buffers, PAPER, 0.0F, -PAGE_HIGH / 2, side * PAGE_WIDE, PAGE_HIGH / 2, 0.0F, 0.0F, 0.0F, PAPER_UV, PAPER_UV,
+        if (lift == 0) {
+            // The block of pages under it, its edge stepped at the outer side.
+            for (int step = 1; step <= 2; step++) {
+                quad(pose, buffers, PAPER, 0.0F, -PAGE_HIGH / 2 + 0.05F * step, side * (PAGE_WIDE + 0.08F * step),
+                        PAGE_HIGH / 2 - 0.05F * step, 0.09F * step, 0.0F, 0.0F, PAPER_U, PAPER_V, alpha | 0xD8D0B8);
+            }
+        }
+        quad(pose, buffers, PAPER, 0.0F, -PAGE_HIGH / 2, side * PAGE_WIDE, PAGE_HIGH / 2, 0.0F, 0.0F, 0.0F, PAPER_U, PAPER_V,
                 alpha | 0xFFFFFF);
+        if (side < 0 && lift == 0) {
+            // The ribbon from the head of the right page.
+            quad(pose, buffers, PAPER, -PAGE_WIDE * 0.78F, PAGE_HIGH / 2 - 0.9F, -PAGE_WIDE * 0.78F - 0.45F, PAGE_HIGH / 2 + 0.35F, -0.02F,
+                    RIBBON_U0, 0.0F, RIBBON_U1, RIBBON_V, alpha | 0xFFFFFF);
+        }
         if (alpha >>> 24 > 200) {
             pose.translate(side * PAGE_WIDE / 2, 0.0F, -0.03F);
             painter.paint(pose, buffers, number);
