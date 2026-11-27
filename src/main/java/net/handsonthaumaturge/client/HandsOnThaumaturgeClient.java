@@ -19,6 +19,10 @@ public final class HandsOnThaumaturgeClient {
 
     private static void setup() {
         DiegesisClient.registerBehavior(WorkbenchStation.ID, WorkbenchBehavior::new);
+        // The specks a carried aspect leaves behind the cursor: glowing, rising a little, fading.
+        DiegesisClient.registerParticle(ResearchBehavior.SPECK, com.pockyl.diegesis.api.client.ParticleStyle
+                .builder(com.pockyl.diegesis.api.client.ParticleStyle.frames("minecraft:generic", 8))
+                .size(0.45F, 0.8F).life(0.45F, 0.8F).gravity(-1.5F).drag(0.92F).wobble(0.6F).emissive().build());
         DiegesisClient.registerBehavior(net.handsonthaumaturge.station.ResearchStation.ID, ResearchBehavior::new);
         DiegesisClient.registerEffect(WorkbenchStation.EFFECT_CRAFTED, (view, node, data) -> {
         });

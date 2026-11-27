@@ -605,6 +605,8 @@ public final class ResearchBehavior implements StationBehavior {
     }
 
     /** The aspect taken up, following the cursor over the table. */
+    static final ResourceLocation SPECK = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "aspect_speck");
+
     /** Where the held aspect was when the trail last left a speck, and how long ago, seconds. */
     private Vector3f trailFrom;
     private float trailWait;
@@ -615,7 +617,7 @@ public final class ResearchBehavior implements StationBehavior {
      */
     private void trail(StationView view, float dt) {
         trailWait -= dt;
-        if (held == null || !view.isInUse() || Minecraft.getInstance().level == null) {
+        if (held == null || !view.isInUse()) {
             trailFrom = null;
             return;
         }
@@ -627,13 +629,12 @@ public final class ResearchBehavior implements StationBehavior {
             }
             trailFrom = new Vector3f(point);
             trailWait = 1.0F / 15.0F;
-            int colour = ThaumClient.colour(held);
-            var random = Minecraft.getInstance().level.getRandom();
-            net.minecraft.world.phys.Vec3 at = view.toWorld(point.x + (random.nextFloat() - 0.5F) * 0.6F, point.y + 0.2F,
-                    point.z + (random.nextFloat() - 0.5F) * 0.6F);
-            var dust = new net.minecraft.core.particles.DustParticleOptions(new Vector3f((colour >> 16 & 0xFF) / 255.0F,
-                    (colour >> 8 & 0xFF) / 255.0F, (colour & 0xFF) / 255.0F), 0.45F);
-            Minecraft.getInstance().level.addParticle(dust, at.x, at.y, at.z, 0.0, 0.01, 0.0);
+            if (TRACE) {
+                System.out.println("[shots] trail speck at " + point);
+            }
+            // Diegesis's own scene particles: world particles are not drawn while a station is worked.
+            view.spawnParticles(SPECK, new Vector3f(point.x, point.y + 0.2F, point.z), new Vector3f(0.0F, 2.0F, 0.0F), 0.5F, 2,
+                    0xFF000000 | ThaumClient.colour(held));
         });
     }
 
