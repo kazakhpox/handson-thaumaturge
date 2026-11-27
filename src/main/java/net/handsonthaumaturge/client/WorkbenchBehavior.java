@@ -96,11 +96,16 @@ public final class WorkbenchBehavior implements StationBehavior {
         int vis = data.getInt(WorkbenchStation.VIS);
         int cost = data.contains(WorkbenchStation.COST) ? data.getInt(WorkbenchStation.COST) : -1;
         boolean short_ = cost > vis;
-        // Written on the workbench's top behind the grid, as the aura's reading and the recipe's price in one line.
-        Component line = Component.translatable("handson_thaumaturge.workbench.vis", vis);
+        // Written on the workbench's top between the grid and the back crystal: the aura's reading, the recipe's price under it.
+        TextPainter.drawFlat(pose, buffers, Component.translatable("handson_thaumaturge.workbench.vis", vis), 0.7F,
+                short_ ? 0xFFEE6E6E : 0xFFD8C8FF);
         if (cost > 0) {
-            line = line.copy().append("   ").append(Component.translatable("handson_thaumaturge.workbench.cost", cost));
+            pose.pushPose();
+            pose.translate(0.0F, 0.0F, -0.9F);
+            TextPainter.drawFlat(pose, buffers, Component.translatable("handson_thaumaturge.workbench.cost", cost), 0.7F, 0xFFC0FFFF);
+            pose.popPose();
         }
+    }
         TextPainter.drawFlat(pose, buffers, line, 0.9F, short_ ? 0xFFEE6E6E : 0xFFD8C8FF);
     }
 
