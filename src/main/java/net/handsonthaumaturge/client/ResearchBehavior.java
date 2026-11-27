@@ -232,6 +232,7 @@ public final class ResearchBehavior implements StationBehavior {
     @Override
     public void frame(StationView view, float dt) {
         clock += dt;
+        trail(view, dt);
         guide.frame(dt, helperOpen && view.isInUse());
         boolean using = view.isInUse() && ThaumClient.ready();
         for (int i = 0; i < CELLS; i++) {
@@ -604,6 +605,38 @@ public final class ResearchBehavior implements StationBehavior {
     }
 
     /** The aspect taken up, following the cursor over the table. */
+    /** Where the held aspect was when the trail last left a speck, and how long ago, seconds. */
+    private Vector3f trailFrom;
+    private float trailWait;
+
+    /**
+     * A few specks of the held aspect's colour left behind the cursor while it is carried over the table: one now and then while
+     * it moves (at most fifteen a second), small, drifting up and gone in a moment.
+     */
+    private void trail(StationView view, float dt) {
+        trailWait -= dt;
+        if (held == null || !view.isInUse() || Minecraft.getInstance().level == null) {
+            trailFrom = null;
+            return;
+        }
+        Vector3f centre = sheetCentre(view);
+        view.cursorOn(centre.y + 0.6F).ifPresent(point -> {
+            boolean moved = trailFrom == null || trailFrom.distance(point) > 0.25F;
+            if (!moved || trailWait > 0) {
+                return;
+            }
+            trailFrom = new Vector3f(point);
+            trailWait = 1.0F / 15.0F;
+            int colour = ThaumClient.colour(held);
+            var random = Minecraft.getInstance().level.getRandom();
+            net.minecraft.world.phys.Vec3 at = view.toWorld(point.x + (random.nextFloat() - 0.5F) * 0.6F, point.y + 0.2F,
+                    point.z + (random.nextFloat() - 0.5F) * 0.6F);
+            var dust = new net.minecraft.core.particles.DustParticleOptions(new Vector3f((colour >> 16 & 0xFF) / 255.0F,
+                    (colour >> 8 & 0xFF) / 255.0F, (colour & 0xFF) / 255.0F), 0.45F);
+            Minecraft.getInstance().level.addParticle(dust, at.x, at.y, at.z, 0.0, 0.01, 0.0);
+        });
+    }
+
     private void paintHeld(StationView view, PoseStack pose, MultiBufferSource buffers) {
         if (held == null || !view.isInUse()) {
             return;

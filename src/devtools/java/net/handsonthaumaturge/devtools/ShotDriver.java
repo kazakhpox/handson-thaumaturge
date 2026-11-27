@@ -110,9 +110,13 @@ public final class ShotDriver {
             shot("04_research");
             station().ifPresent(view -> System.out.println("[shots] research station " + view.type().id()));
         });
-        then("aim aspect", 10, () -> aimAt(19.6F, 26.6F, 16.6F));
+        then("aim aspect", 10, () -> aimScreen(525, 128));
         then("take aspect", 20, ShotDriver::click);
-        then("aim sheet", 10, () -> aimAt(16.6F, 16.05F, 9.8F));
+        then("drag 1", 3, () -> aimScreen(560, 400));
+        then("drag 2", 3, () -> aimScreen(590, 420));
+        then("drag 3", 3, () -> aimScreen(620, 435));
+        then("drag 4", 3, () -> aimScreen(650, 445));
+        then("aim sheet", 2, () -> aimScreen(680, 450));
         then("held shot", 5, () -> shot("05_research_held"));
         then("write aspect", 30, ShotDriver::click);
         then("written shot", 5, () -> shot("06_research_written"));
