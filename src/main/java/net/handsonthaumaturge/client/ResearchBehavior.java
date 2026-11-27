@@ -579,8 +579,8 @@ public final class ResearchBehavior implements StationBehavior {
     private static final ResourceLocation PLANK = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/plank_greatwood.png");
     private static final ResourceLocation DARK_WOOD = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/base_wood_grain.png");
     private static final ResourceLocation BRASS = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/metal_brass.png");
-    /** How far the drawer slides out of the table, scene pixels, and how long it takes, seconds. */
-    private static final float DRAWER_TRAVEL = 8.0F;
+    /** How far the drawer slides out from under the tabletop towards the player, scene pixels, and how long it takes, seconds. */
+    private static final float DRAWER_TRAVEL = 9.0F;
     private static final float DRAWER_TIME = 0.4F;
     private static final String[] IN_DRAWER = {"drawer", "page_prev", "page_next"};
     private float drawer;
@@ -594,17 +594,17 @@ public final class ResearchBehavior implements StationBehavior {
             return;
         }
         float eased = drawer * drawer * (3 - 2 * drawer);
-        float out = (eased - 1.0F) * DRAWER_TRAVEL;
+        float out = -eased * DRAWER_TRAVEL;
         boolean shown = drawer > 0;
         for (String id : IN_DRAWER) {
             view.node(id).ifPresent(node -> {
-                node.moveTo(SHIFT.x + out, SHIFT.y, SHIFT.z, 0.0F);
+                node.moveTo(SHIFT.x, SHIFT.y, SHIFT.z + out, 0.0F);
                 node.setVisible(shown);
             });
         }
         for (int i = 0; i < CELLS; i++) {
             view.node("aspect_" + i).ifPresent(node -> {
-                node.moveTo(SHIFT.x + out, SHIFT.y, SHIFT.z, 0.0F);
+                node.moveTo(SHIFT.x, SHIFT.y, SHIFT.z + out, 0.0F);
                 node.setVisible(shown);
             });
         }
@@ -620,9 +620,10 @@ public final class ResearchBehavior implements StationBehavior {
         Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, 4.5F, 4.0F, 1.2F, 4.8F, 0.0F, 0.0F, 0.5F, 0.08F, wood);
         Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, -4.8F, 4.0F, 1.2F, -4.5F, 0.0F, 0.0F, 0.5F, 0.08F, wood);
         Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, -4.5F, -3.7F, 1.2F, 4.5F, 0.0F, 0.0F, 0.08F, 0.6F, wood);
-        // The front, the drawer's face as the table's own, with its brass pull.
-        Quads.box(pose, buffers, DARK_WOOD, 4.0F, -1.0F, -4.8F, 4.6F, 2.6F, 4.8F, 0.0F, 0.0F, 0.6F, 0.25F, wood);
-        Quads.box(pose, buffers, BRASS, 4.6F, 0.4F, -1.6F, 5.1F, 1.2F, 1.6F, 0.0F, 0.0F, 0.2F, 0.05F, wood);
+        Quads.box(pose, buffers, PLANK, 3.7F, 0.0F, -4.5F, 4.0F, 1.2F, 4.5F, 0.0F, 0.0F, 0.08F, 0.6F, wood);
+        // The front towards the player, dark as the table's own drawer face, with its brass pull.
+        Quads.box(pose, buffers, DARK_WOOD, -4.0F, -1.0F, -5.4F, 4.0F, 2.6F, -4.8F, 0.0F, 0.0F, 0.5F, 0.25F, wood);
+        Quads.box(pose, buffers, BRASS, -1.6F, 0.4F, -5.9F, 1.6F, 1.2F, -5.4F, 0.0F, 0.0F, 0.2F, 0.05F, wood);
         // The rack: a board at half the vials' height, a hole for each.
         for (float z = 3.8F; z >= -3.8F; z -= 1.9F) {
             Quads.box(pose, buffers, PLANK, -3.7F, 1.0F, z - 0.15F, 4.0F, 1.25F, z + 0.15F, 0.0F, 0.0F, 0.5F, 0.02F, wood);
