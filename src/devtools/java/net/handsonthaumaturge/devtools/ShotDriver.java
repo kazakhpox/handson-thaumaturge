@@ -133,7 +133,7 @@ public final class ShotDriver {
         then("close book", 10, ShotDriver::click);
         then("complete note", 1, () -> server(player -> completeNote(player.serverLevel())));
         // The completion animation frame by frame, for a GIF (tools/gif.py): a frame every tick for two and a half seconds.
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 60; i++) {
             String name = String.format("seal_%02d", i);
             then("seal frame " + i, 1, () -> shot(name));
         }

@@ -593,6 +593,8 @@ public final class ResearchBehavior implements StationBehavior {
     /** A piece of the parchment with no seal drawn on it, for the rolls. */
     private static final float CLEAN_UV = 0.3F;
     private static final float ROLL_TIME = 1.0F;
+    /** Dev only: the dev client's frame recorder slows the sealing down to film it (handson.shots.slowSeal). */
+    private static final float SEAL_PACE = Boolean.getBoolean("handson.shots.slowSeal") ? 0.25F : 1.0F;
     private static final float SEAL_AT = 1.1F;
     private static final float SEAL_TIME = 0.4F;
     private boolean sealSounded;
@@ -614,7 +616,7 @@ public final class ResearchBehavior implements StationBehavior {
                 sound(view, SoundEvents.BOOK_PAGE_TURN, 0.7F);
             }
         } else {
-            sealTime += dt;
+            sealTime += dt * SEAL_PACE;
         }
         if (!sealSounded && sealTime >= SEAL_AT + SEAL_TIME) {
             sealSounded = true;
@@ -670,14 +672,18 @@ public final class ResearchBehavior implements StationBehavior {
             float squash = 1.0F + 0.35F * (float) Math.sin(seal * Math.PI);
             float size = 0.85F * squash;
             float top = LIFT + 2 * radius + drop;
-            Quads.box(pose, buffers, WHITE, -size, top - 0.05F, edge - size * 0.8F, size, top + 0.06F, edge + size * 0.8F, 0.0F, 0.0F,
-                    1.0F, 1.0F, 0xFF8E1010);
-            Quads.box(pose, buffers, WHITE, -size * 0.8F, top + 0.06F, edge - size * 0.62F, size * 0.8F, top + 0.12F, edge + size * 0.62F,
-                    0.0F, 0.0F, 1.0F, 1.0F, 0xFFB82420);
-            // The seal's pressed middle, a shade darker.
-            Quads.box(pose, buffers, WHITE, -size * 0.35F, top + 0.12F, edge - size * 0.3F, size * 0.35F, top + 0.14F, edge + size * 0.3F,
-                    0.0F, 0.0F, 1.0F, 1.0F, 0xFF7A0C0C);
+            // Round-ish, as a seal is: a long and a wide bar crossed make an octagon of wax, a smaller one its raised rim.
+            sealDisc(pose, buffers, edge, top - 0.05F, top + 0.06F, size, 0xFF8E1010);
+            sealDisc(pose, buffers, edge, top + 0.06F, top + 0.12F, size * 0.8F, 0xFFB82420);
+            sealDisc(pose, buffers, edge, top + 0.12F, top + 0.14F, size * 0.4F, 0xFF7A0C0C);
         }
+    }
+
+    private static void sealDisc(PoseStack pose, MultiBufferSource buffers, float z, float y0, float y1, float r, int argb) {
+        float cut = r * 0.42F;
+        Quads.box(pose, buffers, WHITE, -r, y0, z - cut, r, y1, z + cut, 0.0F, 0.0F, 1.0F, 1.0F, argb);
+        Quads.box(pose, buffers, WHITE, -cut, y0, z - r, cut, y1, z + r, 0.0F, 0.0F, 1.0F, 1.0F, argb);
+        Quads.box(pose, buffers, WHITE, -r * 0.72F, y0, z - r * 0.72F, r * 0.72F, y1, z + r * 0.72F, 0.0F, 0.0F, 1.0F, 1.0F, argb);
     }
 
     // ---- The drawer of vials.
