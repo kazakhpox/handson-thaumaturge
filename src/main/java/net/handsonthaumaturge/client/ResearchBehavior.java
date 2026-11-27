@@ -207,6 +207,7 @@ public final class ResearchBehavior implements StationBehavior {
             }
         }));
         view.node("book").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintGuide(pose, buffers)));
+        view.node("helper").ifPresent(node -> node.setPainter((pose, buffers, light) -> guide.renderClosed(pose, buffers)));
         view.node("help_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
             if (helperOpen) {
                 TextPainter.draw(pose, buffers, Component.literal("<"), 1.2F, 0.0F, guide.spread() > 0 ? 0xFFE8D8A8 : 0x40E8D8A8);

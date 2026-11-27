@@ -122,6 +122,59 @@ final class FloatingBook {
         pose.popPose();
     }
 
+    /**
+     * The book lying shut on the table, drawn in its node's pixels: leather boards top and bottom, the block of pages between
+     * them, the spine along -X. Hidden while it is open in the air.
+     */
+    void renderClosed(PoseStack pose, MultiBufferSource buffers) {
+        if (open > 0) {
+            return;
+        }
+        float w = 3.6F;
+        float d = 4.6F;
+        float board = 0.3F;
+        float pages = 1.1F;
+        int leather = 0xFFFFFFFF;
+        int edge = 0xFFE8DDB8;
+        // Boards: the leather of the enchanting book's lid.
+        box(pose, buffers, COVER, -w, 0.0F, -d, w, board, d, 0.0F, 0.0F, 6.0F / 64.0F, 10.0F / 32.0F, leather);
+        box(pose, buffers, COVER, -w, board + pages, -d, w, 2 * board + pages, d, 0.0F, 0.0F, 6.0F / 64.0F, 10.0F / 32.0F, leather);
+        // The pages, a little inside the boards, and the spine closing them on -X.
+        box(pose, buffers, PAPER, -w + 0.3F, board, -d + 0.25F, w - 0.25F, board + pages, d - 0.25F, 0.0F, 0.0F, 0.1F, 0.6F, edge);
+        box(pose, buffers, COVER, -w - 0.15F, 0.0F, -d, -w + 0.3F, 2 * board + pages, d, 0.0F, 0.0F, 1.0F / 64.0F, 10.0F / 32.0F, leather);
+        // A ribbon hanging out at the foot, as the Thaumonomicon's.
+        box(pose, buffers, PAPER, 1.0F, board + pages * 0.5F, -d - 0.9F, 1.6F, board + pages * 0.5F + 0.08F, -d + 0.3F,
+                0.0F, 0.0F, 0.1F, 0.1F, 0xFF9A1E1E);
+    }
+
+    /** A box, every face carrying the same piece of texture. */
+    private static void box(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float y0, float z0, float x1,
+                            float y1, float z1, float u0, float v0, float u1, float v1, int argb) {
+        VertexConsumer out = buffers.getBuffer(RenderType.entityCutoutNoCull(texture));
+        PoseStack.Pose last = pose.last();
+        Matrix4f m = last.pose();
+        float[][] faces = {
+                {x0, y1, z0, x1, y1, z0, x1, y1, z1, x0, y1, z1, 0, 1, 0},
+                {x0, y0, z1, x1, y0, z1, x1, y0, z0, x0, y0, z0, 0, -1, 0},
+                {x0, y0, z0, x1, y0, z0, x1, y1, z0, x0, y1, z0, 0, 0, -1},
+                {x1, y0, z1, x0, y0, z1, x0, y1, z1, x1, y1, z1, 0, 0, 1},
+                {x0, y0, z1, x0, y0, z0, x0, y1, z0, x0, y1, z1, -1, 0, 0},
+                {x1, y0, z0, x1, y0, z1, x1, y1, z1, x1, y1, z0, 1, 0, 0},
+        };
+        for (float[] f : faces) {
+            shade(out, m, last, f[0], f[1], f[2], u0, v1, argb, f[12], f[13], f[14]);
+            shade(out, m, last, f[3], f[4], f[5], u1, v1, argb, f[12], f[13], f[14]);
+            shade(out, m, last, f[6], f[7], f[8], u1, v0, argb, f[12], f[13], f[14]);
+            shade(out, m, last, f[9], f[10], f[11], u0, v0, argb, f[12], f[13], f[14]);
+        }
+    }
+
+    private static void shade(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float x, float y, float z, float u, float v, int argb,
+                              float nx, float ny, float nz) {
+        out.addVertex(m, x, y, z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(pose, nx, ny, nz);
+    }
+
     /** One half of the cover behind its page: {@code side} 1 the left (+X), -1 the right. */
     private static void cover(PoseStack pose, MultiBufferSource buffers, int side, float fold, int alpha) {
         pose.pushPose();

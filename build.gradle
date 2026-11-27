@@ -120,5 +120,8 @@ neoForge.runs.register('shots') {
     sourceSet = sourceSets.devtools
     gameDirectory = project.file('run-shots')
     systemProperty 'handson.shots', project.file('shots').absolutePath
+    if (project.hasProperty('bookOnly')) {
+        systemProperty 'handson.shots.bookOnly', 'true'
+    }
     programArguments.addAll('--width', '1280', '--height', '720')
 }
