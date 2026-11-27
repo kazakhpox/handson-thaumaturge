@@ -155,6 +155,51 @@ final class Quads {
         }
     }
 
+    /**
+     * A cuboid textured as a model part's box ({@code CubeListBuilder.texOffs(u, v).addBox}): the same faces of a {@code texWide} by
+     * {@code texHigh} texture as Minecraft's own models take, so an entity model's piece can be drawn with its own texture.
+     */
+    static void modelBox(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float y0, float z0, float x1,
+                         float y1, float z1, float u, float v, float texWide, float texHigh, int argb) {
+        VertexConsumer out = buffers.getBuffer(RenderType.entityCutoutNoCull(texture));
+        PoseStack.Pose last = pose.last();
+        Matrix4f m = last.pose();
+        float w = x1 - x0;
+        float h = y1 - y0;
+        float d = z1 - z0;
+        float a = u / texWide;
+        float b = (u + d) / texWide;
+        float c = (u + d + w) / texWide;
+        float e = (u + d + w + w) / texWide;
+        float f = (u + d + w + d) / texWide;
+        float g = (u + d + w + d + w) / texWide;
+        float r0 = v / texHigh;
+        float r1 = (v + d) / texHigh;
+        float r2 = (v + d + h) / texHigh;
+        // Top and bottom.
+        quad(out, m, last, x0, y1, z0, x1, y1, z0, x1, y1, z1, x0, y1, z1, c, r1, e, r0, 0, 1, 0, argb);
+        quad(out, m, last, x0, y0, z1, x1, y0, z1, x1, y0, z0, x0, y0, z0, b, r0, c, r1, 0, -1, 0, argb);
+        // Sides: west, north, east, south.
+        quad(out, m, last, x0, y1, z1, x0, y1, z0, x0, y0, z0, x0, y0, z1, a, r1, b, r2, -1, 0, 0, argb);
+        quad(out, m, last, x0, y1, z0, x1, y1, z0, x1, y0, z0, x0, y0, z0, b, r1, c, r2, 0, 0, -1, argb);
+        quad(out, m, last, x1, y1, z0, x1, y1, z1, x1, y0, z1, x1, y0, z0, c, r1, f, r2, 1, 0, 0, argb);
+        quad(out, m, last, x1, y1, z1, x0, y1, z1, x0, y0, z1, x1, y0, z1, f, r1, g, r2, 0, 0, 1, argb);
+    }
+
+    /** Four corners, the texture's {@code u0, v0} at the first and {@code u1, v1} at the third. */
+    private static void quad(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float ax, float ay, float az, float bx, float by,
+                             float bz, float cx, float cy, float cz, float dx, float dy, float dz, float u0, float v0, float u1, float v1,
+                             float nx, float ny, float nz, int argb) {
+        out.addVertex(m, ax, ay, az).setColor(argb).setUv(u0, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(pose, nx, ny, nz);
+        out.addVertex(m, bx, by, bz).setColor(argb).setUv(u1, v0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(pose, nx, ny, nz);
+        out.addVertex(m, cx, cy, cz).setColor(argb).setUv(u1, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(pose, nx, ny, nz);
+        out.addVertex(m, dx, dy, dz).setColor(argb).setUv(u0, v1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
+                .setNormal(pose, nx, ny, nz);
+    }
+
     private static void put(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float x, float y, float z, float u, float v, int argb,
             float nx, float ny, float nz) {
         out.addVertex(m, x, y, z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)

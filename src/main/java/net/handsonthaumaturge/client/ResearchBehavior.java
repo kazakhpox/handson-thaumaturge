@@ -624,14 +624,24 @@ public final class ResearchBehavior implements StationBehavior {
         }
     }
 
-    /** The note in its slot as Thaumaturge's table shows it: rolled up, tied with a ribbon of its colour. */
+    /** Thaumaturge's table model texture: its scroll is a box at (0, 0), its ribbon at (0, 4), of 128 by 64. */
+    private static final ResourceLocation TABLE_MODEL = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/entity/restable2.png");
+
+    /**
+     * The note in its slot as Thaumaturge's own table shows it: its scroll (eight long, two thick, the ends curled) lying turned a
+     * little, tied with a ribbon of the note's colour.
+     */
     private void paintRolledNote(StationView view, PoseStack pose, MultiBufferSource buffers) {
         Object note = note(view);
         if (note == null) {
             return;
         }
-        Quads.rollX(pose, buffers, SCROLL, -1.6F, 1.6F, 0.42F, 0.0F, 0.42F, CLEAN_UV, 0xFFFFFFFF);
-        Quads.rollX(pose, buffers, WHITE, -0.25F, 0.25F, 0.42F, 0.0F, 0.47F, 1.0F, 0xFF000000 | ThaumClient.noteColour(note));
+        pose.pushPose();
+        pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(10.0F));
+        Quads.modelBox(pose, buffers, TABLE_MODEL, -4.0F, 0.0F, -1.0F, 4.0F, 2.0F, 1.0F, 0.0F, 0.0F, 128.0F, 64.0F, 0xFFFFFFFF);
+        Quads.modelBox(pose, buffers, TABLE_MODEL, 1.3F, -0.2F, -1.2F, 2.5F, 2.2F, 1.2F, 0.0F, 4.0F, 128.0F, 64.0F,
+                0xFF000000 | ThaumClient.noteColour(note));
+        pose.popPose();
     }
 
     /**
