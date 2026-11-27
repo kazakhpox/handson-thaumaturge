@@ -389,6 +389,7 @@ public final class ShotDriver {
             double scale = mc.getWindow().getGuiScale();
             double px = screen.get().x * scale;
             double py = screen.get().y * scale;
+            System.out.println("[shots] aim " + x + "," + y + "," + z + " -> screen " + (int) px + "," + (int) py);
             long window = mc.getWindow().getWindow();
             GLFW.glfwSetCursorPos(window, px, py);
             invoke("onMove", new Class<?>[]{long.class, double.class, double.class}, window, px, py);

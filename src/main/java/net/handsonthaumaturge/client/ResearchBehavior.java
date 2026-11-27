@@ -301,7 +301,12 @@ public final class ResearchBehavior implements StationBehavior {
         }
     }
 
+    private static final boolean TRACE = System.getProperty("handson.shots") != null;
+
     private void click(StationView view, String node, int button) {
+        if (TRACE) {
+            System.out.println("[shots] research table click on " + node);
+        }
         if (node == null) {
             return;
         }
