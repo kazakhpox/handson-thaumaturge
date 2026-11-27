@@ -7,25 +7,35 @@ the [Diegesis](https://modrinth.com/mod/diegesis-api) library in the spirit of
 
 - **The arcane workbench**, as Hands-On Vanilla's crafting table. The eleven cells of its top are used as drawn: the 3x3 grid
   in the middle, the wand on the left strip, the result hovering over the right one. The six primal crystals float in a
-  ring round the table, clear of the grid, in the screen's places; under each glows a sigil (after Hands-On Vanilla's
-  enchanting table) in its primal's colour, flaring and turning while the recipe on the grid burns that crystal. Over the
-  far edge stands the vis in the aura and what the recipe costs, red when the aura cannot pay it. Taking the result crafts
-  through Thaumaturge's own workbench menu: arcane and vanilla recipes, research gates, wand and crystal payment.
-- **The research table** (either half opens it; like a furnace it is always worked from its front, the side that puts the inkwell in the far left corner, the sheet in the middle of the whole table). The scribing tools go in where Thaumaturge draws its own inkwell and quill, the note lies in front. With
-  a note in, its puzzle lies open on the table on parchment: Thaumaturge's hex grid, the aspects written in, the lines of the
-  chains that connect. The aspects you know hang over the far edge as a panel of icons (five by five, paged as in the screen:
-  the wheel or the arrows). Click one to take it up, click a blank hex to write it in, click a written one to rub it out.
-  Right click puts an aspect into the mixing tray beside the panel, whose button combines the two (shift-click on a compound
-  fills the tray with its parts, with the research for it); the copy button appears for a finished note when you can copy
-  it. The book on the table opens the guide to mixtures in the air beside it, as Hands-On Vanilla's crafting table shows
-  its recipe book.
+  ring just over the workbench's edges, each in a soft glow of its primal's colour; under each glows a sigil (after
+  Hands-On Vanilla's enchanting table), flaring and turning while the recipe on the grid burns that crystal. The vis in the
+  aura and what the recipe costs are written on the workbench's top, red when the aura cannot pay. Shift-clicking from the
+  inventory puts a wand in the wand's place and a crystal in its primal's, anything else in the grid. Taking the result
+  crafts through Thaumaturge's own workbench menu: arcane and vanilla recipes, research gates, wand and crystal payment.
+- **The research table** (either half opens it; like a furnace it is always worked from its front, the side that puts the
+  inkwell in the far left corner). You stand before it as at a desk:
+  - **The note is the parchment in the middle.** With no note, a pale sheet shows where one goes. On the open sheet lie
+    Thaumaturge's hex grid, the aspects written in and the lines of the chains that connect. Take an unfinished note by the
+    wax seal in its corner, clear of the hexes.
+  - **The aspects are vials in the drawer** under the left of the tabletop, which slides out when you open the table: one vial
+    per aspect you know, filled with its colour by how much of it you have, its sign on the cork (four by five, the arrows on
+    the drawer's front page through them). Click a vial to take its aspect (a few sparks of its colour follow the cursor),
+    click a blank hex to write it in, click a written one to rub it out.
+  - **Finished, the note rolls up** into Thaumaturge's scroll and a wax seal drops onto it; click the scroll to take it.
+  - **The mixing tray** stands in front of the inkwell, in brass: right click puts an aspect in it, its button combines the
+    two (shift-click on a compound fills it with its parts, with the research for it).
+  - **The guide to mixtures** is a recipe book as in Hands-On Vanilla, dressed as the Thaumonomicon. It lies shut on the right
+    of the table; a click opens it in the air over the table, its leaves turn, and each aspect sits on a small hexagon so it
+    stands out from the paper.
+  - Out of ink, the table says so in front of the parchment.
 - **Nothing replaced.** Sneaking + use keeps Thaumaturge's own screens. The items stay in the blocks' own inventories;
   the research table's actions call the table's own methods, so ink, costs, aids and copying are all Thaumaturge's.
-  While you work at the research table, Thaumaturge's renderer of it draws only its inkwell and quill (its papers and scroll give way to the sheet); at the workbench its wand display rests.
 
-| The arcane workbench | The research table | Its guide to mixtures |
-|---|---|---|
-| ![The arcane workbench](docs/workbench.png) | ![The research table](docs/research.png) | ![The guide](docs/research_book.png) |
+| The arcane workbench | The research table |
+|---|---|
+| ![The arcane workbench](docs/workbench.png) | ![The research table: the drawer of vials, the note, the mixing tray](docs/research.png) |
+| **The guide to mixtures** | **A finished note sealed** |
+| ![The guide to mixtures open over the table](docs/research_book.png) | ![The note rolled up and sealed](docs/sealing.gif) |
 
 ## Requirements
 
@@ -53,4 +63,5 @@ blocks keep their own screens. Tested with Thaumaturge 1.1.0 for 1.21.1.
 
 ## License
 
-MIT. The sigil texture comes from [Hands-On Vanilla](https://github.com/Pocky-l/handson-vanilla) (MIT, Pocky).
+MIT. The sigil texture and the recipe book's textures come from [Hands-On Vanilla](https://github.com/Pocky-l/handson-vanilla)
+(MIT, Pocky; see `THIRD_PARTY_NOTICES.txt`).
