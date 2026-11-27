@@ -55,8 +55,10 @@
         "slot": "note[0]",
         "size": 2.8,
         "item_size": 2.4,
-        "idle_highlight": 0.3
-      }
+        "idle_highlight": 0.3,
+        "display": "hidden"
+      },
+      "$comment": "The note's slot: the note itself is not drawn, a rolled scroll tied with its colour is (code)."
     },
     {
       "$comment": "The note's puzzle, painted by code on parchment lying on the table; a click writes or rubs out on the hex under the cursor.",
@@ -83,7 +85,7 @@
       "id": "drawer",
       "$comment": "The drawer under the left of the tabletop, drawn by code; it slides out towards the player with the vials when the table is opened.",
       "pos": [
-        12.0,
+        15.5,
         11.0,
         7.2
       ],
@@ -92,7 +94,7 @@
     {
       "id": "aspect_0",
       "pos": [
-        14.85,
+        18.35,
         11.6,
         11.0
       ],
@@ -112,7 +114,7 @@
     {
       "id": "aspect_1",
       "pos": [
-        12.95,
+        16.45,
         11.6,
         11.0
       ],
@@ -132,7 +134,7 @@
     {
       "id": "aspect_2",
       "pos": [
-        11.05,
+        14.55,
         11.6,
         11.0
       ],
@@ -152,7 +154,7 @@
     {
       "id": "aspect_3",
       "pos": [
-        9.15,
+        12.65,
         11.6,
         11.0
       ],
@@ -172,7 +174,7 @@
     {
       "id": "aspect_4",
       "pos": [
-        14.85,
+        18.35,
         11.6,
         9.1
       ],
@@ -192,7 +194,7 @@
     {
       "id": "aspect_5",
       "pos": [
-        12.95,
+        16.45,
         11.6,
         9.1
       ],
@@ -212,7 +214,7 @@
     {
       "id": "aspect_6",
       "pos": [
-        11.05,
+        14.55,
         11.6,
         9.1
       ],
@@ -232,7 +234,7 @@
     {
       "id": "aspect_7",
       "pos": [
-        9.15,
+        12.65,
         11.6,
         9.1
       ],
@@ -252,7 +254,7 @@
     {
       "id": "aspect_8",
       "pos": [
-        14.85,
+        18.35,
         11.6,
         7.2
       ],
@@ -272,7 +274,7 @@
     {
       "id": "aspect_9",
       "pos": [
-        12.95,
+        16.45,
         11.6,
         7.2
       ],
@@ -292,7 +294,7 @@
     {
       "id": "aspect_10",
       "pos": [
-        11.05,
+        14.55,
         11.6,
         7.2
       ],
@@ -312,7 +314,7 @@
     {
       "id": "aspect_11",
       "pos": [
-        9.15,
+        12.65,
         11.6,
         7.2
       ],
@@ -332,7 +334,7 @@
     {
       "id": "aspect_12",
       "pos": [
-        14.85,
+        18.35,
         11.6,
         5.3
       ],
@@ -352,7 +354,7 @@
     {
       "id": "aspect_13",
       "pos": [
-        12.95,
+        16.45,
         11.6,
         5.3
       ],
@@ -372,7 +374,7 @@
     {
       "id": "aspect_14",
       "pos": [
-        11.05,
+        14.55,
         11.6,
         5.3
       ],
@@ -392,7 +394,7 @@
     {
       "id": "aspect_15",
       "pos": [
-        9.15,
+        12.65,
         11.6,
         5.3
       ],
@@ -412,7 +414,7 @@
     {
       "id": "aspect_16",
       "pos": [
-        14.85,
+        18.35,
         11.6,
         3.4
       ],
@@ -432,7 +434,7 @@
     {
       "id": "aspect_17",
       "pos": [
-        12.95,
+        16.45,
         11.6,
         3.4
       ],
@@ -452,7 +454,7 @@
     {
       "id": "aspect_18",
       "pos": [
-        11.05,
+        14.55,
         11.6,
         3.4
       ],
@@ -472,7 +474,7 @@
     {
       "id": "aspect_19",
       "pos": [
-        9.15,
+        12.65,
         11.6,
         3.4
       ],
@@ -577,7 +579,7 @@
     {
       "id": "page_prev",
       "pos": [
-        14.5,
+        18.0,
         13.7,
         2.1
       ],
@@ -597,7 +599,7 @@
     {
       "id": "page_next",
       "pos": [
-        9.5,
+        13.0,
         13.7,
         2.1
       ],
@@ -617,9 +619,9 @@
     {
       "id": "select_1",
       "pos": [
-        1.6,
-        23.0,
-        16.6
+        9.4,
+        16.9,
+        4.6
       ],
       "collider": {
         "from": [
@@ -632,14 +634,19 @@
           1,
           0.3
         ]
-      }
+      },
+      "rotation": [
+        60,
+        0,
+        0
+      ]
     },
     {
       "id": "select_2",
       "pos": [
-        -1.6,
-        23.0,
-        16.6
+        6.6,
+        16.9,
+        4.6
       ],
       "collider": {
         "from": [
@@ -652,14 +659,19 @@
           1,
           0.3
         ]
-      }
+      },
+      "rotation": [
+        60,
+        0,
+        0
+      ]
     },
     {
       "id": "combine",
       "pos": [
-        0,
-        20.8,
-        16.6
+        8.0,
+        16.5,
+        2.4
       ],
       "collider": {
         "from": [
@@ -672,7 +684,12 @@
           0.6,
           0.3
         ]
-      }
+      },
+      "rotation": [
+        60,
+        0,
+        0
+      ]
     },
     {
       "id": "duplicate",

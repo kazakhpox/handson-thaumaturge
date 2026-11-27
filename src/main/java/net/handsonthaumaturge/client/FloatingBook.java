@@ -27,7 +27,7 @@ final class FloatingBook {
         void paint(PoseStack pose, MultiBufferSource buffers, int page);
     }
 
-    private static final ResourceLocation COVER = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "textures/entity/recipe_book.png");
+    private static final ResourceLocation COVER = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "textures/entity/recipe_book_thaum.png");
     private static final ResourceLocation PAPER = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "textures/entity/recipe_book_paper.png");
     /** The page on the paper texture: 72 by 96 of 128 by 128; the ribbons beside it. */
     private static final float PAPER_U = 72.0F / 128.0F;
@@ -151,9 +151,13 @@ final class FloatingBook {
         float d = 3.9F;
         float board = 0.3F;
         float pages = 0.9F;
+        // Shut, it lies a little smaller and turned a touch, as a book put down on a desk (the recipe book of Hands-On Vanilla too).
+        pose.pushPose();
+        pose.mulPose(Axis.YP.rotationDegrees(-14.0F));
+        pose.scale(0.8F, 0.8F, 0.8F);
         int leather = 0xFFFFFFFF;
         int edge = 0xFFFFFFFF;
-        // Green boards, the paper's cream between them, the spine closing them on -X.
+        // Leather boards with brass corners (the Thaumonomicon's), the paper's cream between them, the spine closing them on -X.
         box(pose, buffers, COVER, -w, 0.0F, -d, w, board, d, 0.0F, 0.0F, LID_U, LID_V, leather);
         box(pose, buffers, COVER, -w, board + pages, -d, w, 2 * board + pages, d, 0.0F, 0.0F, LID_U, LID_V, leather);
         box(pose, buffers, PAPER, -w + 0.3F, board, -d + 0.25F, w - 0.25F, board + pages, d - 0.25F, 0.1F, 0.1F, 0.3F, 0.5F, edge);
@@ -161,6 +165,7 @@ final class FloatingBook {
         // The ribbon hanging out of the head.
         box(pose, buffers, PAPER, 1.0F, board + pages * 0.5F, d - 0.3F, 1.5F, board + pages * 0.5F + 0.06F, d + 1.0F,
                 RIBBON_U0, 0.0F, RIBBON_U1, RIBBON_V, leather);
+        pose.popPose();
     }
 
     /** A box, every face carrying the same piece of texture. */

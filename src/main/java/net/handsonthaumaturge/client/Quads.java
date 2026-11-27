@@ -121,6 +121,40 @@ final class Quads {
         }
     }
 
+    /** A roll lying along X from {@code x0} to {@code x1}, its axis at ({@code y}, {@code z}): eight faces of the texture round it, and its ends. */
+    static void rollX(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float x1, float y, float z, float radius,
+                      float uv, int argb) {
+        VertexConsumer out = buffers.getBuffer(RenderType.entityTranslucent(texture));
+        PoseStack.Pose last = pose.last();
+        Matrix4f m = last.pose();
+        int sides = 8;
+        for (int i = 0; i < sides; i++) {
+            double a0 = 2 * Math.PI * i / sides;
+            double a1 = 2 * Math.PI * (i + 1) / sides;
+            float y0 = y + radius * (float) Math.cos(a0);
+            float z0 = z + radius * (float) Math.sin(a0);
+            float y1 = y + radius * (float) Math.cos(a1);
+            float z1 = z + radius * (float) Math.sin(a1);
+            float ny = (float) Math.cos((a0 + a1) / 2);
+            float nz = (float) Math.sin((a0 + a1) / 2);
+            float v0 = uv * i / sides;
+            float v1 = uv * (i + 1) / sides;
+            put(out, m, last, x0, y0, z0, 0, v0, argb, 0, ny, nz);
+            put(out, m, last, x0, y1, z1, 0, v1, argb, 0, ny, nz);
+            put(out, m, last, x1, y1, z1, uv, v1, argb, 0, ny, nz);
+            put(out, m, last, x1, y0, z0, uv, v0, argb, 0, ny, nz);
+            // The ends: a fan from the axis, the paper's curl.
+            put(out, m, last, x0, y, z, 0.3F * uv, 0.3F * uv, argb, -1, 0, 0);
+            put(out, m, last, x0, y0, z0, 0.3F * uv, 0.35F * uv, argb, -1, 0, 0);
+            put(out, m, last, x0, y1, z1, 0.35F * uv, 0.35F * uv, argb, -1, 0, 0);
+            put(out, m, last, x0, y, z, 0.3F * uv, 0.3F * uv, argb, -1, 0, 0);
+            put(out, m, last, x1, y, z, 0.3F * uv, 0.3F * uv, argb, 1, 0, 0);
+            put(out, m, last, x1, y1, z1, 0.35F * uv, 0.35F * uv, argb, 1, 0, 0);
+            put(out, m, last, x1, y0, z0, 0.3F * uv, 0.35F * uv, argb, 1, 0, 0);
+            put(out, m, last, x1, y, z, 0.3F * uv, 0.3F * uv, argb, 1, 0, 0);
+        }
+    }
+
     private static void put(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float x, float y, float z, float u, float v, int argb,
             float nx, float ny, float nz) {
         out.addVertex(m, x, y, z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)

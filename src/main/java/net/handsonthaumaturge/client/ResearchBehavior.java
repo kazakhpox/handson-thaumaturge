@@ -84,7 +84,7 @@ public final class ResearchBehavior implements StationBehavior {
 
     /** Everything laid out on the table moves with the sheet to the middle of the two-block table. */
     private static final String[] ON_TABLE = {"note", "sheet", "helper", "book", "help_prev", "help_next", "page_prev",
-            "page_next", "select_1", "select_2", "combine", "duplicate"};
+            "page_next", "duplicate"};
     /** How far the middle of the whole table lies from the middle of the half the station stands on, scene pixels. */
     private static final Vector3f SHIFT = new Vector3f();
 
@@ -141,6 +141,10 @@ public final class ResearchBehavior implements StationBehavior {
                     table.getBlockPos().getY() + 1.0, table.getBlockPos().getZ() + local.z);
             Vector3f scene = toScene(view, world);
             view.node("tools").ifPresent(node -> node.moveTo(scene.x - 8.0F, 0.0F, scene.z - 8.0F, 0.0F));
+            // The mixing tray and its button stand on the table just in front of the inkwell (authored round 8, 8).
+            for (String id : new String[]{"select_1", "select_2", "combine"}) {
+                view.node(id).ifPresent(node -> node.moveTo(scene.x - 8.0F, 0.0F, scene.z - 8.0F, 0.0F));
+            }
         }
     }
 
@@ -197,8 +201,9 @@ public final class ResearchBehavior implements StationBehavior {
         view.node("select_2").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintTray(select2, pose, buffers)));
         view.node("combine").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.draw(pose, buffers,
                 Component.translatable("handson_thaumaturge.research.combine"), 0.9F, 0.0F,
-                select1 != null && select2 != null ? 0xFFE8D8FF : 0x60FFFFFF)));
+                select1 != null && select2 != null ? 0xFFFFE27A : 0xFFC8A870)));
         view.node("drawer").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintDrawer(view, pose, buffers)));
+        view.node("note").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintRolledNote(view, pose, buffers)));
         view.node("page_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
                 Component.literal("<"), 1.6F, page > 0 ? 0xFFF0E0B0 : 0x50F0E0B0)));
         view.node("page_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
@@ -234,6 +239,7 @@ public final class ResearchBehavior implements StationBehavior {
     @Override
     public void frame(StationView view, float dt) {
         clock += dt;
+        watchNote(view, dt);
         trail(view, dt);
         slideDrawer(view, dt);
         guide.frame(dt, helperOpen && view.isInUse());
@@ -521,8 +527,12 @@ public final class ResearchBehavior implements StationBehavior {
             return;
         }
         Player player = player();
-        Quads.flatRect(pose, buffers, PARCHMENT, -SHEET / 2.0F, -SHEET / 2.0F, SHEET / 2.0F, SHEET / 2.0F, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
         boolean complete = ThaumClient.complete(note);
+        if (complete && sealTime >= 0) {
+            paintSealing(pose, buffers);
+            return;
+        }
+        Quads.flatRect(pose, buffers, PARCHMENT, -SHEET / 2.0F, -SHEET / 2.0F, SHEET / 2.0F, SHEET / 2.0F, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
         Object hovered = view.isInUse() ? hexUnderCursor(view) : null;
         List<?> cells = ThaumClient.cells(note);
         Map<Object, Object> byHex = new HashMap<>();
@@ -574,6 +584,80 @@ public final class ResearchBehavior implements StationBehavior {
         }
     }
 
+    // ---- The note: rolled up in its slot, rolled up and sealed when its research is done.
+
+    private static final ResourceLocation SCROLL = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/misc/parchment3.png");
+    /** Seconds since the note on the table was completed, while it is rolled up and sealed; negative when there is none to roll. */
+    private float sealTime = -1.0F;
+    private boolean sawIncomplete;
+    private static final float ROLL_TIME = 1.0F;
+    private static final float SEAL_AT = 1.1F;
+    private static final float SEAL_TIME = 0.4F;
+    private boolean sealSounded;
+
+    /** Follows the note: a note seen being worked on that comes out complete is rolled up and sealed on the table. */
+    private void watchNote(StationView view, float dt) {
+        Object note = note(view);
+        if (note == null || !ThaumClient.complete(note)) {
+            sawIncomplete = note != null;
+            sealTime = -1.0F;
+            sealSounded = false;
+            return;
+        }
+        if (sealTime < 0) {
+            // Done just now: roll it up as the player watches. Done before the table was opened: rolled and sealed already.
+            sealTime = sawIncomplete ? 0.0F : SEAL_AT + SEAL_TIME;
+            sealSounded = !sawIncomplete;
+            if (sawIncomplete) {
+                sound(view, SoundEvents.BOOK_PAGE_TURN, 0.7F);
+            }
+        } else {
+            sealTime += dt;
+        }
+        if (!sealSounded && sealTime >= SEAL_AT + SEAL_TIME) {
+            sealSounded = true;
+            view.playSound(SoundEvents.WOOD_PLACE, "sheet", 0.8F, 0.7F);
+            view.spawnParticles(com.pockyl.diegesis.api.client.DiegesisParticles.SMOKE, new Vector3f(sheetCentre(view)).add(0.0F, 1.2F, 0.0F),
+                    new Vector3f(0.0F, 2.0F, 0.0F), 0.6F, 4, 0);
+        }
+    }
+
+    /** The note in its slot as Thaumaturge's table shows it: rolled up, tied with a ribbon of its colour. */
+    private void paintRolledNote(StationView view, PoseStack pose, MultiBufferSource buffers) {
+        Object note = note(view);
+        if (note == null) {
+            return;
+        }
+        Quads.rollX(pose, buffers, SCROLL, -1.6F, 1.6F, 0.42F, 0.0F, 0.42F, PARCHMENT_UV, 0xFFFFFFFF);
+        Quads.rollX(pose, buffers, WHITE, -0.25F, 0.25F, 0.42F, 0.0F, 0.47F, 1.0F, 0xFF000000 | ThaumClient.noteColour(note));
+    }
+
+    /**
+     * The completed note rolled up in the middle of the table: the parchment curls from the near edge into a roll, which ends
+     * lying across the sheet's place; then a wax seal drops onto it.
+     */
+    private void paintSealing(PoseStack pose, MultiBufferSource buffers) {
+        float roll = Math.min(1.0F, sealTime / ROLL_TIME);
+        roll = roll * roll * (3 - 2 * roll);
+        float half = SHEET / 2.0F;
+        float radius = 0.2F + 0.75F * roll;
+        float edge = -half + roll * (half + 0.0F);
+        if (roll < 1.0F) {
+            Quads.flatRect(pose, buffers, PARCHMENT, -half, edge, half, half - roll * half, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
+        }
+        Quads.rollX(pose, buffers, SCROLL, -half * 0.85F, half * 0.85F, LIFT + radius, edge, radius, PARCHMENT_UV, 0xFFFFFFFF);
+        float seal = Math.max(0.0F, Math.min(1.0F, (sealTime - SEAL_AT) / SEAL_TIME));
+        if (seal > 0) {
+            float drop = (1 - seal) * (1 - seal) * 3.0F;
+            float size = 0.55F * (1.0F + 0.5F * (1 - seal));
+            float top = LIFT + 2 * radius + drop;
+            Quads.box(pose, buffers, WHITE, -size, top - 0.12F, edge - size, size, top + 0.12F, edge + size, 0.0F, 0.0F, 1.0F, 1.0F,
+                    0xFF9E1414);
+            Quads.box(pose, buffers, WHITE, -size * 0.62F, top + 0.12F, edge - size * 0.62F, size * 0.62F, top + 0.2F,
+                    edge + size * 0.62F, 0.0F, 0.0F, 1.0F, 1.0F, 0xFFC42A22);
+        }
+    }
+
     // ---- The drawer of vials.
 
     private static final ResourceLocation PLANK = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/plank_greatwood.png");
@@ -621,9 +705,9 @@ public final class ResearchBehavior implements StationBehavior {
         Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, -4.8F, 4.0F, 1.2F, -4.5F, 0.0F, 0.0F, 0.5F, 0.08F, wood);
         Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, -4.5F, -3.7F, 1.2F, 4.5F, 0.0F, 0.0F, 0.08F, 0.6F, wood);
         Quads.box(pose, buffers, PLANK, 3.7F, 0.0F, -4.5F, 4.0F, 1.2F, 4.5F, 0.0F, 0.0F, 0.08F, 0.6F, wood);
-        // The front towards the player, dark as the table's own drawer face, with its brass pull.
-        Quads.box(pose, buffers, DARK_WOOD, -4.0F, -1.0F, -5.4F, 4.0F, 2.6F, -4.8F, 0.0F, 0.0F, 0.5F, 0.25F, wood);
-        Quads.box(pose, buffers, BRASS, -1.6F, 0.4F, -5.9F, 1.6F, 1.2F, -5.4F, 0.0F, 0.0F, 0.2F, 0.05F, wood);
+        // The front towards the player: the table's own drawer face (seven wide, two high) with its pull, which leaves with it.
+        Quads.box(pose, buffers, DARK_WOOD, -3.5F, 0.0F, -5.4F, 3.5F, 2.0F, -4.8F, 0.0F, 0.0F, 0.45F, 0.15F, wood);
+        Quads.box(pose, buffers, BRASS, -0.5F, 0.6F, -5.9F, 0.5F, 1.4F, -5.4F, 0.0F, 0.0F, 0.06F, 0.05F, wood);
         // The rack: a board at half the vials' height, a hole for each.
         for (float z = 3.8F; z >= -3.8F; z -= 1.9F) {
             Quads.box(pose, buffers, PLANK, -3.7F, 1.0F, z - 0.15F, 4.0F, 1.25F, z + 0.15F, 0.0F, 0.0F, 0.5F, 0.02F, wood);
@@ -658,7 +742,7 @@ public final class ResearchBehavior implements StationBehavior {
 
 
     private static void paintTray(Holder<?> aspect, PoseStack pose, MultiBufferSource buffers) {
-        Quads.upright(pose, buffers, HEX_IDLE, 0.0F, 0.0F, 0.02F, 1.0F, 0x80FFFFFF);
+        Quads.upright(pose, buffers, HEX_IDLE, 0.0F, 0.0F, 0.02F, 1.0F, 0xFFF0C860);
         if (aspect != null) {
             Quads.upright(pose, buffers, ThaumClient.texture(aspect), 0.0F, 0.0F, -0.01F, 0.9F, 0xFF000000 | ThaumClient.colour(aspect));
         }

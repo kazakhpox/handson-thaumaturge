@@ -139,6 +139,15 @@ final class ThaumClient {
         return stack.isEmpty() ? null : call(dataOf, null, stack);
     }
 
+    /** The note's colour (its ribbon on Thaumaturge's own table), or a plain grey. */
+    static int noteColour(Object note) {
+        try {
+            return (int) note.getClass().getMethod("color").invoke(note);
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            return 0x999999;
+        }
+    }
+
     static boolean complete(Object note) {
         return (boolean) call(complete, note);
     }

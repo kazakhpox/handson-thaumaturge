@@ -110,7 +110,7 @@ public final class ShotDriver {
             shot("04_research");
             station().ifPresent(view -> System.out.println("[shots] research station " + view.type().id()));
         });
-        then("aim aspect", 10, () -> aimScreen(452, 545));
+        then("aim aspect", 10, () -> aimScreen(378, 545));
         then("take aspect", 20, ShotDriver::click);
         then("drag 1", 3, () -> aimScreen(480, 470));
         then("drag 2", 3, () -> aimScreen(520, 400));
@@ -129,6 +129,11 @@ public final class ShotDriver {
         then("turning shot", 5, () -> shot("07b_research_book_turning"));
         then("turned wait", 20, () -> { });
         then("turned shot", 5, () -> shot("07c_research_book_turned"));
+        then("close book", 10, ShotDriver::click);
+        then("complete note", 12, () -> server(player -> completeNote(player.serverLevel())));
+        then("rolling shot", 5, () -> shot("08_note_rolling"));
+        then("sealed wait", 40, () -> { });
+        then("sealed shot", 5, () -> shot("08b_note_sealed"));
         if (Boolean.getBoolean("handson.shots.bookOnly")) {
             then("quit early", 5, () -> Minecraft.getInstance().stop());
         }
@@ -405,6 +410,29 @@ public final class ShotDriver {
         long window = Minecraft.getInstance().getWindow().getWindow();
         GLFW.glfwSetCursorPos(window, px, py);
         invoke("onMove", new Class<?>[]{long.class, double.class, double.class}, window, px, py);
+    }
+
+    /** The note on the research table, completed as if its puzzle had just been solved (Thaumaturge's own asComplete). */
+    private static void completeNote(net.minecraft.server.level.ServerLevel level) {
+        try {
+            var table = level.getBlockEntity(TABLE);
+            Object items = table.getClass().getMethod("items").invoke(table);
+            var handler = (net.neoforged.neoforge.items.ItemStackHandler) items;
+            ItemStack note = handler.getStackInSlot(1).copy();
+            for (var typed : note.getComponents()) {
+                Object value = typed.value();
+                if (value.getClass().getSimpleName().equals("ResearchNoteData")) {
+                    Object done = value.getClass().getMethod("asComplete").invoke(value);
+                    note.set((net.minecraft.core.component.DataComponentType<Object>) typed.type(), done);
+                    handler.setStackInSlot(1, note);
+                    System.out.println("[shots] note completed");
+                    return;
+                }
+            }
+            System.out.println("[shots] no note data on " + note);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void click() {
