@@ -56,9 +56,10 @@
         "display": "hidden",
         "size": 12.0,
         "idle_highlight": 0.0,
-        "highlight": false
+        "highlight": false,
+        "item_size": 0.01
       },
-      "$comment": "The note's slot over the whole sheet: put a note down here, or take the sealed scroll when it is done (code enables it only then)."
+      "$comment": "The note's slot over the whole sheet: put a note down here, or take the sealed scroll when it is done (code enables it only then). No item is drawn here, not even the one about to be put down: the pale sheet shows the place."
     },
     {
       "id": "note_take",
