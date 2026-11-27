@@ -671,7 +671,7 @@ public final class ResearchBehavior implements StationBehavior {
     private static void guideTag(PoseStack pose, MultiBufferSource buffers, Holder<?> aspect, float x, float y) {
         int colour = ThaumClient.colour(aspect);
         float bright = (0.299F * (colour >> 16 & 0xFF) + 0.587F * (colour >> 8 & 0xFF) + 0.114F * (colour & 0xFF)) / 255.0F;
-        Quads.upright(pose, buffers, GUIDE_HEX, x, y, 0.01F, 0.5F, bright > 0.55F ? 0xFF4A3828 : 0xFFE4D4AE);
+        Quads.upright(pose, buffers, GUIDE_HEX, x, y, 0.01F, 0.5F, bright > 0.45F ? 0xFF4A3828 : 0xFFE4D4AE);
         if (ThaumClient.discovered(player(), aspect)) {
             Quads.upright(pose, buffers, ThaumClient.texture(aspect), x, y, -0.01F, 0.38F, 0xFF000000 | ThaumClient.colour(aspect));
         } else {
