@@ -192,6 +192,7 @@ public final class ResearchBehavior implements StationBehavior {
             return;
         }
         centreOnTable(view);
+        placedDrawer = -1.0F;
         view.node("sheet").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintSheet(view, pose, buffers)));
         for (int i = 0; i < CELLS; i++) {
             int cell = i;
@@ -222,6 +223,7 @@ public final class ResearchBehavior implements StationBehavior {
     @Override
     public void onOpen(StationView view) {
         centreOnTable(view);
+        placedDrawer = -1.0F;
         held = null;
         helperOpen = false;
     }
@@ -720,10 +722,26 @@ public final class ResearchBehavior implements StationBehavior {
     private static final String[] IN_DRAWER = {"drawer", "page_prev", "page_next"};
     private float drawer;
     private float placedDrawer = -1.0F;
+    private boolean drawerWanted;
+    private float drawerFlip;
 
     /** Slides the drawer (and everything in it) out while the table is worked, back in after. */
     private void slideDrawer(StationView view, float dt) {
-        float target = view.isInUse() && ThaumClient.ready() ? 1.0F : 0.0F;
+        // Out while the table is worked; a flicker of "not in use" for a frame or two must not start it closing (that shook it).
+        boolean wanted = view.isInUse() && ThaumClient.ready();
+        if (wanted != drawerWanted) {
+            drawerFlip += dt;
+            if (drawerFlip >= 0.2F || drawer == 0.0F) {
+                if (TRACE) {
+                    System.out.println("[shots] drawer now " + (wanted ? "out" : "in") + " after " + drawerFlip + "s");
+                }
+                drawerWanted = wanted;
+                drawerFlip = 0.0F;
+            }
+        } else {
+            drawerFlip = 0.0F;
+        }
+        float target = drawerWanted ? 1.0F : 0.0F;
         drawer = Math.max(0.0F, Math.min(1.0F, drawer + (target > drawer ? dt : -dt) / DRAWER_TIME));
         // Moved only when it has moved: a node told where to be every frame shook (each move restarts its own easing).
         if (drawer == placedDrawer) {
