@@ -83,7 +83,7 @@
       "$comment": "The recipe book of mixtures on the right of the table, drawn by code: shut, a green book; a click opens it flat in place, another shuts it.",
       "id": "helper",
       "pos": [
-        -5.5,
+        -7.8,
         16.02,
         10.5
       ],
@@ -108,7 +108,7 @@
     {
       "id": "book",
       "pos": [
-        -5.5,
+        -7.8,
         16.02,
         10.5
       ],
@@ -118,7 +118,7 @@
     {
       "id": "help_prev",
       "pos": [
-        -0.45,
+        -2.75,
         18.93,
         8.01
       ],
@@ -138,7 +138,7 @@
     {
       "id": "help_next",
       "pos": [
-        -10.55,
+        -12.85,
         18.93,
         8.01
       ],
