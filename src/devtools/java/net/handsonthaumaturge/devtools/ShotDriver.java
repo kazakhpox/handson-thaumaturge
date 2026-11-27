@@ -116,11 +116,11 @@ public final class ShotDriver {
         then("held shot", 5, () -> shot("05_research_held"));
         then("write aspect", 30, ShotDriver::click);
         then("written shot", 5, () -> shot("06_research_written"));
-        then("aim book", 20, () -> aimAt(-2.5F, 17.5F, 11.0F));
+        then("aim book", 20, () -> aimAt(5.5F, 17.5F, 11.0F));
         then("closed book shot", 5, () -> shot("06b_research_book_closed"));
         then("open book", 30, ShotDriver::click);
         then("book shot", 5, () -> shot("07_research_book"));
-        then("aim next page", 20, () -> aimAt(-18.0F, 22.5F, 10.6F));
+        then("aim next page", 20, () -> aimAt(-10.0F, 22.5F, 10.6F));
         then("turn page", 4, ShotDriver::click);
         then("turning shot", 5, () -> shot("07b_research_book_turning"));
         then("turned wait", 20, () -> { });
