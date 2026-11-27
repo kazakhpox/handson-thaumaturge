@@ -200,9 +200,9 @@ public final class ResearchBehavior implements StationBehavior {
                 select1 != null && select2 != null ? 0xFFE8D8FF : 0x60FFFFFF)));
         view.node("drawer").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintDrawer(view, pose, buffers)));
         view.node("page_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
-                Component.literal("<"), 1.3F, page > 0 ? 0xFF3A2A1A : 0x403A2A1A)));
+                Component.literal("<"), 1.6F, page > 0 ? 0xFFF0E0B0 : 0x50F0E0B0)));
         view.node("page_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
-                Component.literal(">"), 1.3F, page < lastPage() ? 0xFF3A2A1A : 0x403A2A1A)));
+                Component.literal(">"), 1.6F, page < lastPage() ? 0xFFF0E0B0 : 0x50F0E0B0)));
         view.node("duplicate").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
             if (canDuplicate(view)) {
                 TextPainter.draw(pose, buffers, Component.translatable("handson_thaumaturge.research.copy"), 0.9F, 0.0F, 0xFFFFE8A0);
@@ -650,8 +650,8 @@ public final class ResearchBehavior implements StationBehavior {
         }
         Quads.flat(pose, buffers, ThaumClient.texture(aspect), 0.0F, 3.0F, 0.0F, 0.62F, (ready ? 0xFF000000 : 0x60000000) | colour);
         pose.pushPose();
-        pose.translate(0.0F, 0.3F, -0.62F);
-        TextPainter.draw(pose, buffers, Component.literal(Integer.toString(pool) + (bonus > 0 ? "+" + bonus : "")), 0.42F, 0.0F,
+        pose.translate(0.0F, 0.35F, -0.62F);
+        TextPainter.draw(pose, buffers, Component.literal(Integer.toString(pool) + (bonus > 0 ? "+" + bonus : "")), 0.6F, 0.0F,
                 ready ? 0xFFFFFFFF : 0x80FFFFFF);
         pose.popPose();
     }
