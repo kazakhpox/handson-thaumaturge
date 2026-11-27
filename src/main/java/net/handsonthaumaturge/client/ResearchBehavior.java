@@ -210,17 +210,6 @@ public final class ResearchBehavior implements StationBehavior {
             guide.renderClosed(pose, buffers);
             paintGuide(pose, buffers);
         }));
-        view.node("help_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
-            if (helperOpen) {
-                TextPainter.drawFlat(pose, buffers, Component.literal("<"), 1.1F, guide.spread() > 0 ? 0xFF3A2A1A : 0x403A2A1A);
-            }
-        }));
-        view.node("help_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
-            if (helperOpen) {
-                TextPainter.drawFlat(pose, buffers, Component.literal(">"), 1.1F,
-                        guide.spread() < lastHelperPage() ? 0xFF3A2A1A : 0x403A2A1A);
-            }
-        }));
         view.node("held").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintHeld(view, pose, buffers)));
     }
 
@@ -657,6 +646,13 @@ public final class ResearchBehavior implements StationBehavior {
             pose.popPose();
             guideTag(pose, buffers, compound, -2.0F, y);
         }
+        // The page's foot, as the recipe book's: an arrow back at the left page's outer corner, on at the right page's.
+        float outer = pageNumber % 2 == 0 ? FloatingBook.PAGE_WIDE / 2 - 0.55F : -(FloatingBook.PAGE_WIDE / 2 - 0.55F);
+        boolean can = pageNumber % 2 == 0 ? guide.spread() > 0 : guide.spread() < lastHelperPage();
+        pose.pushPose();
+        pose.translate(outer, -3.25F, 0.0F);
+        TextPainter.draw(pose, buffers, Component.literal(pageNumber % 2 == 0 ? "<" : ">"), 0.8F, 0.0F, can ? 0xFF3A2A1A : 0x403A2A1A);
+        pose.popPose();
         int pages = Math.max(1, (compounds.size() + HELP_ROWS - 1) / HELP_ROWS);
         if (pageNumber < pages) {
             pose.pushPose();

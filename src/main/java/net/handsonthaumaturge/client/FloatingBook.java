@@ -41,7 +41,7 @@ final class FloatingBook {
     /** Page size, node pixels (the paper's 3 by 4). */
     static final float PAGE_WIDE = 5.6F;
     static final float PAGE_HIGH = 7.5F;
-    private static final float COVER_RIM = 0.35F;
+    private static final float COVER_RIM = 0.6F;
     /** How far the open pages rise towards the spine, radians: an open book is not a plank. */
     private static final float REST_FOLD = 0.07F;
     private static final float OPEN_TIME = 0.35F;

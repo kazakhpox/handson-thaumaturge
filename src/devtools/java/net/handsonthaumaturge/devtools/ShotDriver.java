@@ -120,7 +120,7 @@ public final class ShotDriver {
         then("closed book shot", 5, () -> shot("06b_research_book_closed"));
         then("open book", 30, ShotDriver::click);
         then("book shot", 5, () -> shot("07_research_book"));
-        then("aim next page", 20, () -> aimScreen(1053, 470));
+        then("aim next page", 20, () -> aimScreen(1092, 472));
         then("turn page", 4, ShotDriver::click);
         then("turning shot", 5, () -> shot("07b_research_book_turning"));
         then("turned wait", 20, () -> { });
