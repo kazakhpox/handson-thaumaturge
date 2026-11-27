@@ -111,6 +111,10 @@ public final class ShotDriver {
             shot("04_research");
             station().ifPresent(view -> System.out.println("[shots] research station " + view.type().id()));
         });
+        for (int i = 0; i < 5; i++) {
+            String name = "still_" + i;
+            then("still " + i, 3, () -> shot(name));
+        }
         then("aim aspect", 10, () -> aimScreen(378, 545));
         then("take aspect", 20, ShotDriver::click);
         then("drag 1", 3, () -> aimScreen(480, 470));
