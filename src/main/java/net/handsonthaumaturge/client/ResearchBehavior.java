@@ -639,8 +639,13 @@ public final class ResearchBehavior implements StationBehavior {
         pose.pushPose();
         pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(10.0F));
         Quads.modelBox(pose, buffers, TABLE_MODEL, -4.0F, 0.0F, -1.0F, 4.0F, 2.0F, 1.0F, 0.0F, 0.0F, 128.0F, 64.0F, 0xFFFFFFFF);
-        Quads.modelBox(pose, buffers, TABLE_MODEL, 1.3F, -0.2F, -1.2F, 2.5F, 2.2F, 1.2F, 0.0F, 4.0F, 128.0F, 64.0F,
+        // The ribbon as the model's: a box one by two by two, drawn at 1.2 times about its middle so it stands proud of the roll.
+        pose.pushPose();
+        pose.translate(1.9F, 1.0F, 0.0F);
+        pose.scale(1.2F, 1.2F, 1.2F);
+        Quads.modelBox(pose, buffers, TABLE_MODEL, -0.5F, -1.0F, -1.0F, 0.5F, 1.0F, 1.0F, 0.0F, 4.0F, 128.0F, 64.0F,
                 0xFF000000 | ThaumClient.noteColour(note));
+        pose.popPose();
         pose.popPose();
     }
 

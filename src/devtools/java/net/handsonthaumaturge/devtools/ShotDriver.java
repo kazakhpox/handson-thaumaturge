@@ -120,7 +120,7 @@ public final class ShotDriver {
         then("held shot", 5, () -> shot("05_research_held"));
         then("write aspect", 30, ShotDriver::click);
         then("written shot", 5, () -> shot("06_research_written"));
-        then("aim book", 20, () -> aimScreen(931, 405));
+        then("aim book", 20, () -> aimScreen(830, 258));
         then("closed book shot", 5, () -> shot("06b_research_book_closed"));
         then("open book", 30, ShotDriver::click);
         then("book shot", 5, () -> shot("07_research_book"));
@@ -129,10 +129,14 @@ public final class ShotDriver {
         then("turning shot", 5, () -> shot("07b_research_book_turning"));
         then("turned wait", 20, () -> { });
         then("turned shot", 5, () -> shot("07c_research_book_turned"));
+        then("aim shut book", 5, () -> aimScreen(830, 258));
         then("close book", 10, ShotDriver::click);
-        then("complete note", 12, () -> server(player -> completeNote(player.serverLevel())));
-        then("rolling shot", 5, () -> shot("08_note_rolling"));
-        then("sealed wait", 40, () -> { });
+        then("complete note", 1, () -> server(player -> completeNote(player.serverLevel())));
+        // The completion animation frame by frame, for a GIF (tools/gif.py): a frame every tick for two and a half seconds.
+        for (int i = 0; i < 50; i++) {
+            String name = String.format("seal_%02d", i);
+            then("seal frame " + i, 1, () -> shot(name));
+        }
         then("sealed shot", 5, () -> shot("08b_note_sealed"));
         if (Boolean.getBoolean("handson.shots.bookOnly")) {
             then("quit early", 5, () -> Minecraft.getInstance().stop());
