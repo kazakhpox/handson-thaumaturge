@@ -662,7 +662,7 @@ public final class ResearchBehavior implements StationBehavior {
         }
     }
 
-    /** A small dark hexagon behind each aspect in the guide, so pale icons stand out from the paper. */
+    /** A small hexagon behind each aspect in the guide, darker than the paper with an ink rim, so pale and dark icons both stand out. */
     private static final ResourceLocation GUIDE_HEX = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "textures/gui/aspect_hex.png");
 
     private static void guideTag(PoseStack pose, MultiBufferSource buffers, Holder<?> aspect, float x, float y) {
