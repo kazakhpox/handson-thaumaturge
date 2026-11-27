@@ -98,6 +98,7 @@ public final class ShotDriver {
         then("hover shot", 5, () -> shot("02_workbench_hover"));
         then("take result", 30, ShotDriver::click);
         then("crafted shot", 5, () -> shot("03_workbench_crafted"));
+        then("shift test", 20, this::shiftTest);
         then("leave bench", 40, ShotDriver::leave);
 
         // The research table: scribing tools and a note to solve.
@@ -227,6 +228,56 @@ public final class ShotDriver {
         stack.set(com.leclowndu93150.thaumaturge.registry.TTDataComponents.CRYSTAL_ASPECT.get(),
                 new com.leclowndu93150.thaumaturge.api.aspect.AspectInstance(holder, 1));
         return stack;
+    }
+
+    /**
+     * A shift-click from the inventory, as Diegesis does it (its own moveIntoStation): with the wand's and the aqua crystal's
+     * places empty, a wand and an aqua crystal shifted in must go there, not to the grid.
+     */
+    private void shiftTest() {
+        server(player -> {
+            try {
+                if (!(player.level().getBlockEntity(BENCH) instanceof com.leclowndu93150.thaumaturge.content.workbench.BlockEntityArcaneWorkbench bench)) {
+                    return;
+                }
+                var inventory = bench.getInventory();
+                for (int i = 0; i < 9; i++) {
+                    inventory.setItem(i, ItemStack.EMPTY);
+                }
+                inventory.setItem(11, ItemStack.EMPTY);
+                inventory.setItem(15, ItemStack.EMPTY);
+                inventory.setChanged();
+                Class<?> managerClass = Class.forName("com.pockyl.diegesis.impl.server.StationManager");
+                Object manager = managerClass.getMethod("get", net.minecraft.server.MinecraftServer.class).invoke(null, player.server);
+                Object context = ((java.util.Optional<?>) managerClass.getMethod("active", ServerLevel.class, BlockPos.class)
+                        .invoke(manager, player.serverLevel(), BENCH)).orElseThrow();
+                var logicMethod = context.getClass().getDeclaredMethod("logic");
+                logicMethod.setAccessible(true);
+                Object logic = logicMethod.invoke(context);
+                var move = Class.forName("com.pockyl.diegesis.impl.action.ActionHandler").getDeclaredMethod("moveIntoStation",
+                        com.pockyl.diegesis.api.station.StationContext.class, com.pockyl.diegesis.api.station.StationLogic.class,
+                        net.minecraft.world.entity.player.Player.class, ItemStack.class);
+                move.setAccessible(true);
+                ItemStack wand = com.leclowndu93150.thaumaturge.content.wands.ItemWand.create(
+                        com.leclowndu93150.thaumaturge.registry.TTItems.WAND.get(),
+                        com.leclowndu93150.thaumaturge.registry.TTWandParts.CAP_IRON.get(),
+                        com.leclowndu93150.thaumaturge.registry.TTWandParts.ROD_WOOD.get(), false);
+                ItemStack aqua = crystal("aqua", 3);
+                ItemStack planks = new ItemStack(net.minecraft.world.item.Items.OAK_PLANKS, 2);
+                move.invoke(null, context, logic, player, wand);
+                move.invoke(null, context, logic, player, aqua);
+                move.invoke(null, context, logic, player, planks);
+                StringBuilder grid = new StringBuilder();
+                for (int i = 0; i < 9; i++) {
+                    grid.append(inventory.getItem(i).isEmpty() ? "." : inventory.getItem(i).getItem().toString()).append(' ');
+                }
+                System.out.println("[shots] shift test: wand slot " + inventory.getItem(15) + ", aqua slot " + inventory.getItem(11)
+                        + ", grid " + grid);
+            } catch (ReflectiveOperationException | RuntimeException e) {
+                System.out.println("[shots] shift test failed: " + e);
+                e.printStackTrace();
+            }
+        });
     }
 
     private void fillBench() {

@@ -719,15 +719,17 @@ public final class ResearchBehavior implements StationBehavior {
     private static final float DRAWER_TIME = 0.4F;
     private static final String[] IN_DRAWER = {"drawer", "page_prev", "page_next"};
     private float drawer;
+    private float placedDrawer = -1.0F;
 
     /** Slides the drawer (and everything in it) out while the table is worked, back in after. */
     private void slideDrawer(StationView view, float dt) {
         float target = view.isInUse() && ThaumClient.ready() ? 1.0F : 0.0F;
-        float before = drawer;
         drawer = Math.max(0.0F, Math.min(1.0F, drawer + (target > drawer ? dt : -dt) / DRAWER_TIME));
-        if (drawer == before && drawer != 1.0F && drawer != 0.0F) {
+        // Moved only when it has moved: a node told where to be every frame shook (each move restarts its own easing).
+        if (drawer == placedDrawer) {
             return;
         }
+        placedDrawer = drawer;
         float eased = drawer * drawer * (3 - 2 * drawer);
         float out = -eased * DRAWER_TRAVEL;
         boolean shown = drawer > 0;

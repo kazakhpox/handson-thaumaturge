@@ -22,14 +22,14 @@ import net.handsonthaumaturge.station.WorkbenchStation;
 
 /**
  * The arcane workbench at work: a sigil glows under each floating crystal in its primal's colour, faint while it waits and
- * bright and turning while the recipe on the grid burns that crystal; over the far edge stand the vis in the aura and what the
- * recipe costs, red when the aura cannot pay it. A craft rings and throws sparks of magic from the result.
+ * bright and turning while the recipe on the grid burns that crystal; written on its top behind the grid are the vis in the aura and
+ * what the recipe costs, red when the aura cannot pay it. A craft rings and throws sparks of magic from the result.
  */
 public final class WorkbenchBehavior implements StationBehavior {
     private static final ResourceLocation SIGIL = HandsOnThaumaturge.id("textures/misc/sigil.png");
     /** Thaumaturge's primal colours, in the crystal slots' order (aer, ignis, aqua, terra, ordo, perditio). */
     private static final int[] COLOURS = {0xFFFF7E, 0xFF5A01, 0x3CD4FC, 0x56C000, 0xD5D4EC, 0x7A4A9A};
-    private static final float SIGIL_SIZE = 5.0F;
+    private static final float SIGIL_SIZE = 4.0F;
 
     /** How lit each sigil is now (0 faint, 1 burning), eased towards what the recipe asks. */
     private final float[] glow = new float[6];
@@ -96,12 +96,12 @@ public final class WorkbenchBehavior implements StationBehavior {
         int vis = data.getInt(WorkbenchStation.VIS);
         int cost = data.contains(WorkbenchStation.COST) ? data.getInt(WorkbenchStation.COST) : -1;
         boolean short_ = cost > vis;
-        TextPainter.draw(pose, buffers, Component.translatable("handson_thaumaturge.workbench.vis", vis), 1.2F, 0.9F,
-                short_ ? 0xFFEE6E6E : 0xFFB4B4FF);
+        // Written on the workbench's top behind the grid, as the aura's reading and the recipe's price in one line.
+        Component line = Component.translatable("handson_thaumaturge.workbench.vis", vis);
         if (cost > 0) {
-            TextPainter.draw(pose, buffers, Component.translatable("handson_thaumaturge.workbench.cost", cost), 1.2F, -0.7F,
-                    0xFFC0FFFF);
+            line = line.copy().append("   ").append(Component.translatable("handson_thaumaturge.workbench.cost", cost));
         }
+        TextPainter.drawFlat(pose, buffers, line, 0.9F, short_ ? 0xFFEE6E6E : 0xFFD8C8FF);
     }
 
     @Override
