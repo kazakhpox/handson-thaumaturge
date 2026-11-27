@@ -30,6 +30,7 @@ public final class WorkbenchBehavior implements StationBehavior {
     /** Thaumaturge's primal colours, in the crystal slots' order (aer, ignis, aqua, terra, ordo, perditio). */
     private static final int[] COLOURS = {0xFFFF7E, 0xFF5A01, 0x3CD4FC, 0x56C000, 0xD5D4EC, 0x7A4A9A};
     private static final float SIGIL_SIZE = 4.0F;
+    private static final ResourceLocation GLOW = HandsOnThaumaturge.id("textures/misc/glow.png");
 
     /** How lit each sigil is now (0 faint, 1 burning), eased towards what the recipe asks. */
     private final float[] glow = new float[6];
@@ -45,6 +46,10 @@ public final class WorkbenchBehavior implements StationBehavior {
             view.node("sigil_" + i).ifPresent(node -> node.setPainter((pose, buffers, light) -> paintSigil(view, index, pose, buffers)));
         }
         view.node("vis").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintVis(view, pose, buffers)));
+        for (int i = 0; i < 6; i++) {
+            int index = i;
+            view.node("crystal_" + i).ifPresent(node -> node.setPainter((pose, buffers, light) -> paintGlow(view, index, pose, buffers)));
+        }
     }
 
     @Override
@@ -81,6 +86,43 @@ public final class WorkbenchBehavior implements StationBehavior {
         vertex(out, m, last, -half, half, 0, 1, argb);
         vertex(out, m, last, -half, -half, 0, 0, argb);
         pose.popPose();
+    }
+
+    /**
+     * A soft glow of the primal's colour round its floating crystal: faint while it waits, brighter and breathing while the
+     * recipe burns it. Two crossed planes, so it shows from wherever the camera stands.
+     */
+    private void paintGlow(StationView view, int index, PoseStack pose, MultiBufferSource buffers) {
+        if (!view.isInUse() && glow[index] < 0.01F) {
+            return;
+        }
+        float lit = glow[index];
+        float breath = 0.5F + 0.5F * Mth.sin(clock * 2.0F + index);
+        int alpha = Math.round(55 + 40 * breath + 120 * lit);
+        int argb = alpha << 24 | COLOURS[index];
+        float half = 1.3F + 0.4F * lit + 0.1F * breath;
+        VertexConsumer out = buffers.getBuffer(RenderType.entityTranslucentEmissive(GLOW));
+        for (int plane = 0; plane < 2; plane++) {
+            pose.pushPose();
+            pose.translate(0.0F, 0.9F, 0.0F);
+            pose.mulPose(Axis.YP.rotationDegrees(45.0F + plane * 90.0F));
+            PoseStack.Pose last = pose.last();
+            Matrix4f m = last.pose();
+            glowVertex(out, m, last, -half, -half, 0, 1, argb);
+            glowVertex(out, m, last, half, -half, 1, 1, argb);
+            glowVertex(out, m, last, half, half, 1, 0, argb);
+            glowVertex(out, m, last, -half, half, 0, 0, argb);
+            glowVertex(out, m, last, -half, half, 0, 0, argb);
+            glowVertex(out, m, last, half, half, 1, 0, argb);
+            glowVertex(out, m, last, half, -half, 1, 1, argb);
+            glowVertex(out, m, last, -half, -half, 0, 1, argb);
+            pose.popPose();
+        }
+    }
+
+    private static void glowVertex(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float x, float y, float u, float v, int argb) {
+        out.addVertex(m, x, y, 0.0F).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(LightTexture.FULL_BRIGHT).setNormal(pose, 0.0F, 0.0F, 1.0F);
     }
 
     private static void vertex(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float x, float z, float u, float v, int argb) {

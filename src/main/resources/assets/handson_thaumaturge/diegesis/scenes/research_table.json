@@ -6,15 +6,15 @@
   "camera": {
     "position": [
       6,
-      45,
-      -19
+      34,
+      -16
     ],
     "target": [
       6,
-      13,
+      12,
       5
     ],
-    "fov": 55,
+    "fov": 62,
     "interactive_at": 0.6
   },
   "interface": {

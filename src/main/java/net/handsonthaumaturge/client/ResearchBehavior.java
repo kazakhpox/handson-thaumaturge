@@ -595,7 +595,8 @@ public final class ResearchBehavior implements StationBehavior {
         }
         if (!inkReady(view)) {
             pose.pushPose();
-            pose.translate(0.0F, LIFT + 0.03F, 0.6F);
+            // Written on the table in front of the parchment, clear of it.
+            pose.translate(0.0F, LIFT + 0.03F, -SHEET / 2.0F - 0.9F);
             TextPainter.drawFlat(pose, buffers, Component.translatable("gui.thaumaturge.research_table.no_ink.0"), 0.7F, 0xFFFF5555);
             pose.translate(0.0F, 0.0F, -1.0F);
             TextPainter.drawFlat(pose, buffers, Component.translatable("gui.thaumaturge.research_table.no_ink.1"), 0.7F, 0xFFFF5555);
