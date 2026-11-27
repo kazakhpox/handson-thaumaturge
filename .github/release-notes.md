@@ -1,5 +1,9 @@
 Thaumaturge's arcane workbench and research table open right in the world, as the crafting table of Hands-On Vanilla does.
 
+**New in 0.2.1:**
+- Arcane workbench: shift-clicking from the inventory puts a wand in the wand's place and a crystal in its primal's, before the grid. The crystals float just over the workbench's edges, each in a soft glow of its colour that brightens while the recipe burns it. The vis in the aura and the recipe's price are written on the workbench's top.
+- Research table: the drawer of vials no longer shakes; the camera stands where a player at the desk would; the out-of-ink note is written on the table in front of the parchment.
+
 **New in 0.2.0 — the research table:**
 - The aspects you know stand as vials in a rack in the drawer under the table, which slides out when you open it. Each vial shows the aspect's colour, filled by how much of it you have, and the aspect's sign on its cork. Take an aspect from a vial and carry it to the note (a few sparks of its colour follow the cursor).
 - The note is the open parchment in the middle of the table. Put a note on the pale sheet's place. Take an unfinished note by the wax seal in its corner, clear of the hexes.
@@ -13,6 +17,10 @@ Thaumaturge's arcane workbench and research table open right in the world, as th
 Sneaking + use keeps Thaumaturge's own screen. The recipe book's textures come from Hands-On Vanilla by Pocky (MIT, see THIRD_PARTY_NOTICES.txt).
 
 ---
+
+**Новое в 0.2.1:**
+- Магический верстак: шифт-клик из инвентаря кладёт жезл в слот жезла, а кристалл в слот его аспекта, прежде чем в сетку. Кристаллы парят прямо над краями верстака, вокруг каждого мягкое свечение его цвета, ярче, когда рецепт его тратит. Вис в ауре и цена рецепта написаны на столешнице.
+- Стол исследований: ящик с пробирками больше не трясётся, камера стоит как игрок перед столом, надпись «нет чернил» — на столе перед пергаментом.
 
 **Новое в 0.2.0 — стол исследований:**
 - Известные аспекты стоят пробирками в штативе в ящике под столом. Ящик выдвигается, когда открываешь стол. В каждой пробирке жидкость цвета аспекта: чем больше аспекта, тем она полнее. На пробке знак аспекта. Аспект берётся из пробирки и несётся к записке, за курсором летят искры его цвета.
