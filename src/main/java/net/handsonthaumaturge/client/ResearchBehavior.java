@@ -662,11 +662,15 @@ public final class ResearchBehavior implements StationBehavior {
         }
     }
 
+    /** A small dark hexagon behind each aspect in the guide, so pale icons stand out from the paper. */
+    private static final ResourceLocation GUIDE_HEX = ResourceLocation.fromNamespaceAndPath("handson_thaumaturge", "textures/gui/aspect_hex.png");
+
     private static void guideTag(PoseStack pose, MultiBufferSource buffers, Holder<?> aspect, float x, float y) {
+        Quads.upright(pose, buffers, GUIDE_HEX, x, y, 0.01F, 0.5F, 0xFFFFFFFF);
         if (ThaumClient.discovered(player(), aspect)) {
-            Quads.upright(pose, buffers, ThaumClient.texture(aspect), x, y, 0.0F, 0.42F, 0xFF000000 | ThaumClient.colour(aspect));
+            Quads.upright(pose, buffers, ThaumClient.texture(aspect), x, y, -0.01F, 0.38F, 0xFF000000 | ThaumClient.colour(aspect));
         } else {
-            Quads.upright(pose, buffers, UNKNOWN, x, y, 0.0F, 0.42F, 0x80000000);
+            Quads.upright(pose, buffers, UNKNOWN, x, y, -0.01F, 0.38F, 0xA0FFFFFF);
         }
     }
 }
