@@ -83,7 +83,7 @@ public final class ResearchBehavior implements StationBehavior {
     }
 
     /** Everything laid out on the table moves with the sheet to the middle of the two-block table. */
-    private static final String[] ON_TABLE = {"note", "sheet", "helper", "book", "help_prev", "help_next", "page_prev",
+    private static final String[] ON_TABLE = {"note", "note_take", "sheet", "helper", "book", "help_prev", "help_next", "page_prev",
             "page_next", "duplicate"};
     /** How far the middle of the whole table lies from the middle of the half the station stands on, scene pixels. */
     private static final Vector3f SHIFT = new Vector3f();
@@ -203,7 +203,6 @@ public final class ResearchBehavior implements StationBehavior {
                 Component.translatable("handson_thaumaturge.research.combine"), 0.9F, 0.0F,
                 select1 != null && select2 != null ? 0xFFFFE27A : 0xFFC8A870)));
         view.node("drawer").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintDrawer(view, pose, buffers)));
-        view.node("note").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintRolledNote(view, pose, buffers)));
         view.node("page_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
                 Component.literal("<"), 1.6F, page > 0 ? 0xFFF0E0B0 : 0x50F0E0B0)));
         view.node("page_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
@@ -240,6 +239,13 @@ public final class ResearchBehavior implements StationBehavior {
     public void frame(StationView view, float dt) {
         clock += dt;
         watchNote(view, dt);
+        // One slot, two ways to it: the whole sheet's place while there is no note (put one down) or the note is done (take the
+        // sealed scroll); only the seal in the sheet's corner while it is worked on, so the hexes stay free for the aspects.
+        Object worked = note(view);
+        boolean working = worked != null && !ThaumClient.complete(worked);
+        boolean inUse = view.isInUse();
+        view.node(ResearchStation.NOTE).ifPresent(node -> node.setEnabled(inUse && !working));
+        view.node("note_take").ifPresent(node -> node.setEnabled(inUse && working));
         trail(view, dt);
         slideDrawer(view, dt);
         guide.frame(dt, helperOpen && view.isInUse());
@@ -295,6 +301,10 @@ public final class ResearchBehavior implements StationBehavior {
             view.showCaption(Component.translatable("gui.thaumaturge.research_table.slot_tools"), 0.0F);
         } else if (ResearchStation.NOTE.equals(node) && slot(view, ResearchStation.NOTE).isEmpty()) {
             view.showCaption(Component.translatable("gui.thaumaturge.research_table.slot_note"), 0.0F);
+        } else if (ResearchStation.NOTE.equals(node)) {
+            view.showCaption(Component.translatable("handson_thaumaturge.research.take_done"), 0.0F);
+        } else if ("note_take".equals(node)) {
+            view.showCaption(Component.translatable("handson_thaumaturge.research.take_note"), 0.0F);
         } else if ("helper".equals(node)) {
             view.showCaption(Component.translatable("gui.thaumaturge.research_table.helper"), 0.0F);
         } else {
@@ -523,6 +533,13 @@ public final class ResearchBehavior implements StationBehavior {
 
     private void paintSheet(StationView view, PoseStack pose, MultiBufferSource buffers) {
         Object note = note(view);
+        if (note == null && view.isInUse()) {
+            // No note: a pale sheet where one goes, breathing, so the place to put it is plain.
+            int alpha = (int) (0x30 + 0x28 * (0.5F + 0.5F * (float) Math.sin(clock * 2.5F)));
+            Quads.flatRect(pose, buffers, PARCHMENT, -SHEET / 2.0F, -SHEET / 2.0F, SHEET / 2.0F, SHEET / 2.0F, LIFT, PARCHMENT_UV,
+                    alpha << 24 | 0xFFFFFF);
+            return;
+        }
         if (note == null || !ThaumClient.ready()) {
             return;
         }
@@ -628,21 +645,6 @@ public final class ResearchBehavior implements StationBehavior {
 
     /** Thaumaturge's table model texture: its scroll is a box at (0, 0), its ribbon at (0, 4), of 128 by 64. */
     private static final ResourceLocation TABLE_MODEL = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/entity/restable2.png");
-
-    /**
-     * The note in its slot as Thaumaturge's own table shows it: its scroll (eight long, two thick, the ends curled) lying turned a
-     * little, tied with a ribbon of the note's colour.
-     */
-    private void paintRolledNote(StationView view, PoseStack pose, MultiBufferSource buffers) {
-        Object note = note(view);
-        if (note == null) {
-            return;
-        }
-        pose.pushPose();
-        pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(10.0F));
-        paintScroll(pose, buffers, ThaumClient.noteColour(note));
-        pose.popPose();
-    }
 
     /**
      * Thaumaturge's scroll from its table model, its texture and its box: eight long and two thick along X, lying on Y = 0 round

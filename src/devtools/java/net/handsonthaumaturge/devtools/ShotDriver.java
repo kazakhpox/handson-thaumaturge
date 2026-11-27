@@ -131,6 +131,8 @@ public final class ShotDriver {
         then("turned shot", 5, () -> shot("07c_research_book_turned"));
         then("aim shut book", 5, () -> aimScreen(790, 258));
         then("close book", 10, ShotDriver::click);
+        then("aim corner", 10, () -> aimScreen(680, 318));
+        then("corner shot", 5, () -> shot("07d_take_hover"));
         then("complete note", 1, () -> server(player -> completeNote(player.serverLevel())));
         // The completion animation frame by frame, for a GIF (tools/gif.py): a frame every tick for two and a half seconds.
         for (int i = 0; i < 60; i++) {
@@ -138,6 +140,20 @@ public final class ShotDriver {
             then("seal frame " + i, 1, () -> shot(name));
         }
         then("sealed shot", 5, () -> shot("08b_note_sealed"));
+        then("aim sealed", 10, () -> aimScreen(603, 250));
+        then("sealed hover shot", 5, () -> shot("08c_sealed_hover"));
+        then("take sealed", 20, ShotDriver::click);
+        then("taken check", 10, () -> server(player -> {
+            try {
+                var table = player.serverLevel().getBlockEntity(TABLE);
+                var handler = (net.neoforged.neoforge.items.ItemStackHandler) table.getClass().getMethod("items").invoke(table);
+                System.out.println("[shots] after taking: table note slot " + handler.getStackInSlot(1) + ", carried "
+                        + player.containerMenu.getCarried() + ", hand " + player.getMainHandItem());
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
+        }));
+        then("taken shot", 5, () -> shot("09_note_taken"));
         if (Boolean.getBoolean("handson.shots.bookOnly")) {
             then("quit early", 5, () -> Minecraft.getInstance().stop());
         }

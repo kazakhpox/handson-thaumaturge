@@ -2,5 +2,7 @@
   "handson_thaumaturge.workbench.vis": "Вис в ауре: %s",
   "handson_thaumaturge.workbench.cost": "Рецепт берёт: %s",
   "handson_thaumaturge.research.combine": "Смешать",
-  "handson_thaumaturge.research.copy": "Копировать записку"
+  "handson_thaumaturge.research.copy": "Копировать записку",
+  "handson_thaumaturge.research.take_note": "Забрать записку",
+  "handson_thaumaturge.research.take_done": "Забрать готовое исследование"
 }

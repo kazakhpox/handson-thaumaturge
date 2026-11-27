@@ -47,18 +47,32 @@
     {
       "id": "note",
       "pos": [
-        0.8,
+        8,
         16.02,
-        1.8
+        9.8
       ],
       "slot": {
         "slot": "note[0]",
-        "size": 4.4,
-        "item_size": 2.4,
-        "idle_highlight": 0.3,
-        "display": "hidden"
+        "display": "hidden",
+        "size": 12.0,
+        "idle_highlight": 0.0
       },
-      "$comment": "The note's slot: the note itself is not drawn, a rolled scroll tied with its colour is (code)."
+      "$comment": "The note's slot over the whole sheet: put a note down here, or take the sealed scroll when it is done (code enables it only then)."
+    },
+    {
+      "id": "note_take",
+      "$comment": "The same slot at the seal in the sheet's near corner: takes the note while it is worked on, clear of the hexes.",
+      "pos": [
+        3.0,
+        16.02,
+        4.6
+      ],
+      "slot": {
+        "slot": "note[0]",
+        "display": "hidden",
+        "size": 2.0,
+        "idle_highlight": 0.4
+      }
     },
     {
       "$comment": "The note's puzzle, painted by code on parchment lying on the table; a click writes or rubs out on the hex under the cursor.",
