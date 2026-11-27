@@ -49,6 +49,30 @@ final class Quads {
         put(out, m, last, right, y, far, uv, 0, argb, 0, 1, 0);
     }
 
+    /**
+     * A piece of a sheet lying face up: the rectangle from ({@code x0}, {@code z0}) to ({@code x1}, {@code z1}) of a whole sheet
+     * {@code 2 * half} wide centred on the origin, carrying the same piece of the texture the whole sheet's top left {@code uv} would
+     * put there (the texture cut, not squeezed).
+     */
+    static void flatPiece(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float z0, float x1, float z1,
+            float y, float half, float uv, int argb) {
+        VertexConsumer out = buffers.getBuffer(RenderType.entityTranslucent(texture));
+        PoseStack.Pose last = pose.last();
+        Matrix4f m = last.pose();
+        float left = Math.max(x0, x1);
+        float right = Math.min(x0, x1);
+        float far = Math.max(z0, z1);
+        float near = Math.min(z0, z1);
+        float uLeft = (half - left) / (2 * half) * uv;
+        float uRight = (half - right) / (2 * half) * uv;
+        float vFar = (half - far) / (2 * half) * uv;
+        float vNear = (half - near) / (2 * half) * uv;
+        put(out, m, last, left, y, far, uLeft, vFar, argb, 0, 1, 0);
+        put(out, m, last, left, y, near, uLeft, vNear, argb, 0, 1, 0);
+        put(out, m, last, right, y, near, uRight, vNear, argb, 0, 1, 0);
+        put(out, m, last, right, y, far, uRight, vFar, argb, 0, 1, 0);
+    }
+
     /** A line of ink lying face up from one point to another, {@code width} wide. */
     static void flatLine(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float z0, float x1, float z1,
             float y, float width, int argb) {

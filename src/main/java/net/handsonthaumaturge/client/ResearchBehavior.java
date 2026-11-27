@@ -670,7 +670,14 @@ public final class ResearchBehavior implements StationBehavior {
         float length = half * 0.85F + (4.0F - half * 0.85F) * roll;
         float edge = -half + roll * (half + 0.0F);
         if (roll < 1.0F) {
-            Quads.flatRect(pose, buffers, PARCHMENT, -half, edge, half, half - roll * half, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
+            // What is not yet rolled: cut from the sheet, not squeezed, its sides drawn in with the roll's ends, and gone into the
+            // roll before the roll is done (nothing showing under it at the last).
+            float far = half - roll * half;
+            float flatFrom = edge + radius;
+            if (far > flatFrom) {
+                float side = half - (half - length) * Math.min(1.0F, roll * 1.25F);
+                Quads.flatPiece(pose, buffers, PARCHMENT, -side, flatFrom, side, far, LIFT, half, PARCHMENT_UV, 0xFFFFFFFF);
+            }
             Quads.rollX(pose, buffers, SCROLL, -length, length, LIFT + radius, edge, radius, CLEAN_UV, 0xFFFFFFFF);
         } else {
             pose.pushPose();
