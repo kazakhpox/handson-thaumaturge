@@ -248,8 +248,15 @@ public final class ResearchBehavior implements StationBehavior {
             view.node("aspect_" + i).ifPresent(node -> node.setEnabled(there));
         }
         view.node("book").ifPresent(node -> node.setVisible(using && (helperOpen || guide.shown())));
-        view.node("help_prev").ifPresent(node -> node.setEnabled(using && helperOpen));
-        view.node("help_next").ifPresent(node -> node.setEnabled(using && helperOpen));
+        // Hidden as well as disabled while the book is shut: a disabled node still stands in the way of clicks.
+        view.node("help_prev").ifPresent(node -> {
+            node.setEnabled(using && helperOpen);
+            node.setVisible(using && helperOpen);
+        });
+        view.node("help_next").ifPresent(node -> {
+            node.setEnabled(using && helperOpen);
+            node.setVisible(using && helperOpen);
+        });
         view.node("duplicate").ifPresent(node -> node.setEnabled(using && canDuplicate(view)));
     }
 
