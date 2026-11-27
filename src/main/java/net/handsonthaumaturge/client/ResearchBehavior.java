@@ -590,6 +590,8 @@ public final class ResearchBehavior implements StationBehavior {
     /** Seconds since the note on the table was completed, while it is rolled up and sealed; negative when there is none to roll. */
     private float sealTime = -1.0F;
     private boolean sawIncomplete;
+    /** A piece of the parchment with no seal drawn on it, for the rolls. */
+    private static final float CLEAN_UV = 0.3F;
     private static final float ROLL_TIME = 1.0F;
     private static final float SEAL_AT = 1.1F;
     private static final float SEAL_TIME = 0.4F;
@@ -628,7 +630,7 @@ public final class ResearchBehavior implements StationBehavior {
         if (note == null) {
             return;
         }
-        Quads.rollX(pose, buffers, SCROLL, -1.6F, 1.6F, 0.42F, 0.0F, 0.42F, PARCHMENT_UV, 0xFFFFFFFF);
+        Quads.rollX(pose, buffers, SCROLL, -1.6F, 1.6F, 0.42F, 0.0F, 0.42F, CLEAN_UV, 0xFFFFFFFF);
         Quads.rollX(pose, buffers, WHITE, -0.25F, 0.25F, 0.42F, 0.0F, 0.47F, 1.0F, 0xFF000000 | ThaumClient.noteColour(note));
     }
 
@@ -645,16 +647,21 @@ public final class ResearchBehavior implements StationBehavior {
         if (roll < 1.0F) {
             Quads.flatRect(pose, buffers, PARCHMENT, -half, edge, half, half - roll * half, LIFT, PARCHMENT_UV, 0xFFFFFFFF);
         }
-        Quads.rollX(pose, buffers, SCROLL, -half * 0.85F, half * 0.85F, LIFT + radius, edge, radius, PARCHMENT_UV, 0xFFFFFFFF);
+        Quads.rollX(pose, buffers, SCROLL, -half * 0.85F, half * 0.85F, LIFT + radius, edge, radius, CLEAN_UV, 0xFFFFFFFF);
         float seal = Math.max(0.0F, Math.min(1.0F, (sealTime - SEAL_AT) / SEAL_TIME));
         if (seal > 0) {
+            // A flat blob of wax pressed down on the roll's top: it drops, squashes wide, and settles.
             float drop = (1 - seal) * (1 - seal) * 3.0F;
-            float size = 0.55F * (1.0F + 0.5F * (1 - seal));
+            float squash = 1.0F + 0.35F * (float) Math.sin(seal * Math.PI);
+            float size = 0.85F * squash;
             float top = LIFT + 2 * radius + drop;
-            Quads.box(pose, buffers, WHITE, -size, top - 0.12F, edge - size, size, top + 0.12F, edge + size, 0.0F, 0.0F, 1.0F, 1.0F,
-                    0xFF9E1414);
-            Quads.box(pose, buffers, WHITE, -size * 0.62F, top + 0.12F, edge - size * 0.62F, size * 0.62F, top + 0.2F,
-                    edge + size * 0.62F, 0.0F, 0.0F, 1.0F, 1.0F, 0xFFC42A22);
+            Quads.box(pose, buffers, WHITE, -size, top - 0.05F, edge - size * 0.8F, size, top + 0.06F, edge + size * 0.8F, 0.0F, 0.0F,
+                    1.0F, 1.0F, 0xFF8E1010);
+            Quads.box(pose, buffers, WHITE, -size * 0.8F, top + 0.06F, edge - size * 0.62F, size * 0.8F, top + 0.12F, edge + size * 0.62F,
+                    0.0F, 0.0F, 1.0F, 1.0F, 0xFFB82420);
+            if (seal >= 1) {
+                Quads.flat(pose, buffers, UNKNOWN, 0.0F, top + 0.13F, edge, 0.4F, 0xC0601010);
+            }
         }
     }
 
