@@ -106,8 +106,6 @@ public final class WorkbenchBehavior implements StationBehavior {
             pose.popPose();
         }
     }
-        TextPainter.drawFlat(pose, buffers, line, 0.9F, short_ ? 0xFFEE6E6E : 0xFFD8C8FF);
-    }
 
     @Override
     public void onEffect(StationView view, ResourceLocation effect, String node, CompoundTag data) {
