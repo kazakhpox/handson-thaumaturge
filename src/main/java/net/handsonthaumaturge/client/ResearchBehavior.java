@@ -51,9 +51,10 @@ public final class ResearchBehavior implements StationBehavior {
     private static final float PARCHMENT_UV = 150.0F / 256.0F;
     private static final float K = SHEET / GUI_SHEET;
     private static final float LIFT = 0.04F;
-    private static final int CELLS = 25;
+    /** The vials in the drawer's rack: four across, five deep; a page turns one row. */
+    private static final int CELLS = 20;
     private static final int ROWS = 5;
-    private static final int PAGE_STEP = 5;
+    private static final int PAGE_STEP = 4;
     /** Mixtures written on one page of the guide; two pages to a spread. */
     private static final int HELP_ROWS = 5;
     private static final long COMBINE_COOLDOWN_MS = 200L;
@@ -197,10 +198,11 @@ public final class ResearchBehavior implements StationBehavior {
         view.node("combine").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.draw(pose, buffers,
                 Component.translatable("handson_thaumaturge.research.combine"), 0.9F, 0.0F,
                 select1 != null && select2 != null ? 0xFFE8D8FF : 0x60FFFFFF)));
-        view.node("page_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.draw(pose, buffers,
-                Component.literal("<"), 1.4F, 0.0F, page > 0 ? 0xFFFFFFFF : 0x40FFFFFF)));
-        view.node("page_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.draw(pose, buffers,
-                Component.literal(">"), 1.4F, 0.0F, page < lastPage() ? 0xFFFFFFFF : 0x40FFFFFF)));
+        view.node("drawer").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintDrawer(view, pose, buffers)));
+        view.node("page_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
+                Component.literal("<"), 1.3F, page > 0 ? 0xFF3A2A1A : 0x403A2A1A)));
+        view.node("page_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> TextPainter.drawFlat(pose, buffers,
+                Component.literal(">"), 1.3F, page < lastPage() ? 0xFF3A2A1A : 0x403A2A1A)));
         view.node("duplicate").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
             if (canDuplicate(view)) {
                 TextPainter.draw(pose, buffers, Component.translatable("handson_thaumaturge.research.copy"), 0.9F, 0.0F, 0xFFFFE8A0);
@@ -233,6 +235,7 @@ public final class ResearchBehavior implements StationBehavior {
     public void frame(StationView view, float dt) {
         clock += dt;
         trail(view, dt);
+        slideDrawer(view, dt);
         guide.frame(dt, helperOpen && view.isInUse());
         boolean using = view.isInUse() && ThaumClient.ready();
         for (int i = 0; i < CELLS; i++) {
@@ -571,31 +574,87 @@ public final class ResearchBehavior implements StationBehavior {
         }
     }
 
+    // ---- The drawer of vials.
+
+    private static final ResourceLocation PLANK = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/plank_greatwood.png");
+    private static final ResourceLocation DARK_WOOD = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/base_wood_grain.png");
+    private static final ResourceLocation BRASS = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/metal_brass.png");
+    /** How far the drawer slides out of the table, scene pixels, and how long it takes, seconds. */
+    private static final float DRAWER_TRAVEL = 8.0F;
+    private static final float DRAWER_TIME = 0.4F;
+    private static final String[] IN_DRAWER = {"drawer", "page_prev", "page_next"};
+    private float drawer;
+
+    /** Slides the drawer (and everything in it) out while the table is worked, back in after. */
+    private void slideDrawer(StationView view, float dt) {
+        float target = view.isInUse() && ThaumClient.ready() ? 1.0F : 0.0F;
+        float before = drawer;
+        drawer = Math.max(0.0F, Math.min(1.0F, drawer + (target > drawer ? dt : -dt) / DRAWER_TIME));
+        if (drawer == before && drawer != 1.0F && drawer != 0.0F) {
+            return;
+        }
+        float eased = drawer * drawer * (3 - 2 * drawer);
+        float out = (eased - 1.0F) * DRAWER_TRAVEL;
+        boolean shown = drawer > 0;
+        for (String id : IN_DRAWER) {
+            view.node(id).ifPresent(node -> {
+                node.moveTo(SHIFT.x + out, SHIFT.y, SHIFT.z, 0.0F);
+                node.setVisible(shown);
+            });
+        }
+        for (int i = 0; i < CELLS; i++) {
+            view.node("aspect_" + i).ifPresent(node -> {
+                node.moveTo(SHIFT.x + out, SHIFT.y, SHIFT.z, 0.0F);
+                node.setVisible(shown);
+            });
+        }
+    }
+
+    /** The drawer: a tray of greatwood with a dark front and a brass pull, and the rack the vials stand in. */
+    private void paintDrawer(StationView view, PoseStack pose, MultiBufferSource buffers) {
+        if (drawer <= 0) {
+            return;
+        }
+        int wood = 0xFFFFFFFF;
+        Quads.box(pose, buffers, PLANK, -4.0F, -0.6F, -4.8F, 4.0F, 0.0F, 4.8F, 0.0F, 0.0F, 0.5F, 0.6F, wood);
+        Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, 4.5F, 4.0F, 1.2F, 4.8F, 0.0F, 0.0F, 0.5F, 0.08F, wood);
+        Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, -4.8F, 4.0F, 1.2F, -4.5F, 0.0F, 0.0F, 0.5F, 0.08F, wood);
+        Quads.box(pose, buffers, PLANK, -4.0F, 0.0F, -4.5F, -3.7F, 1.2F, 4.5F, 0.0F, 0.0F, 0.08F, 0.6F, wood);
+        // The front, the drawer's face as the table's own, with its brass pull.
+        Quads.box(pose, buffers, DARK_WOOD, 4.0F, -1.0F, -4.8F, 4.6F, 2.6F, 4.8F, 0.0F, 0.0F, 0.6F, 0.25F, wood);
+        Quads.box(pose, buffers, BRASS, 4.6F, 0.4F, -1.6F, 5.1F, 1.2F, 1.6F, 0.0F, 0.0F, 0.2F, 0.05F, wood);
+        // The rack: a board at half the vials' height, a hole for each.
+        for (float z = 3.8F; z >= -3.8F; z -= 1.9F) {
+            Quads.box(pose, buffers, PLANK, -3.7F, 1.0F, z - 0.15F, 4.0F, 1.25F, z + 0.15F, 0.0F, 0.0F, 0.5F, 0.02F, wood);
+        }
+    }
+
+    /** One vial in the rack: glass, the aspect's colour inside (fuller the more the player has), a cork, the aspect's sign on top. */
     private void paintCell(StationView view, int cell, PoseStack pose, MultiBufferSource buffers) {
         Holder<?> aspect = shown(cell);
-        if (aspect == null || !view.isInUse()) {
+        if (aspect == null || drawer <= 0) {
             return;
         }
         int pool = ThaumClient.amount(player(), aspect);
         int bonus = ThaumClient.bonus(table(view), aspect);
         boolean ready = pool + bonus > 0;
-        boolean isHeld = aspect.equals(held);
-        if (isHeld) {
-            Quads.upright(pose, buffers, HEX_HOVER, 0.0F, 0.0F, 0.02F, 1.0F, 0xFFFFFFFF);
+        int colour = ThaumClient.colour(aspect);
+        float fill = Math.min(1.0F, 0.12F + (pool + bonus) / 120.0F);
+        Quads.box(pose, buffers, WHITE, -0.28F, 0.05F, -0.28F, 0.28F, 0.05F + 2.2F * fill, 0.28F, 0.0F, 0.0F, 1.0F, 1.0F,
+                (ready ? 0xE0000000 : 0x70000000) | colour);
+        Quads.box(pose, buffers, WHITE, -0.38F, 0.0F, -0.38F, 0.38F, 2.5F, 0.38F, 0.0F, 0.0F, 1.0F, 1.0F, 0x40D8F0FF);
+        Quads.box(pose, buffers, WHITE, -0.33F, 2.5F, -0.33F, 0.33F, 2.95F, 0.33F, 0.0F, 0.0F, 1.0F, 1.0F, 0xFF8A6438);
+        if (aspect.equals(held)) {
+            Quads.flat(pose, buffers, HEX_HOVER, 0.0F, 2.97F, 0.0F, 0.85F, 0xFFFFFFFF);
         }
-        int alpha = ready ? 0xFF : 0x55;
-        Quads.upright(pose, buffers, ThaumClient.texture(aspect), 0.0F, 0.0F, -0.01F, 0.8F, alpha << 24 | ThaumClient.colour(aspect));
+        Quads.flat(pose, buffers, ThaumClient.texture(aspect), 0.0F, 3.0F, 0.0F, 0.62F, (ready ? 0xFF000000 : 0x60000000) | colour);
         pose.pushPose();
-        pose.translate(-0.5F, -0.55F, -0.03F);
-        TextPainter.draw(pose, buffers, Component.literal(Integer.toString(pool)), 0.55F, 0.0F, ready ? 0xFFFFFFFF : 0x80FFFFFF);
+        pose.translate(0.0F, 0.3F, -0.62F);
+        TextPainter.draw(pose, buffers, Component.literal(Integer.toString(pool) + (bonus > 0 ? "+" + bonus : "")), 0.42F, 0.0F,
+                ready ? 0xFFFFFFFF : 0x80FFFFFF);
         pose.popPose();
-        if (bonus > 0) {
-            pose.pushPose();
-            pose.translate(0.55F, 0.6F, -0.03F);
-            TextPainter.draw(pose, buffers, Component.literal("+" + bonus), 0.45F, 0.0F, 0xFFFFD76E);
-            pose.popPose();
-        }
     }
+
 
     private static void paintTray(Holder<?> aspect, PoseStack pose, MultiBufferSource buffers) {
         Quads.upright(pose, buffers, HEX_IDLE, 0.0F, 0.0F, 0.02F, 1.0F, 0x80FFFFFF);

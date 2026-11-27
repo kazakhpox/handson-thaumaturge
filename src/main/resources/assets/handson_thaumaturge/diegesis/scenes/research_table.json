@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/Pocky-l/diegesis/main/docs/schema/scene.schema.json",
-  "$comment": "Thaumaturge's research table (its main half, 16 high) worked through its own menu. The scribing tools go where Thaumaturge's own renderer draws its inkwell, towards the main half's outer end (code moves the slot there); the note lies in front. In the middle lies the note's puzzle on parchment (sheet), the screen's hex grid drawn on it by code. Over the far edge hangs the palette, five by five icons of the aspects the player knows (aspect_N in columns, the screen's order and pages; page_prev and page_next under it), and right of it the mixing tray (select_1, select_2, combine) and the copy button. The recipe book of mixtures lies on the right of the table, shut or open flat in place (helper). The camera stands in front and above, looking down at the sheet with the palette behind it.",
+  "$comment": "Thaumaturge's research table (its main half, 16 high) worked through its own menu. The scribing tools go where Thaumaturge's own renderer draws its inkwell, towards the main half's outer end (code moves the slot there); the note lies in front. In the middle lies the note's puzzle on parchment (sheet), the screen's hex grid drawn on it by code. The aspects the player knows stand as vials in a rack in the drawer under the main half's outer end (drawer, aspect_N four by five, the screen's order and pages; page_prev and page_next on the drawer's front edge), which slides out when the table is opened; in the air over the far edge hang the mixing tray (select_1, select_2, combine) and the copy button. The recipe book of mixtures lies on the right of the table, shut or open flat in place (helper). The camera stands in front and above, looking down at the sheet with the palette behind it.",
   "work_plane": 16,
   "idle_visible": false,
   "camera": {
@@ -76,6 +76,416 @@
           6,
           0.2,
           6
+        ]
+      }
+    },
+    {
+      "id": "drawer",
+      "$comment": "The drawer under the tabletop at the main half's outer end, drawn by code; it slides out with the vials when the table is opened.",
+      "pos": [
+        20.0,
+        11.0,
+        7.2
+      ],
+      "pickable": false
+    },
+    {
+      "id": "aspect_0",
+      "pos": [
+        22.9,
+        11.6,
+        11.0
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_1",
+      "pos": [
+        21.0,
+        11.6,
+        11.0
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_2",
+      "pos": [
+        19.1,
+        11.6,
+        11.0
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_3",
+      "pos": [
+        17.2,
+        11.6,
+        11.0
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_4",
+      "pos": [
+        22.9,
+        11.6,
+        9.1
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_5",
+      "pos": [
+        21.0,
+        11.6,
+        9.1
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_6",
+      "pos": [
+        19.1,
+        11.6,
+        9.1
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_7",
+      "pos": [
+        17.2,
+        11.6,
+        9.1
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_8",
+      "pos": [
+        22.9,
+        11.6,
+        7.2
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_9",
+      "pos": [
+        21.0,
+        11.6,
+        7.2
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_10",
+      "pos": [
+        19.1,
+        11.6,
+        7.2
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_11",
+      "pos": [
+        17.2,
+        11.6,
+        7.2
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_12",
+      "pos": [
+        22.9,
+        11.6,
+        5.3
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_13",
+      "pos": [
+        21.0,
+        11.6,
+        5.3
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_14",
+      "pos": [
+        19.1,
+        11.6,
+        5.3
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_15",
+      "pos": [
+        17.2,
+        11.6,
+        5.3
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_16",
+      "pos": [
+        22.9,
+        11.6,
+        3.4
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_17",
+      "pos": [
+        21.0,
+        11.6,
+        3.4
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_18",
+      "pos": [
+        19.1,
+        11.6,
+        3.4
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "aspect_19",
+      "pos": [
+        17.2,
+        11.6,
+        3.4
+      ],
+      "collider": {
+        "from": [
+          -0.85,
+          0,
+          -0.85
+        ],
+        "to": [
+          0.85,
+          3.1,
+          0.85
         ]
       }
     },
@@ -165,542 +575,42 @@
       "pickable": false
     },
     {
-      "id": "aspect_0",
-      "pos": [
-        11.6,
-        26.6,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_1",
-      "pos": [
-        11.6,
-        24.8,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_2",
-      "pos": [
-        11.6,
-        23.0,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_3",
-      "pos": [
-        11.6,
-        21.200000000000003,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_4",
-      "pos": [
-        11.6,
-        19.400000000000002,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_5",
-      "pos": [
-        9.799999999999999,
-        26.6,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_6",
-      "pos": [
-        9.799999999999999,
-        24.8,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_7",
-      "pos": [
-        9.799999999999999,
-        23.0,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_8",
-      "pos": [
-        9.799999999999999,
-        21.200000000000003,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_9",
-      "pos": [
-        9.799999999999999,
-        19.400000000000002,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_10",
-      "pos": [
-        8.0,
-        26.6,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_11",
-      "pos": [
-        8.0,
-        24.8,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_12",
-      "pos": [
-        8.0,
-        23.0,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_13",
-      "pos": [
-        8.0,
-        21.200000000000003,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_14",
-      "pos": [
-        8.0,
-        19.400000000000002,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_15",
-      "pos": [
-        6.199999999999999,
-        26.6,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_16",
-      "pos": [
-        6.199999999999999,
-        24.8,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_17",
-      "pos": [
-        6.199999999999999,
-        23.0,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_18",
-      "pos": [
-        6.199999999999999,
-        21.200000000000003,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_19",
-      "pos": [
-        6.199999999999999,
-        19.400000000000002,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_20",
-      "pos": [
-        4.3999999999999995,
-        26.6,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_21",
-      "pos": [
-        4.3999999999999995,
-        24.8,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_22",
-      "pos": [
-        4.3999999999999995,
-        23.0,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_23",
-      "pos": [
-        4.3999999999999995,
-        21.200000000000003,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
-      "id": "aspect_24",
-      "pos": [
-        4.3999999999999995,
-        19.400000000000002,
-        16.6
-      ],
-      "collider": {
-        "from": [
-          -0.85,
-          -0.85,
-          -0.2
-        ],
-        "to": [
-          0.85,
-          0.85,
-          0.2
-        ]
-      }
-    },
-    {
       "id": "page_prev",
       "pos": [
-        10.4,
-        17.6,
-        16.6
+        22.5,
+        11.8,
+        1.6
       ],
       "collider": {
         "from": [
           -0.8,
-          -0.8,
-          -0.3
+          0,
+          -0.6
         ],
         "to": [
           0.8,
-          0.8,
-          0.3
+          0.6,
+          0.6
         ]
       }
     },
     {
       "id": "page_next",
       "pos": [
-        5.6,
-        17.6,
-        16.6
+        17.5,
+        11.8,
+        1.6
       ],
       "collider": {
         "from": [
           -0.8,
-          -0.8,
-          -0.3
+          0,
+          -0.6
         ],
         "to": [
           0.8,
-          0.8,
-          0.3
+          0.6,
+          0.6
         ]
       }
     },

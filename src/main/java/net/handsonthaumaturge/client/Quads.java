@@ -99,6 +99,28 @@ final class Quads {
         put(out, m, last, right, top, z, uv, 0, argb, 0, 0, -1);
     }
 
+    /** A box from one corner to the other, every face carrying the same {@code u0,v0}..{@code u1,v1} of the texture, see-through allowed. */
+    static void box(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, float x0, float y0, float z0, float x1, float y1,
+                    float z1, float u0, float v0, float u1, float v1, int argb) {
+        VertexConsumer out = buffers.getBuffer(RenderType.entityTranslucent(texture));
+        PoseStack.Pose last = pose.last();
+        Matrix4f m = last.pose();
+        float[][] faces = {
+                {x0, y1, z0, x0, y1, z1, x1, y1, z1, x1, y1, z0, 0, 1, 0},
+                {x0, y0, z1, x0, y0, z0, x1, y0, z0, x1, y0, z1, 0, -1, 0},
+                {x1, y1, z0, x1, y0, z0, x0, y0, z0, x0, y1, z0, 0, 0, -1},
+                {x0, y1, z1, x0, y0, z1, x1, y0, z1, x1, y1, z1, 0, 0, 1},
+                {x0, y1, z0, x0, y0, z0, x0, y0, z1, x0, y1, z1, -1, 0, 0},
+                {x1, y1, z1, x1, y0, z1, x1, y0, z0, x1, y1, z0, 1, 0, 0},
+        };
+        for (float[] f : faces) {
+            put(out, m, last, f[0], f[1], f[2], u0, v0, argb, f[12], f[13], f[14]);
+            put(out, m, last, f[3], f[4], f[5], u0, v1, argb, f[12], f[13], f[14]);
+            put(out, m, last, f[6], f[7], f[8], u1, v1, argb, f[12], f[13], f[14]);
+            put(out, m, last, f[9], f[10], f[11], u1, v0, argb, f[12], f[13], f[14]);
+        }
+    }
+
     private static void put(VertexConsumer out, Matrix4f m, PoseStack.Pose pose, float x, float y, float z, float u, float v, int argb,
             float nx, float ny, float nz) {
         out.addVertex(m, x, y, z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
