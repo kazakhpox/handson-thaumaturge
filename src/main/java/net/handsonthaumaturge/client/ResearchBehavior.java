@@ -580,7 +580,7 @@ public final class ResearchBehavior implements StationBehavior {
     private static final ResourceLocation DARK_WOOD = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/base_wood_grain.png");
     private static final ResourceLocation BRASS = ResourceLocation.fromNamespaceAndPath("thaumaturge", "textures/block/metal_brass.png");
     /** How far the drawer slides out from under the tabletop towards the player, scene pixels, and how long it takes, seconds. */
-    private static final float DRAWER_TRAVEL = 9.0F;
+    private static final float DRAWER_TRAVEL = 11.5F;
     private static final float DRAWER_TIME = 0.4F;
     private static final String[] IN_DRAWER = {"drawer", "page_prev", "page_next"};
     private float drawer;

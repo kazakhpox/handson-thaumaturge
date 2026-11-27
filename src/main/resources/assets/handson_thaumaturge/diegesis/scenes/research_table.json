@@ -6,13 +6,13 @@
   "camera": {
     "position": [
       6,
-      37,
-      -21
+      41,
+      -16
     ],
     "target": [
       6,
-      14,
-      6
+      12,
+      4
     ],
     "fov": 55,
     "interactive_at": 0.6
