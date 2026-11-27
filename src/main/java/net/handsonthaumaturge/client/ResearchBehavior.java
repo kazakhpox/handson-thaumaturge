@@ -31,7 +31,8 @@ import net.handsonthaumaturge.station.ResearchStation;
  * icons in the air (five by five, the screen's pages, the wheel or the arrows turn them): a click takes one up, a click on a
  * blank hex writes it in, a click on a written one rubs it out. A right click puts an aspect in the mixing tray beside the panel,
  * whose button combines the two; shift on a compound fills the tray with its parts (with the research for it). The book on
- * the table opens the guide to mixtures in the air beside it, as Hands-On Vanilla's crafting table shows its recipe book.
+ * the table opens the guide to mixtures as a book in the air beside it ({@link FloatingBook}), its leaves turned like Hands-On
+ * Vanilla's recipe book.
  * What is done goes to the server as the station's actions, which call the table's own methods.
  */
 public final class ResearchBehavior implements StationBehavior {
@@ -53,11 +54,12 @@ public final class ResearchBehavior implements StationBehavior {
     private static final int CELLS = 25;
     private static final int ROWS = 5;
     private static final int PAGE_STEP = 5;
-    private static final int HELP_ROWS = 7;
+    /** Mixtures written on one page of the guide; two pages to a spread. */
+    private static final int HELP_ROWS = 5;
     private static final long COMBINE_COOLDOWN_MS = 200L;
 
     private int page;
-    private int helperPage;
+    private final FloatingBook guide = new FloatingBook();
     private boolean helperOpen;
     private Holder<?> held;
     private Holder<?> select1;
@@ -207,13 +209,13 @@ public final class ResearchBehavior implements StationBehavior {
         view.node("book").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintGuide(pose, buffers)));
         view.node("help_prev").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
             if (helperOpen) {
-                TextPainter.draw(pose, buffers, Component.literal("<"), 1.2F, 0.0F, helperPage > 0 ? 0xFF3A2A1A : 0x403A2A1A);
+                TextPainter.draw(pose, buffers, Component.literal("<"), 1.2F, 0.0F, guide.spread() > 0 ? 0xFFE8D8A8 : 0x40E8D8A8);
             }
         }));
         view.node("help_next").ifPresent(node -> node.setPainter((pose, buffers, light) -> {
             if (helperOpen) {
                 TextPainter.draw(pose, buffers, Component.literal(">"), 1.2F, 0.0F,
-                        helperPage < lastHelperPage() ? 0xFF3A2A1A : 0x403A2A1A);
+                        guide.spread() < lastHelperPage() ? 0xFFE8D8A8 : 0x40E8D8A8);
             }
         }));
         view.node("held").ifPresent(node -> node.setPainter((pose, buffers, light) -> paintHeld(view, pose, buffers)));
@@ -231,19 +233,20 @@ public final class ResearchBehavior implements StationBehavior {
         if (ThaumClient.ready() && player() != null && view.isInUse()) {
             palette = ThaumClient.discoveredAspects(player());
             page = Math.min(page, lastPage());
-            helperPage = Math.min(helperPage, lastHelperPage());
+            guide.jumpTo(Math.min(guide.spread(), lastHelperPage()));
         }
     }
 
     @Override
     public void frame(StationView view, float dt) {
         clock += dt;
+        guide.frame(dt, helperOpen && view.isInUse());
         boolean using = view.isInUse() && ThaumClient.ready();
         for (int i = 0; i < CELLS; i++) {
             boolean there = using && shown(i) != null;
             view.node("aspect_" + i).ifPresent(node -> node.setEnabled(there));
         }
-        view.node("book").ifPresent(node -> node.setVisible(using && helperOpen));
+        view.node("book").ifPresent(node -> node.setVisible(using && (helperOpen || guide.shown())));
         view.node("help_prev").ifPresent(node -> node.setEnabled(using && helperOpen));
         view.node("help_next").ifPresent(node -> node.setEnabled(using && helperOpen));
         view.node("duplicate").ifPresent(node -> node.setEnabled(using && canDuplicate(view)));
@@ -449,15 +452,16 @@ public final class ResearchBehavior implements StationBehavior {
         }
     }
 
+    /** The guide's last spread (two pages of {@link #HELP_ROWS} mixtures). */
     private int lastHelperPage() {
-        return Math.max(0, (compounds().size() - 1) / HELP_ROWS);
+        return Math.max(0, (compounds().size() - 1) / (2 * HELP_ROWS));
     }
 
     private void turnGuide(StationView view, int step) {
-        int target = helperPage + step;
+        int target = guide.spread() + step;
         if (target >= 0 && target <= lastHelperPage()) {
-            helperPage = target;
-            sound(view, SoundEvents.BOOK_PAGE_TURN, 0.4F);
+            guide.turnTo(target);
+            sound(view, SoundEvents.BOOK_PAGE_TURN, 0.5F);
         }
     }
 
@@ -607,45 +611,51 @@ public final class ResearchBehavior implements StationBehavior {
         });
     }
 
-    /** The guide to mixtures, open in the air: a row for each known compound, "part + part = compound", seven to a page. */
+    /**
+     * The guide to mixtures: a book open in the air beside the table ({@link FloatingBook}), as Hands-On Vanilla's crafting table
+     * shows its recipe book. Each page lists {@link #HELP_ROWS} known compounds, "part + part = compound"; the leaves turn.
+     */
     private void paintGuide(PoseStack pose, MultiBufferSource buffers) {
-        if (!helperOpen || player() == null) {
+        if (player() == null) {
             return;
         }
-        Quads.uprightRect(pose, buffers, PARCHMENT, -5.0F, -6.0F, 5.0F, 6.0F, 0.05F, PARCHMENT_UV, 0xFFFFFFFF);
+        guide.render(pose, buffers, this::paintGuidePage, 0.15F * (float) Math.sin(clock * 1.6F));
+    }
+
+    private void paintGuidePage(PoseStack pose, MultiBufferSource buffers, int pageNumber) {
         List<Holder<?>> compounds = compounds();
-        int start = helperPage * HELP_ROWS;
-        float rowHeight = 1.5F;
+        int start = pageNumber * HELP_ROWS;
+        float rowHeight = 1.55F;
         for (int row = 0; row < HELP_ROWS && start + row < compounds.size(); row++) {
             Holder<?> compound = compounds.get(start + row);
             List<Holder<?>> parts = ThaumClient.components(compound);
-            float y = 4.6F - row * rowHeight;
-            guideTag(pose, buffers, parts.get(0), 3.2F, y);
+            float y = 3.2F - row * rowHeight;
+            guideTag(pose, buffers, parts.get(0), 2.4F, y);
             pose.pushPose();
-            pose.translate(1.6F, y, 0.0F);
-            TextPainter.draw(pose, buffers, Component.literal("+"), 0.8F, 0.0F, 0xFF3A2A1A);
+            pose.translate(1.2F, y, 0.0F);
+            TextPainter.draw(pose, buffers, Component.literal("+"), 0.7F, 0.0F, 0xFF3A2A1A);
             pose.popPose();
             guideTag(pose, buffers, parts.get(1), 0.0F, y);
             pose.pushPose();
-            pose.translate(-1.6F, y, 0.0F);
-            TextPainter.draw(pose, buffers, Component.literal("="), 0.8F, 0.0F, 0xFF3A2A1A);
+            pose.translate(-1.2F, y, 0.0F);
+            TextPainter.draw(pose, buffers, Component.literal("="), 0.7F, 0.0F, 0xFF3A2A1A);
             pose.popPose();
-            guideTag(pose, buffers, compound, -3.2F, y);
+            guideTag(pose, buffers, compound, -2.4F, y);
         }
-        int last = lastHelperPage();
-        if (last > 0) {
+        int pages = Math.max(1, (compounds.size() + HELP_ROWS - 1) / HELP_ROWS);
+        if (pageNumber < pages) {
             pose.pushPose();
-            pose.translate(0.0F, -5.3F, 0.0F);
-            TextPainter.draw(pose, buffers, Component.literal((helperPage + 1) + "/" + (last + 1)), 0.7F, 0.0F, 0xFF3A2A1A);
+            pose.translate(0.0F, -4.0F, 0.0F);
+            TextPainter.draw(pose, buffers, Component.literal(String.valueOf(pageNumber + 1)), 0.55F, 0.0F, 0xFF6A5A3A);
             pose.popPose();
         }
     }
 
     private static void guideTag(PoseStack pose, MultiBufferSource buffers, Holder<?> aspect, float x, float y) {
         if (ThaumClient.discovered(player(), aspect)) {
-            Quads.upright(pose, buffers, ThaumClient.texture(aspect), x, y, 0.0F, 0.6F, 0xFF000000 | ThaumClient.colour(aspect));
+            Quads.upright(pose, buffers, ThaumClient.texture(aspect), x, y, 0.0F, 0.5F, 0xFF000000 | ThaumClient.colour(aspect));
         } else {
-            Quads.upright(pose, buffers, UNKNOWN, x, y, 0.0F, 0.6F, 0x80000000);
+            Quads.upright(pose, buffers, UNKNOWN, x, y, 0.0F, 0.5F, 0x80000000);
         }
     }
 }
