@@ -55,7 +55,8 @@
         "slot": "note[0]",
         "display": "hidden",
         "size": 12.0,
-        "idle_highlight": 0.0
+        "idle_highlight": 0.0,
+        "highlight": false
       },
       "$comment": "The note's slot over the whole sheet: put a note down here, or take the sealed scroll when it is done (code enables it only then)."
     },
