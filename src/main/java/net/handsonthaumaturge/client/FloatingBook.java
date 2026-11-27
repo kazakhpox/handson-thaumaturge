@@ -130,10 +130,10 @@ final class FloatingBook {
         if (open > 0) {
             return;
         }
-        float w = 3.6F;
-        float d = 4.6F;
+        float w = 3.0F;
+        float d = 3.9F;
         float board = 0.3F;
-        float pages = 1.1F;
+        float pages = 0.9F;
         int leather = 0xFFFFFFFF;
         int edge = 0xFFE8DDB8;
         // Boards: the leather of the enchanting book's lid.
